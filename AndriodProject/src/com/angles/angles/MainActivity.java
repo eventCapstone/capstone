@@ -7,6 +7,7 @@ import com.angles.angles.AnglesController;
 
 @SuppressWarnings("unused")
 public class MainActivity extends Activity {
+	//hello
 
 	private AnglesController  itsMainController = new AnglesController(this);
     @Override
@@ -17,10 +18,9 @@ public class MainActivity extends Activity {
      
     }
 
-    public void hello()
-    {
-    	int i = 45;
-    }
-   
+    
+   public void hello(){
+	   
+   }
    
 }
