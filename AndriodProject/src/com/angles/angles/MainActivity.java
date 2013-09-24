@@ -5,6 +5,8 @@ import android.os.Bundle;
 
 import com.angles.angles.AnglesController;
 
+//Goodbye
+
 @SuppressWarnings("unused")
 public class MainActivity extends Activity {
 
