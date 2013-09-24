@@ -18,9 +18,9 @@ public class MainActivity extends Activity {
      
     }
 
-    
-   public void hello(){
-	   
-   }
+    public void goodbye()
+    {
+    	int j = 45;
+    }
    
 }
