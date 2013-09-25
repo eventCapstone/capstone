@@ -1,0 +1,32 @@
+package com.angles.angles;
+
+import android.app.Activity;
+
+import com.angles.view.AnglesDisplayManager;
+import com.angles.view.AnglesTouchManager;
+
+public class AnglesController {
+	public static final String TAG = "AnglesController";
+	
+	
+	AnglesDisplayManager itsDisplayManager;
+	AnglesTouchManager  itsTouchManager;
+	
+	
+	public AnglesController(Activity inActivity){
+		itsDisplayManager = new AnglesDisplayManager(inActivity);
+		itsTouchManager = new AnglesTouchManager(inActivity, this);	
+	}
+	
+	public void homeEvent(){
+		itsDisplayManager.displayHome();
+		itsTouchManager.refresh();
+	}
+	
+	public void eventListHomeEvent(){
+		itsDisplayManager.displayEventListHome();
+		
+	}
+	
+	
+}
