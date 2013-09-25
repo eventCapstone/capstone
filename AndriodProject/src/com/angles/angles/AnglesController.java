@@ -1,9 +1,10 @@
 package com.angles.angles;
 
-import android.app.Activity;
-
 import com.angles.view.AnglesDisplayManager;
 import com.angles.view.AnglesTouchManager;
+
+import android.app.Activity;
+
 
 public class AnglesController {
 	public static final String TAG = "AnglesController";
