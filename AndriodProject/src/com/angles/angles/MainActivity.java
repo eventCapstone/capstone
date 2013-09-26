@@ -10,6 +10,7 @@ public class MainActivity extends Activity {
 	//hello
 
 	private AnglesController  itsMainController = new AnglesController(this);
+	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
     	 super.onCreate(savedInstanceState);

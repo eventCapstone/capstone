@@ -8,6 +8,6 @@ public class Event {
 	String itsStartTime;
 	String itsEndTime;
 	boolean itsInviteIndicator;
-	List<Guest> itsAttendees;
+	List<User> itsAttendees;
 
 }

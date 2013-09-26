@@ -1,8 +1,8 @@
-package com.angles.model;
+package com.angles.view;
 
 import java.util.ArrayList;
 
-public class TestBean {
+public class EventsManager {
 	
 	
 	
@@ -11,7 +11,7 @@ public class TestBean {
 	}
 	
 	
-	public static ArrayList<String> getList(){
+	public static ArrayList<String> getEventList(){
 	    ArrayList<String> list = new ArrayList<String>();
 	    list.add("John's Wedding");
 	    list.add("My Kegger");
