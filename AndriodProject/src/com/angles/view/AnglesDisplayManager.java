@@ -30,7 +30,7 @@ public void displayHome(){
 public void displayEventListHome(){
 	itsActivity.setContentView(R.layout.events_list);
 	  ListView theList = (ListView) itsActivity.findViewById(R.id.listOfEvents);
-			ArrayList<String> theStrings = com.angles.view.EventsManager.getEventList();
+			ArrayList<String> theStrings = com.angles.model.EventsManager.getEventList();
 			StableArrayAdapter adapter = new StableArrayAdapter(itsActivity,android.R.layout.simple_list_item_1 ,theStrings);
 			theList.setAdapter(adapter);
 			

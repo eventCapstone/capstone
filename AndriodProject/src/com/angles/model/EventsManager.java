@@ -1,4 +1,4 @@
-package com.angles.view;
+package com.angles.model;
 
 import java.util.ArrayList;
 
