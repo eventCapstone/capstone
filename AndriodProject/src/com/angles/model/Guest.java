@@ -4,6 +4,6 @@ import java.util.List;
 
 public class Guest {
 	String itsName;
-	List<Event> itsEvents;
+	List<AnglesEvent> itsEvents;
 	
 }

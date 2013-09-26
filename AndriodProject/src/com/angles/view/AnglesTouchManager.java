@@ -18,36 +18,39 @@ public class AnglesTouchManager {
 	
 	
 	
-	public AnglesTouchManager(Activity inActivity, AnglesController inController){
+	public AnglesTouchManager(Activity inActivity, AnglesController inController) 
+	{
 		itsActivity = inActivity;
 		itsAnglesController = inController;
 	}
 	
-	public void refresh(){
-		
-			Button button = (Button) itsActivity.findViewById(R.id.homeEventsButton);
-			button.setOnClickListener(goToEventsList);
+	public void setHomePageListeners() 
+	{
+		Button button = (Button) itsActivity.findViewById(R.id.homeEventsButton);
+		button.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				itsAnglesController.eventListHomeEvent();
+			}
+		});
+	}
+	
+	public void setEventsHomeListeners() 
+	{
 		
 	}
 
-	private OnClickListener goToEventsList = new OnClickListener() {
-		public void onClick(View v) {
-			itsAnglesController.eventListHomeEvent();
+	private class EventButtonListener implements OnClickListener
+	{
+		public EventButtonListener()
+		{
+			
+		}
+		@Override
+		public void onClick(View view) {
+			Button button = (Button) view;
+			String eventID = button.getText().toString();
+			
 		}
 		
-	};
-	
-	
-	
-	
-	
-//	 private OnClickListener onClickListener = new OnClickListener() { 
-//	    	public void onClick(final View v) {
-//			setContentView(R.layout.events_list);
-//			
-//			
-//	    	
-//
-//	    }
-//	 };
+	}
 }

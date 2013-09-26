@@ -1,5 +1,6 @@
 package com.angles.angles;
 
+import com.angles.model.AnglesEvent;
 import com.angles.view.AnglesDisplayManager;
 import com.angles.view.AnglesTouchManager;
 
@@ -21,12 +22,17 @@ public class AnglesController {
 	
 	public void homeEvent(){
 		itsDisplayManager.displayHome();
-		itsTouchManager.refresh();
+		itsTouchManager.setHomePageListeners();
 	}
 	
 	public void eventListHomeEvent(){
 		itsDisplayManager.displayEventListHome();
 		
+	}
+	
+	public void viewEvent(AnglesEvent event)
+	{
+		itsDisplayManager.displayEvent(event);
 	}
 	
 	
