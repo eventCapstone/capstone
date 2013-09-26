@@ -9,7 +9,7 @@ public class AnglesEvent {
 	String itsStartTime;
 	String itsEndTime;
 	boolean itsInviteIndicator;
-	List<Guest> itsAttendees;
+	List<User> itsAttendees;
 	long itsID;
 	
 	public String getItsEventTitle() {
@@ -32,7 +32,7 @@ public class AnglesEvent {
 		return itsInviteIndicator;
 	}
 
-	public List<Guest> getItsAttendees() {
+	public List<User> getItsAttendees() {
 		return itsAttendees;
 	}
 

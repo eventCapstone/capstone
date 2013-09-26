@@ -1,6 +1,5 @@
 package com.angles.model;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -18,7 +17,6 @@ public class EventsManager {
 	public static String getAValue(){
 		return "OMG!";
 	}
-	
 	
 	public static List<AnglesEvent> getEventList(){
 	    return eventList;

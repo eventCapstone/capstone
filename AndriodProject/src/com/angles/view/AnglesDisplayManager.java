@@ -20,8 +20,6 @@ public class AnglesDisplayManager {
 	
 	public AnglesDisplayManager(Activity inActivity){
 		itsActivity = inActivity;
-		
-		
 	}
 	
 	public void displayHome(){
