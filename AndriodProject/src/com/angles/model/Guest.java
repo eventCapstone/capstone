@@ -2,7 +2,7 @@ package com.angles.model;
 
 import java.util.List;
 
-public class Attendee {
+public class Guest {
 	String itsName;
 	List<Event> itsEvents;
 	
