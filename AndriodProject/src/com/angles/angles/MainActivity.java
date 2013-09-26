@@ -17,10 +17,5 @@ public class MainActivity extends Activity {
       
      
     }
-
-    public void goodbye()
-    {
-    	int j = 45;
-    }
    
 }
