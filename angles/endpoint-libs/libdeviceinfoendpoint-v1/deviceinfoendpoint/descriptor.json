@@ -1,13 +1,13 @@
 {
   "files": [
     {
-      "downloadUrl": "/downloads/deviceinfoendpoint/v1/20130928000412/java/1.16.0-rc/angles.com-deviceinfoendpoint-v1-20130928000412-java-1.16.0-rc-sources.jar", 
-      "path": "angles.com-deviceinfoendpoint-v1-20130928000412-java-1.16.0-rc-sources.jar", 
+      "downloadUrl": "/downloads/deviceinfoendpoint/v1/20131001172726/java/1.16.0-rc/angles.com-deviceinfoendpoint-v1-20131001172726-java-1.16.0-rc-sources.jar", 
+      "path": "angles.com-deviceinfoendpoint-v1-20131001172726-java-1.16.0-rc-sources.jar", 
       "type": "source", 
-      "timestamp": "2013-09-28 00:04"
+      "timestamp": "2013-10-01 17:27"
     }, 
     {
-      "path": "angles.com-deviceinfoendpoint-v1-20130928000412-java-1.16.0-rc.jar.properties", 
+      "path": "angles.com-deviceinfoendpoint-v1-20131001172726-java-1.16.0-rc.jar.properties", 
       "type": "android.properties"
     }
   ], 
@@ -702,5 +702,5 @@
   "packagePath": "angles", 
   "language_version": "1.16.0-rc", 
   "id": "deviceinfoendpoint:v1", 
-  "revision": 20130928000412
+  "revision": 20131001172726
 }
