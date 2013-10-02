@@ -3,7 +3,10 @@ package com.angles.model;
 import java.util.List;
 
 public class User {
-	String itsName;
-	List<AnglesEvent> itsEvents;
+	public String name;
+	public List<AnglesEvent> events;
 	
+	public User(String name) {
+		this.name = name;
+	}
 }

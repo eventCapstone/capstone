@@ -4,13 +4,14 @@ import java.util.Arrays;
 import java.util.List;
 
 public class EventsManager {
+	private static User walterWhite = new User("Walter White");
 	
 	private static List<AnglesEvent> eventList =
 		Arrays.asList(new AnglesEvent[]
 			{
-				new AnglesEvent("John's Wedding"),
-				new AnglesEvent("Guns 'n Roses Concert"),
-				new AnglesEvent("My first dance recital")
+				new AnglesEvent("John's Wedding", walterWhite, "6:00pm"),
+				new AnglesEvent("Guns 'n Roses Concert", walterWhite, "9:00pm"),
+				new AnglesEvent("My first dance recital", walterWhite, "4:00pm")
 			}
 		);
 		

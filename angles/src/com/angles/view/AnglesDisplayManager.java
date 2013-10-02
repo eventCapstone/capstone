@@ -8,7 +8,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import com.angles.angles.AnglesController;
 import com.angles.angles.R;
 import com.angles.model.AnglesEvent;
 import com.angles.model.EventsManager;
@@ -17,9 +19,11 @@ public class AnglesDisplayManager {
 	public static final String KEY = "AnglesDisplayManager"; 
 	
 	private Activity itsActivity;
+	private AnglesController anglesController;
 	
-	public AnglesDisplayManager(Activity inActivity){
+	public AnglesDisplayManager(Activity inActivity, AnglesController anglesController){
 		itsActivity = inActivity;
+		this.anglesController = anglesController;
 	}
 	
 	public void displayHome(){
@@ -29,12 +33,18 @@ public class AnglesDisplayManager {
 	public void displayEventListHome(){
 		itsActivity.setContentView(R.layout.events_list);
 		ListView theList = (ListView) itsActivity.findViewById(R.id.listOfEvents);
-		theList.setAdapter(new EventsListAdapter(EventsManager.getEventList()));
+		theList.setAdapter(new EventsListAdapter(EventsManager.getEventList(), anglesController));
 	}
 	
-	public void displayEvent(AnglesEvent someevent)
+	public void displayEvent(AnglesEvent event)
 	{
-		int i = 0;
+		itsActivity.setContentView(R.layout.events_view);
+		TextView eventName = (TextView) itsActivity.findViewById(R.id.eventName);
+		eventName.setText("Event Name: " + event.eventTitle);
+		TextView startTime = (TextView) itsActivity.findViewById(R.id.startTime);
+		startTime.setText("Start Time: " + event.startTime);
+		TextView host = (TextView) itsActivity.findViewById(R.id.host);
+		host.setText("Hosted By: " + event.host.name);
 	}
 	
 	private class StableArrayAdapter extends ArrayAdapter<String> {

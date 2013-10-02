@@ -2,6 +2,7 @@ package com.angles.view;
 
 import java.util.List;
 
+import com.angles.angles.AnglesController;
 import com.angles.angles.R;
 import com.angles.model.AnglesEvent;
 
@@ -9,15 +10,20 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 public class EventsListAdapter extends BaseAdapter {
 	private List<AnglesEvent> eventsList;
+	private AnglesController anglesController;
 	
-	public EventsListAdapter(List<AnglesEvent> eventsList)
+	public EventsListAdapter(List<AnglesEvent> eventsList, AnglesController anglesController)
 	{
 		this.eventsList = eventsList;
+		this.anglesController = anglesController;
 	}
 
 	@Override
@@ -32,7 +38,7 @@ public class EventsListAdapter extends BaseAdapter {
 
 	@Override
 	public long getItemId(int index) {
-		return eventsList.get(index).getItsID();
+		return eventsList.get(index).eventID;
 	}
 
 	@Override
@@ -41,9 +47,11 @@ public class EventsListAdapter extends BaseAdapter {
 		TextView eventName = (TextView)item.findViewById(R.id.eventName);
 		TextView eventStatus = (TextView)item.findViewById(R.id.inviteStatus);
 		
-		eventName.setText(eventsList.get(index).getItsEventTitle());
+		eventName.setText(eventsList.get(index).eventTitle);
 		//TODO: Implement getting this user's invite status
 		eventStatus.setText("Going");
+		
+		item.setOnClickListener(new EventButtonListener(eventsList.get(index)));
 				
 		return item;
 	}
@@ -58,5 +66,20 @@ public class EventsListAdapter extends BaseAdapter {
 		ViewGroup item = (ViewGroup)inflater.inflate(R.layout.event_item, null);
 		
 		return item;
+	}
+	
+	private class EventButtonListener implements OnClickListener
+	{
+		AnglesEvent anglesEvent;
+		
+		public EventButtonListener(AnglesEvent anglesEvent)
+		{
+			this.anglesEvent = anglesEvent;
+		}
+		
+		@Override
+		public void onClick(View view) {
+			anglesController.viewEvent(anglesEvent);
+		}
 	}
 }

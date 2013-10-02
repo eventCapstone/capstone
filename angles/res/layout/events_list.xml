@@ -10,14 +10,15 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:text="Your Events:"
-        android:textSize="32sp" />
+        android:textSize="32dp" />
 
     <ListView
         android:id="@+id/listOfEvents"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textView1" >
+        android:layout_below="@+id/textView1"
+        android:gravity="left" >
     </ListView>
 
 </RelativeLayout>

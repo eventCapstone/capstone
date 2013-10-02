@@ -2,13 +2,16 @@ package com.angles.view;
 
 
 import android.app.Activity;
-
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 
 import com.angles.angles.AnglesController;
 import com.angles.angles.R;
+import com.angles.model.AnglesEvent;
 
 public class AnglesTouchManager {
 	public static final String KEY = "AnglesTouchManager"; 
@@ -36,21 +39,15 @@ public class AnglesTouchManager {
 	
 	public void setEventsHomeListeners() 
 	{
-		
 	}
-
-	private class EventButtonListener implements OnClickListener
+	
+	public void setEventDisplayListeners()
 	{
-		public EventButtonListener()
-		{
-			
-		}
-		@Override
-		public void onClick(View view) {
-			Button button = (Button) view;
-			String eventID = button.getText().toString();
-			
-		}
-		
+		Button otherAnglesButton = (Button) itsActivity.findViewById(R.id.otherAnglesButton);
+		otherAnglesButton.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				itsAnglesController.eventListHomeEvent();
+			}
+		});
 	}
 }

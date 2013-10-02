@@ -16,7 +16,7 @@ public class AnglesController {
 	
 	
 	public AnglesController(Activity inActivity){
-		itsDisplayManager = new AnglesDisplayManager(inActivity);
+		itsDisplayManager = new AnglesDisplayManager(inActivity, this);
 		itsTouchManager = new AnglesTouchManager(inActivity, this);	
 	}
 	
@@ -27,12 +27,13 @@ public class AnglesController {
 	
 	public void eventListHomeEvent(){
 		itsDisplayManager.displayEventListHome();
-		
+		//touch listeners currently implemented in EventListAdapter
 	}
 	
 	public void viewEvent(AnglesEvent event)
 	{
 		itsDisplayManager.displayEvent(event);
+		itsTouchManager.setEventDisplayListeners();
 	}
 	
 	
