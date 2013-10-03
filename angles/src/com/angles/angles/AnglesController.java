@@ -25,8 +25,14 @@ public class AnglesController {
 		itsTouchManager.setHomePageListeners();
 	}
 	
+	public void loginEvent(){
+		itsDisplayManager.displayLogin();
+		itsTouchManager.setLoginPageListeners();
+	}
+	
 	public void eventListHomeEvent(){
 		itsDisplayManager.displayEventListHome();
+		itsTouchManager.setEventsHomeListeners();
 		//touch listeners currently implemented in EventListAdapter
 	}
 	
@@ -36,5 +42,21 @@ public class AnglesController {
 		itsTouchManager.setEventDisplayListeners();
 	}
 	
+	public void eventCreateAnglesEvent(){
+		itsDisplayManager.displayCreateAngle();
+		itsTouchManager.setCreateAngleListenders();
+	}
+
+	public void newAccountEvent() {
+		itsDisplayManager.displayNewAccount();
+		itsTouchManager.setCreateNewAccountListeners();
+		
+	}
+
+	public void eventAngleCreateCompleted() {
+		itsDisplayManager.displayCreateAngleCompleted();
+		itsTouchManager.setAngleCompleteListeners();
+		
+	}
 	
 }

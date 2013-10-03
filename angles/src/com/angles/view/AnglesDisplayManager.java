@@ -36,6 +36,11 @@ public class AnglesDisplayManager {
 		theList.setAdapter(new EventsListAdapter(EventsManager.getEventList(), anglesController));
 	}
 	
+	public void displayCreateAngle(){
+		itsActivity.setContentView(R.layout.create_event);
+		
+	}
+	
 	public void displayEvent(AnglesEvent event)
 	{
 		itsActivity.setContentView(R.layout.events_view);
@@ -45,6 +50,16 @@ public class AnglesDisplayManager {
 		startTime.setText("Start Time: " + event.startTime);
 		TextView host = (TextView) itsActivity.findViewById(R.id.host);
 		host.setText("Hosted By: " + event.host.name);
+	}
+	
+	public void displayCreateAngleCompleted(){
+		itsActivity.setContentView(R.layout.event_create_complete);
+	}
+	public void displayLogin(){
+		itsActivity.setContentView(R.layout.login_screen);
+	}
+	public void displayNewAccount(){
+		itsActivity.setContentView(R.layout.new_account_page);
 	}
 	
 	private class StableArrayAdapter extends ArrayAdapter<String> {

@@ -4,40 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <RadioButton
-        android:id="@+id/attendingNo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/attendingYes"
-        android:layout_below="@+id/attendingYes"
-        android:text="No" />
-
-    <RadioButton
-        android:id="@+id/attendingMaybe"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/attendingNo"
-        android:layout_below="@+id/attendingNo"
-        android:text="Maybe" />
-
-    <ListView
-        android:id="@+id/Guests"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/attendingMaybe" >
-    </ListView>
-
-    <TextView
-        android:id="@+id/attending"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/attendingYes"
-        android:layout_alignBottom="@+id/attendingYes"
-        android:layout_alignLeft="@+id/startTime"
-        android:text="Attending?"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
     <TextView
         android:id="@+id/host"
         android:layout_width="wrap_content"
@@ -59,24 +25,6 @@
         android:text="Start Time: "
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <Button
-        android:id="@+id/otherAnglesButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="14dp"
-        android:text="Other Angles" />
-
-    <RadioButton
-        android:id="@+id/attendingYes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/otherAnglesButton"
-        android:layout_below="@+id/startTime"
-        android:layout_marginTop="30dp"
-        android:text="Yes" />
-
     <TextView
         android:id="@+id/eventName"
         android:layout_width="wrap_content"
@@ -86,5 +34,69 @@
         android:layout_marginTop="20dp"
         android:text="Event Name"
         android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <Button
+        android:id="@+id/otherAnglesButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/eventName"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="16dp"
+        android:text="Other Angles" />
+
+    <Button
+        android:id="@+id/invite_more_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/otherAnglesButton"
+        android:layout_toRightOf="@+id/otherAnglesButton"
+        android:text="Invite More" />
+
+    <RadioButton
+        android:id="@+id/attendingNo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/button1"
+        android:layout_below="@+id/startTime"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="26dp"
+        android:text="No" />
+
+    <RadioButton
+        android:id="@+id/attendingMaybe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/button1"
+        android:layout_below="@+id/attendingNo"
+        android:layout_marginLeft="20dp"
+        android:text="Maybe" />
+
+    <RadioButton
+        android:id="@+id/attendingYes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/button1"
+        android:layout_below="@+id/attendingMaybe"
+        android:layout_marginLeft="20dp"
+        android:text="Yes" />
+
+    <ListView
+        android:id="@+id/Guests"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/attendingYes" >
+
+    </ListView>
+
+    <TextView
+        android:id="@+id/attending"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/startTime"
+        android:layout_below="@+id/startTime"
+        android:text="Attending?"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>

@@ -27,6 +27,21 @@ public class AnglesTouchManager {
 		itsAnglesController = inController;
 	}
 	
+	public void setLoginPageListeners(){
+		Button login = (Button) itsActivity.findViewById(R.id.login_button);
+		login.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				itsAnglesController.homeEvent();
+			}
+		});
+		Button newUser = (Button) itsActivity.findViewById(R.id.new_account_button);
+		newUser.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				itsAnglesController.newAccountEvent();;
+			}
+		});
+	}
+	
 	public void setHomePageListeners() 
 	{
 		Button button = (Button) itsActivity.findViewById(R.id.homeEventsButton);
@@ -39,6 +54,13 @@ public class AnglesTouchManager {
 	
 	public void setEventsHomeListeners() 
 	{
+		Button createAngleButton = (Button) itsActivity.findViewById(R.id.create_angle_button);
+		createAngleButton.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				itsAnglesController.eventCreateAnglesEvent();
+				
+			}
+		});
 	}
 	
 	public void setEventDisplayListeners()
@@ -50,4 +72,34 @@ public class AnglesTouchManager {
 			}
 		});
 	}
+	
+	public void setCreateAngleListenders(){
+		Button inviteGuests = (Button) itsActivity.findViewById(R.id.new_angle_invite_guests);
+		inviteGuests.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				itsAnglesController.eventAngleCreateCompleted();
+			}
+		});
+	}
+	
+	public void setCreateNewAccountListeners(){
+		Button submit = (Button) itsActivity.findViewById(R.id.submit_button);
+		submit.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				itsAnglesController.homeEvent();
+			}
+		});
+	}
+	
+	public void setAngleCompleteListeners(){
+		Button gotIt = (Button) itsActivity.findViewById(R.id.completed_angle_button);
+		gotIt.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				itsAnglesController.eventListHomeEvent();
+			}
+		});
+	}
+	
+	
+	
 }
