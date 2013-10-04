@@ -1,6 +1,7 @@
 package com.angles.view;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -49,10 +50,11 @@ public class AnglesDisplayManager {
 		itsActivity.setContentView(R.layout.events_view);
 		TextView eventName = (TextView) itsActivity.findViewById(R.id.eventName);
 		eventName.setText("Event Name: " + event.eventTitle);
-		TextView startTime = (TextView) itsActivity.findViewById(R.id.startTime);
-		startTime.setText("Start Time: " + event.startTime);
 		TextView host = (TextView) itsActivity.findViewById(R.id.host);
 		host.setText("Hosted By: " + event.host.name);
+		
+		TextView startTime = (TextView) itsActivity.findViewById(R.id.startTime);
+		startTime.setText("Start Time: " + EventsManager.getDisplayDateTime(event.startTime));
 	}
 	
 	public void displayCreateAngleCompleted(){
