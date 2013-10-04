@@ -20,11 +20,6 @@ public class AnglesController {
 		itsTouchManager = new AnglesTouchManager(inActivity, this);	
 	}
 	
-	public void homeEvent(){
-		itsDisplayManager.displayHome();
-		itsTouchManager.setHomePageListeners();
-	}
-	
 	public void loginEvent(){
 		itsDisplayManager.displayLogin();
 		itsTouchManager.setLoginPageListeners();
@@ -40,6 +35,11 @@ public class AnglesController {
 	{
 		itsDisplayManager.displayEvent(event);
 		itsTouchManager.setEventDisplayListeners();
+	}
+	
+	public void changeSettings() {
+		itsDisplayManager.displaySettings();
+		itsTouchManager.setSettingsListeners();
 	}
 	
 	public void eventCreateAnglesEvent(){
