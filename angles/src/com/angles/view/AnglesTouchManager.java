@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -31,13 +32,34 @@ public class AnglesTouchManager {
 		Button login = (Button) itsActivity.findViewById(R.id.login_button);
 		login.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				itsAnglesController.eventListHomeEvent();
+				((LinearLayout) itsActivity.findViewById(R.id.loginUserNameGroup)).setVisibility(View.VISIBLE);
+				((LinearLayout) itsActivity.findViewById(R.id.loginPasswordGroup)).setVisibility(View.VISIBLE);
+				v.setOnClickListener(new OnClickListener() {
+					public void onClick(View v)
+					{
+						itsAnglesController.loginUser();	
+					}
+				});
+				
+				((Button) v).setText("Tap Again to Login!");
 			}
 		});
-		Button newUser = (Button) itsActivity.findViewById(R.id.new_account_button);
+		
+		Button newUser = (Button) itsActivity.findViewById(R.id.signup_button);
 		newUser.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				itsAnglesController.newAccountEvent();;
+				((LinearLayout) itsActivity.findViewById(R.id.signupUserNameGroup)).setVisibility(View.VISIBLE);
+				((LinearLayout) itsActivity.findViewById(R.id.signupEmailGroup)).setVisibility(View.VISIBLE);
+				((LinearLayout) itsActivity.findViewById(R.id.signupPasswordGroup)).setVisibility(View.VISIBLE);
+
+				v.setOnClickListener(new OnClickListener() {
+					public void onClick(View v)
+					{
+						itsAnglesController.registerUser();
+					}
+				});
+				
+				((Button) v).setText("Tap Again to Signup!");
 			}
 		});
 	}

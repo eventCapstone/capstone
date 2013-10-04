@@ -6,7 +6,10 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -57,7 +60,14 @@ public class AnglesDisplayManager {
 	}
 	public void displayLogin(){
 		itsActivity.setContentView(R.layout.login_screen);
+
+		((LinearLayout) itsActivity.findViewById(R.id.loginUserNameGroup)).setVisibility(View.INVISIBLE);
+		((LinearLayout) itsActivity.findViewById(R.id.loginPasswordGroup)).setVisibility(View.INVISIBLE);
+		((LinearLayout) itsActivity.findViewById(R.id.signupUserNameGroup)).setVisibility(View.INVISIBLE);
+		((LinearLayout) itsActivity.findViewById(R.id.signupEmailGroup)).setVisibility(View.INVISIBLE);
+		((LinearLayout) itsActivity.findViewById(R.id.signupPasswordGroup)).setVisibility(View.INVISIBLE);
 	}
+	
 	public void displayNewAccount(){
 		itsActivity.setContentView(R.layout.new_account_page);
 	}

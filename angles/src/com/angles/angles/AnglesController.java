@@ -14,6 +14,23 @@ public class AnglesController {
 	AnglesDisplayManager itsDisplayManager;
 	AnglesTouchManager  itsTouchManager;
 	
+	/**
+	 * TODO: Implement login
+	 */
+	public void loginUser()
+	{
+		itsDisplayManager.displayEventListHome();
+		itsTouchManager.setEventsHomeListeners();
+	}
+	
+	/**
+	 * TODO: Implement register new user
+	 */
+	public void registerUser()
+	{
+		itsDisplayManager.displayEventListHome();
+		itsTouchManager.setEventsHomeListeners();
+	}
 	
 	public AnglesController(Activity inActivity){
 		itsDisplayManager = new AnglesDisplayManager(inActivity, this);
