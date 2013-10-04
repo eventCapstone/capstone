@@ -33,10 +33,10 @@ public class AnglesDisplayManager {
 		itsActivity.setContentView(R.layout.angles_settings);
 	}
 	
-	public void displayEventListHome() {
+	public void displayEventListHome(EventsManager eventsManager) {
 		itsActivity.setContentView(R.layout.events_list);
 		ListView theList = (ListView) itsActivity.findViewById(R.id.listOfEvents);
-		theList.setAdapter(new EventsListAdapter(EventsManager.getEventList(), anglesController));
+		theList.setAdapter(new EventsListAdapter(eventsManager.getEventList(), anglesController));
 	}
 	
 	public void displayCreateAngle(){

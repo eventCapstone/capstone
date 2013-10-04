@@ -1,6 +1,7 @@
 package com.angles.angles;
 
 import com.angles.model.AnglesEvent;
+import com.angles.model.EventsManager;
 import com.angles.view.AnglesDisplayManager;
 import com.angles.view.AnglesTouchManager;
 
@@ -13,13 +14,20 @@ public class AnglesController {
 	
 	AnglesDisplayManager itsDisplayManager;
 	AnglesTouchManager  itsTouchManager;
+	EventsManager eventsManager;
+	
+	public AnglesController(Activity inActivity){
+		itsDisplayManager = new AnglesDisplayManager(inActivity, this);
+		itsTouchManager = new AnglesTouchManager(inActivity, this);
+		eventsManager = new EventsManager();
+	}
 	
 	/**
 	 * TODO: Implement login
 	 */
 	public void loginUser()
 	{
-		itsDisplayManager.displayEventListHome();
+		itsDisplayManager.displayEventListHome(eventsManager);
 		itsTouchManager.setEventsHomeListeners();
 	}
 	
@@ -28,13 +36,8 @@ public class AnglesController {
 	 */
 	public void registerUser()
 	{
-		itsDisplayManager.displayEventListHome();
+		itsDisplayManager.displayEventListHome(eventsManager);
 		itsTouchManager.setEventsHomeListeners();
-	}
-	
-	public AnglesController(Activity inActivity){
-		itsDisplayManager = new AnglesDisplayManager(inActivity, this);
-		itsTouchManager = new AnglesTouchManager(inActivity, this);	
 	}
 	
 	public void loginEvent(){
@@ -43,7 +46,7 @@ public class AnglesController {
 	}
 	
 	public void eventListHomeEvent(){
-		itsDisplayManager.displayEventListHome();
+		itsDisplayManager.displayEventListHome(eventsManager);
 		itsTouchManager.setEventsHomeListeners();
 		//touch listeners currently implemented in EventListAdapter
 	}
