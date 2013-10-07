@@ -6,6 +6,7 @@ import com.angles.angles.AnglesController;
 import com.angles.angles.R;
 import com.angles.model.AnglesEvent;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,11 +20,14 @@ import android.widget.TextView;
 public class EventsListAdapter extends BaseAdapter {
 	private List<AnglesEvent> eventsList;
 	private AnglesController anglesController;
+	private Activity eventsListActivity;
 	
-	public EventsListAdapter(List<AnglesEvent> eventsList, AnglesController anglesController)
+	public EventsListAdapter(List<AnglesEvent> eventsList, AnglesController anglesController, 
+			Activity eventsListActivity)
 	{
 		this.eventsList = eventsList;
 		this.anglesController = anglesController;
+		this.eventsListActivity = eventsListActivity;
 	}
 
 	@Override
@@ -51,7 +55,7 @@ public class EventsListAdapter extends BaseAdapter {
 		//TODO: Implement getting this user's invite status
 		eventStatus.setText("Going");
 		
-		item.setOnClickListener(new EventButtonListener(eventsList.get(index)));
+		item.setOnClickListener(new EventButtonListener(eventsListActivity, eventsList.get(index)));
 				
 		return item;
 	}
@@ -71,15 +75,17 @@ public class EventsListAdapter extends BaseAdapter {
 	private class EventButtonListener implements OnClickListener
 	{
 		AnglesEvent anglesEvent;
+		Activity anglesListActivity;
 		
-		public EventButtonListener(AnglesEvent anglesEvent)
+		public EventButtonListener(Activity currentActivity, AnglesEvent anglesEvent)
 		{
 			this.anglesEvent = anglesEvent;
+			this.anglesListActivity = currentActivity;
 		}
 		
 		@Override
 		public void onClick(View view) {
-			anglesController.viewEvent(anglesEvent);
+			anglesController.viewEvent(anglesListActivity, anglesEvent);
 		}
 	}
 }

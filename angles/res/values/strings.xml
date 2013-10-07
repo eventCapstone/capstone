@@ -7,4 +7,5 @@
 	<string name="count">count: 0</string>
 	<string name="events_button_label">Events</string>
 	
+	<string name="loginActivity">Angles Login</string>
 </resources>

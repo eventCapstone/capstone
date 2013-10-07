@@ -9,14 +9,13 @@ import com.angles.angles.AnglesController;
 public class MainActivity extends Activity {
 	//hello
 
-	private AnglesController  itsMainController = new AnglesController(this);
+	private AnglesController  itsMainController;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-    	 super.onCreate(savedInstanceState);
-        	 itsMainController.loginEvent();
-      
-     
+   	 	super.onCreate(savedInstanceState);
+     	AnglesController.createInstance(this);
+     	AnglesController.getInstance().loginEvent(this);
     }
    
 }

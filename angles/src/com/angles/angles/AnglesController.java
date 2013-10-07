@@ -1,82 +1,115 @@
 package com.angles.angles;
 
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 import com.angles.model.AnglesEvent;
 import com.angles.model.EventsManager;
 import com.angles.view.AnglesDisplayManager;
 import com.angles.view.AnglesTouchManager;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
 
 
 public class AnglesController {
+	private static AnglesController controllerInstance;
 	public static final String TAG = "AnglesController";
-	
 	
 	AnglesDisplayManager itsDisplayManager;
 	AnglesTouchManager  itsTouchManager;
 	EventsManager eventsManager;
 	
-	public AnglesController(Activity inActivity){
-		itsDisplayManager = new AnglesDisplayManager(inActivity, this);
-		itsTouchManager = new AnglesTouchManager(inActivity, this);
+	private AnglesController(Activity inActivity){
+		itsDisplayManager = new AnglesDisplayManager(this);
+		itsTouchManager = new AnglesTouchManager(this);
 		eventsManager = new EventsManager();
+	}
+	
+	public static void createInstance(Activity inActivity)
+	{
+		controllerInstance = new AnglesController(inActivity);
+	}
+	
+	public static AnglesController getInstance()
+	{
+		return controllerInstance;
+	}
+	
+	public AnglesDisplayManager getDisplayManager()
+	{
+		return itsDisplayManager;
+	}
+	
+	public AnglesTouchManager getTouchManager()
+	{
+		return itsTouchManager;
+	}
+	
+	public EventsManager getEventsManager()
+	{
+		return eventsManager;
 	}
 	
 	/**
 	 * TODO: Implement login
 	 */
-	public void loginUser()
+	public void loginUser(Activity currentActivity)
 	{
-		itsDisplayManager.displayEventListHome(eventsManager);
-		itsTouchManager.setEventsHomeListeners();
+		eventListHomeEvent(currentActivity);
 	}
 	
 	/**
 	 * TODO: Implement register new user
 	 */
-	public void registerUser()
+	public void registerUser(Activity currentActivity)
 	{
-		itsDisplayManager.displayEventListHome(eventsManager);
-		itsTouchManager.setEventsHomeListeners();
+		eventListHomeEvent(currentActivity);
 	}
 	
-	public void loginEvent(){
-		itsDisplayManager.displayLogin();
-		itsTouchManager.setLoginPageListeners();
+	public void loginEvent(Activity currentActivity){
+		Intent intent = new Intent(currentActivity, LoginActivity.class);
+		currentActivity.startActivity(intent);
 	}
 	
-	public void eventListHomeEvent(){
-		itsDisplayManager.displayEventListHome(eventsManager);
-		itsTouchManager.setEventsHomeListeners();
-		//touch listeners currently implemented in EventListAdapter
+	public void eventListHomeEvent(Activity currentActivity){
+		Intent intent = new Intent(currentActivity, EventsListActivity.class);
+		currentActivity.startActivity(intent);
 	}
 	
-	public void viewEvent(AnglesEvent event)
+	public void viewEvent(Activity currentActivity, AnglesEvent event)
 	{
-		itsDisplayManager.displayEvent(event);
-		itsTouchManager.setEventDisplayListeners();
+		Intent intent = new Intent(currentActivity, EventItemActivity.class);
+		intent.putExtra("event", event);
+		currentActivity.startActivity(intent);
 	}
 	
-	public void changeSettings() {
-		itsDisplayManager.displaySettings();
-		itsTouchManager.setSettingsListeners();
+	public void changeSettings(Activity currentActivity) {
+		Intent intent = new Intent(currentActivity, SettingsActivity.class);
+		currentActivity.startActivity(intent);
 	}
 	
-	public void eventCreateAnglesEvent(){
-		itsDisplayManager.displayCreateAngle();
-		itsTouchManager.setCreateAngleListenders();
+	public void eventCreateAnglesEvent(Activity currentActivity){
+		Intent intent = new Intent(currentActivity, CreateEventActivity.class);
+		currentActivity.startActivity(intent);
 	}
 
-	public void newAccountEvent() {
-		itsDisplayManager.displayNewAccount();
-		itsTouchManager.setCreateNewAccountListeners();
+	public void newAccountEvent(Activity currentActivity) {
+		//makeNewActivity();
+		itsDisplayManager.displayNewAccount(currentActivity);
+		itsTouchManager.setCreateNewAccountListeners(currentActivity);
 		
 	}
 
-	public void eventAngleCreateCompleted() {
-		itsDisplayManager.displayCreateAngleCompleted();
-		itsTouchManager.setAngleCompleteListeners();
-		
+	public void eventAngleCreateCompleted(Activity currentActivity) {
+		///makeNewActivity();
+		itsDisplayManager.displayCreateAngleCompleted(currentActivity);
+		itsTouchManager.setAngleCompleteListeners(currentActivity);
 	}
 	
 }

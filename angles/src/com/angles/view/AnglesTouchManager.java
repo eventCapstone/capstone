@@ -17,27 +17,25 @@ import com.angles.model.AnglesEvent;
 public class AnglesTouchManager {
 	public static final String KEY = "AnglesTouchManager"; 
 	
-	private Activity itsActivity;
-	private AnglesController itsAnglesController;
+	private AnglesController anglesController;
 	
 	
 	
-	public AnglesTouchManager(Activity inActivity, AnglesController inController) 
+	public AnglesTouchManager(AnglesController inController) 
 	{
-		itsActivity = inActivity;
-		itsAnglesController = inController;
+		anglesController = inController;
 	}
 	
-	public void setLoginPageListeners(){
-		Button login = (Button) itsActivity.findViewById(R.id.login_button);
-		login.setOnClickListener(new OnClickListener() {
+	public void setLoginPageListeners(Activity currentActivity){
+		Button login = (Button) currentActivity.findViewById(R.id.login_button);
+		login.setOnClickListener(new AnglesClickListener(currentActivity) {
 			public void onClick(View v) {
-				((LinearLayout) itsActivity.findViewById(R.id.loginUserNameGroup)).setVisibility(View.VISIBLE);
-				((LinearLayout) itsActivity.findViewById(R.id.loginPasswordGroup)).setVisibility(View.VISIBLE);
-				v.setOnClickListener(new OnClickListener() {
+				((LinearLayout) currentActivity.findViewById(R.id.loginUserNameGroup)).setVisibility(View.VISIBLE);
+				((LinearLayout) currentActivity.findViewById(R.id.loginPasswordGroup)).setVisibility(View.VISIBLE);
+				v.setOnClickListener(new AnglesClickListener(currentActivity) {
 					public void onClick(View v)
 					{
-						itsAnglesController.loginUser();	
+						anglesController.loginUser(currentActivity);	
 					}
 				});
 				
@@ -45,17 +43,17 @@ public class AnglesTouchManager {
 			}
 		});
 		
-		Button newUser = (Button) itsActivity.findViewById(R.id.signup_button);
-		newUser.setOnClickListener(new OnClickListener() {
+		Button newUser = (Button) currentActivity.findViewById(R.id.signup_button);
+		newUser.setOnClickListener(new AnglesClickListener(currentActivity) {
 			public void onClick(View v) {
-				((LinearLayout) itsActivity.findViewById(R.id.signupUserNameGroup)).setVisibility(View.VISIBLE);
-				((LinearLayout) itsActivity.findViewById(R.id.signupEmailGroup)).setVisibility(View.VISIBLE);
-				((LinearLayout) itsActivity.findViewById(R.id.signupPasswordGroup)).setVisibility(View.VISIBLE);
+				((LinearLayout) currentActivity.findViewById(R.id.signupUserNameGroup)).setVisibility(View.VISIBLE);
+				((LinearLayout) currentActivity.findViewById(R.id.signupEmailGroup)).setVisibility(View.VISIBLE);
+				((LinearLayout) currentActivity.findViewById(R.id.signupPasswordGroup)).setVisibility(View.VISIBLE);
 
 				v.setOnClickListener(new OnClickListener() {
 					public void onClick(View v)
 					{
-						itsAnglesController.registerUser();
+						anglesController.registerUser(currentActivity);
 					}
 				});
 				
@@ -64,71 +62,77 @@ public class AnglesTouchManager {
 		});
 	}
 	
-	public void setEventsHomeListeners() 
+	public void setEventsHomeListeners(Activity currentActivity) 
 	{
-		Button createAngleButton = (Button) itsActivity.findViewById(R.id.create_angle_button);
-		createAngleButton.setOnClickListener(new OnClickListener() {
+		Button createAngleButton = (Button) currentActivity.findViewById(R.id.create_angle_button);
+		createAngleButton.setOnClickListener(new AnglesClickListener(currentActivity) {
 			public void onClick(View v) {
-				itsAnglesController.eventCreateAnglesEvent();
+				anglesController.eventCreateAnglesEvent(currentActivity);
 				
 			}
 		});
 		
-		Button settingsButton = (Button) itsActivity.findViewById(R.id.settingsButton);
-		settingsButton.setOnClickListener(new OnClickListener() {
+		Button settingsButton = (Button) currentActivity.findViewById(R.id.settingsButton);
+		settingsButton.setOnClickListener(new AnglesClickListener(currentActivity) {
 			public void onClick(View v) {
-				itsAnglesController.changeSettings();
+				anglesController.changeSettings(currentActivity);
 			}
 		});
 	}
 	
-	public void setSettingsListeners()
+	public void setSettingsListeners(Activity currentActivity)
 	{
-		Button saveSettings = (Button) itsActivity.findViewById(R.id.saveSettingsButton);
-		saveSettings.setOnClickListener(new OnClickListener() {
+		Button saveSettings = (Button) currentActivity.findViewById(R.id.saveSettingsButton);
+		saveSettings.setOnClickListener(new AnglesClickListener(currentActivity) {
 			public void onClick(View v) {
-				itsAnglesController.eventListHomeEvent();
+				anglesController.eventListHomeEvent(currentActivity);
 			}
 		});
 	}
 	
-	public void setEventDisplayListeners()
+	public void setEventDisplayListeners(Activity currentActivity)
 	{
-		Button otherAnglesButton = (Button) itsActivity.findViewById(R.id.otherAnglesButton);
-		otherAnglesButton.setOnClickListener(new OnClickListener() {
+		Button otherAnglesButton = (Button) currentActivity.findViewById(R.id.otherAnglesButton);
+		otherAnglesButton.setOnClickListener(new AnglesClickListener(currentActivity) {
 			public void onClick(View v) {
-				itsAnglesController.eventListHomeEvent();
+				anglesController.eventListHomeEvent(currentActivity);
 			}
 		});
 	}
 	
-	public void setCreateAngleListenders(){
-		Button inviteGuests = (Button) itsActivity.findViewById(R.id.new_angle_invite_guests);
-		inviteGuests.setOnClickListener(new OnClickListener() {
+	public void setCreateAngleListeners(Activity currentActivity){
+		Button inviteGuests = (Button) currentActivity.findViewById(R.id.new_angle_invite_guests);
+		inviteGuests.setOnClickListener(new AnglesClickListener(currentActivity) {
 			public void onClick(View v) {
-				itsAnglesController.eventAngleCreateCompleted();
+				anglesController.eventAngleCreateCompleted(currentActivity);
 			}
 		});
 	}
 	
-	public void setCreateNewAccountListeners(){
-		Button submit = (Button) itsActivity.findViewById(R.id.submit_button);
-		submit.setOnClickListener(new OnClickListener() {
+	public void setCreateNewAccountListeners(Activity currentActivity){
+		Button submit = (Button) currentActivity.findViewById(R.id.submit_button);
+		submit.setOnClickListener(new AnglesClickListener(currentActivity) {
 			public void onClick(View v) {
-				itsAnglesController.eventListHomeEvent();
+				anglesController.eventListHomeEvent(currentActivity);
 			}
 		});
 	}
 	
-	public void setAngleCompleteListeners(){
-		Button gotIt = (Button) itsActivity.findViewById(R.id.completed_angle_button);
-		gotIt.setOnClickListener(new OnClickListener() {
+	public void setAngleCompleteListeners(Activity currentActivity){
+		Button gotIt = (Button) currentActivity.findViewById(R.id.completed_angle_button);
+		gotIt.setOnClickListener(new AnglesClickListener(currentActivity) {
 			public void onClick(View v) {
-				itsAnglesController.eventListHomeEvent();
+				anglesController.eventListHomeEvent(currentActivity);
 			}
 		});
 	}
 	
-	
+	private abstract class AnglesClickListener implements OnClickListener {
+		protected Activity currentActivity;
+		
+		public AnglesClickListener(Activity currentActivity) {
+			this.currentActivity = currentActivity;
+		}
+	}
 	
 }

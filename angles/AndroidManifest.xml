@@ -18,6 +18,37 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        
+        <activity android:label="@string/loginActivity" android:name="com.angles.angles.LoginActivity">
+            <intent-filter>
+                <action android:name="com.angles.angles.LoginActivity"/>
+            </intent-filter>
+        </activity>
+        
+        <activity android:label="@string/app_name" android:name="com.angles.angles.EventsListActivity">
+            <intent-filter>
+                <action android:name="com.angles.angles.EventsListActivity"/>
+            </intent-filter>
+        </activity>
+        
+        <activity android:label="@string/app_name" android:name="com.angles.angles.EventItemActivity">
+            <intent-filter>
+                <action android:name="com.angles.angles.EventItemActivity"/>
+            </intent-filter>
+        </activity>
+        
+         <activity android:label="@string/app_name" android:name="com.angles.angles.SettingsActivity">
+            <intent-filter>
+                <action android:name="com.angles.angles.SettingsActivity"/>
+            </intent-filter>
+        </activity>
+        
+         <activity android:label="@string/app_name" android:name="com.angles.angles.CreateEventActivity">
+            <intent-filter>
+                <action android:name="com.angles.angles.CreateEventActivity"/>
+            </intent-filter>
+        </activity>
+        
         <service android:name=".GCMIntentService"/>
         <receiver android:name="com.google.android.gcm.GCMBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>

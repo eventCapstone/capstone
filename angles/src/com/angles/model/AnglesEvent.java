@@ -1,12 +1,13 @@
 package com.angles.model;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
 import com.google.api.client.util.DateTime;
 
-public class AnglesEvent {
+public class AnglesEvent implements Serializable {
 	public String eventTitle;
 	public String eventDescription;
 	public Calendar startTime;
@@ -22,4 +23,6 @@ public class AnglesEvent {
 		this.host = host;
 		this.startTime = startTime;
 	}
+	
+	
 }

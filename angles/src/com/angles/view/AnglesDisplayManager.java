@@ -22,56 +22,55 @@ import com.angles.model.EventsManager;
 public class AnglesDisplayManager {
 	public static final String KEY = "AnglesDisplayManager"; 
 	
-	private Activity itsActivity;
 	private AnglesController anglesController;
 	
-	public AnglesDisplayManager(Activity inActivity, AnglesController anglesController){
-		itsActivity = inActivity;
+	public AnglesDisplayManager(AnglesController anglesController){
 		this.anglesController = anglesController;
 	}
 	
-	public void displaySettings() {
-		itsActivity.setContentView(R.layout.angles_settings);
+	public void displaySettings(Activity currentActivity) {
+		currentActivity.setContentView(R.layout.angles_settings);
 	}
 	
-	public void displayEventListHome(EventsManager eventsManager) {
-		itsActivity.setContentView(R.layout.events_list);
-		ListView theList = (ListView) itsActivity.findViewById(R.id.listOfEvents);
-		theList.setAdapter(new EventsListAdapter(eventsManager.getEventList(), anglesController));
+	public void displayEventListHome(Activity currentActivity, EventsManager eventsManager) {
+		currentActivity.setContentView(R.layout.events_list);
+		ListView theList = (ListView) currentActivity.findViewById(R.id.listOfEvents);
+		theList.setAdapter(new EventsListAdapter(eventsManager.getEventList(), anglesController, currentActivity));
 	}
 	
-	public void displayCreateAngle(){
-		itsActivity.setContentView(R.layout.create_event);
-		
+	public void displayCreateAngle(Activity currentActivity){
+		currentActivity.setContentView(R.layout.create_event);
 	}
 	
-	public void displayEvent(AnglesEvent event)
+	public void displayEvent(Activity currentActivity, AnglesEvent event)
 	{
-		itsActivity.setContentView(R.layout.events_view);
-		TextView eventName = (TextView) itsActivity.findViewById(R.id.eventName);
+		currentActivity.setContentView(R.layout.events_view);
+		TextView eventName = (TextView) currentActivity.findViewById(R.id.eventName);
 		eventName.setText("Event Name: " + event.eventTitle);
-		TextView host = (TextView) itsActivity.findViewById(R.id.host);
+		TextView host = (TextView) currentActivity.findViewById(R.id.host);
 		host.setText("Hosted By: " + event.host.name);
 		
-		TextView startTime = (TextView) itsActivity.findViewById(R.id.startTime);
+		TextView startTime = (TextView) currentActivity.findViewById(R.id.startTime);
 		startTime.setText("Start Time: " + EventsManager.getDisplayDateTime(event.startTime));
 	}
 	
-	public void displayCreateAngleCompleted(){
-		itsActivity.setContentView(R.layout.event_create_complete);
-	}
-	public void displayLogin(){
-		itsActivity.setContentView(R.layout.login_screen);
-
-		((LinearLayout) itsActivity.findViewById(R.id.loginUserNameGroup)).setVisibility(View.INVISIBLE);
-		((LinearLayout) itsActivity.findViewById(R.id.loginPasswordGroup)).setVisibility(View.INVISIBLE);
-		((LinearLayout) itsActivity.findViewById(R.id.signupUserNameGroup)).setVisibility(View.INVISIBLE);
-		((LinearLayout) itsActivity.findViewById(R.id.signupEmailGroup)).setVisibility(View.INVISIBLE);
-		((LinearLayout) itsActivity.findViewById(R.id.signupPasswordGroup)).setVisibility(View.INVISIBLE);
+	public void displayCreateAngleCompleted(Activity currentActivity){
+		currentActivity.setContentView(R.layout.event_create_complete);
 	}
 	
-	public void displayNewAccount(){
-		itsActivity.setContentView(R.layout.new_account_page);
+	public void displayLogin(Activity currentActivity){
+		//Activity currentActivity = anglesController.getCurrentActivity();
+		currentActivity.setContentView(R.layout.login_screen);
+
+		((LinearLayout) currentActivity.findViewById(R.id.loginUserNameGroup)).setVisibility(View.INVISIBLE);
+		((LinearLayout) currentActivity.findViewById(R.id.loginPasswordGroup)).setVisibility(View.INVISIBLE);
+		((LinearLayout) currentActivity.findViewById(R.id.signupUserNameGroup)).setVisibility(View.INVISIBLE);
+		((LinearLayout) currentActivity.findViewById(R.id.signupEmailGroup)).setVisibility(View.INVISIBLE);
+		((LinearLayout) currentActivity.findViewById(R.id.signupPasswordGroup)).setVisibility(View.INVISIBLE);
+	}
+	
+	public void displayNewAccount(Activity currentActivity){
+		currentActivity.setContentView(R.layout.new_account_page);
 	}
 	
 	private class StableArrayAdapter extends ArrayAdapter<String> {
