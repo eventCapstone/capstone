@@ -20,7 +20,7 @@ import android.view.View;
 import android.widget.Toast;
 
 @TargetApi(Build.VERSION_CODES.GINGERBREAD)
-public class CameraActivity extends Activity {
+public class OngoingEventActivity extends Activity {
 	
 	public final static String DEBUG_TAG = "CameraActivity";
 	
@@ -98,11 +98,13 @@ public class CameraActivity extends Activity {
 	}
 	
 	public void onCreate(Bundle savedInstanceState) {
-		
+				
 		super.onCreate(savedInstanceState);
 		
-		setContentView(R.layout.ongoing_event_activity_main);
+		AnglesController.getInstance().getDisplayManager().displayOngoingEventActivity(this);
 		
+		AnglesController.getInstance().getTouchManager().setOngoingEventListeners(this);
+				
 		/* The boolean cameraDetected first checks if the environment has
 		 * any cameras.
 		 */
@@ -119,14 +121,14 @@ public class CameraActivity extends Activity {
 			
 			if (cameraId < 0) {
 				
-				Toast.makeText(this, "No Front Facing Camera Found!", Toast.LENGTH_LONG).show();
+				Toast.makeText(getApplicationContext(), "No Front Facing Camera Found!", Toast.LENGTH_LONG).show();
 				
 				cameraId = findRearFacingCamera();
 			}
 			
 			if (cameraId < 0) {
 				
-				Toast.makeText(this, "No Rear Facing Camera Found!", Toast.LENGTH_LONG).show();
+				Toast.makeText(getApplicationContext(), "No Rear Facing Camera Found!", Toast.LENGTH_LONG).show();
 			}
 			else
 				
@@ -135,7 +137,7 @@ public class CameraActivity extends Activity {
 		}
 	}
 	
-	public void onClick(View view) {
+	public void newAngle(View view) {
 		
 		/* Taking a picture launches a new PhotoHandler instance.
 		 * PhotoHandler gets the file data and saves it locally.
@@ -143,6 +145,7 @@ public class CameraActivity extends Activity {
 		 * NOTE: Saving locally is only temporary until the photos
 		 * can be sent to the datastore.
 		 */
+		
 		camera.takePicture(null, null, new PhotoHandler(getApplicationContext()));
 	}
 	

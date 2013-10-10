@@ -6,6 +6,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 public class EventsManager {
+	
 	private List<AnglesEvent> eventList;
 	
 	public EventsManager()
@@ -32,6 +33,7 @@ public class EventsManager {
 	}
 	
 	public List<AnglesEvent> getEventList(){
+		
 	    return eventList;
 	}
 	

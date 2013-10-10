@@ -73,6 +73,11 @@ public class AnglesDisplayManager {
 		currentActivity.setContentView(R.layout.new_account_page);
 	}
 	
+	public void displayOngoingEventActivity(Activity currentActivity) {
+		
+		currentActivity.setContentView(R.layout.ongoing_event_activity_main);
+	}
+	
 	private class StableArrayAdapter extends ArrayAdapter<String> {
 	
 	    HashMap<String, Integer> mIdMap = new HashMap<String, Integer>();

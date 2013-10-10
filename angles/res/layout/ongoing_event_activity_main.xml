@@ -8,24 +8,13 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="18dp"
-        android:text="Angles"
-        android:textSize="32sp" />
-
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/btnEventList"
         style="?android:attr/buttonStyleSmall"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="76dp"
         android:text="Events" />
 
     <Button
@@ -33,10 +22,20 @@
         style="?android:attr/buttonStyleSmall"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/button1"
-        android:layout_alignLeft="@+id/button1"
-        android:layout_marginBottom="25dp"
+        android:layout_above="@+id/btnEventList"
+        android:layout_alignLeft="@+id/btnEventList"
         android:onClick="onClick"
         android:text="Take a Photo!" />
+
+    <Gallery
+        android:id="@+id/galleryRecentAngles"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="46dp"
+        android:background="#FF0000" />
 
 </RelativeLayout>

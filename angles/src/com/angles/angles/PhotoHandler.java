@@ -40,8 +40,8 @@ public class PhotoHandler implements PictureCallback {
 		return new File(localFileDirectory, "My Angles");
 	}
 	
-	/*
-	 *
+	/* The method onPictureTaken creates a filename for the raw photo,
+	 *  and saves it to disk. 
 	 */
 	public void onPictureTaken(byte[] data, Camera camera) {
 		
@@ -50,7 +50,7 @@ public class PhotoHandler implements PictureCallback {
 		if (pictureFileDirectory.exists() == false &&
 			pictureFileDirectory.mkdirs() == false) {
 			
-			Log.d(CameraActivity.DEBUG_TAG, "Can't create a new directory to save an image.");
+			Log.d(OngoingEventActivity.DEBUG_TAG, "Can't create a new directory to save an image.");
 			
 			Toast.makeText(context, "Can't create a new directory to save an image.", Toast.LENGTH_LONG).show();
 			
@@ -79,7 +79,7 @@ public class PhotoHandler implements PictureCallback {
 			
 		} catch (Exception error) {
 			
-			Log.d(CameraActivity.DEBUG_TAG, "File " + filename + " not saved: " + error.getMessage());
+			Log.d(OngoingEventActivity.DEBUG_TAG, "File " + filename + " not saved: " + error.getMessage());
 			
 			Toast.makeText(context, "File " + filename + " not saved.", Toast.LENGTH_LONG).show();
 		}

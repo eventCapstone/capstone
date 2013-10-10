@@ -24,5 +24,13 @@ public class AnglesEvent implements Serializable {
 		this.startTime = startTime;
 	}
 	
+	public Calendar getStartTime() {
+		
+		return startTime;
+	}
 	
+	public Calendar getEndTime() {
+		
+		return endTime;
+	}
 }

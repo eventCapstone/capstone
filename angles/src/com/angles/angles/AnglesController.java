@@ -16,13 +16,16 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-
 public class AnglesController {
+	
 	private static AnglesController controllerInstance;
+	
 	public static final String TAG = "AnglesController";
 	
 	AnglesDisplayManager itsDisplayManager;
+	
 	AnglesTouchManager  itsTouchManager;
+	
 	EventsManager eventsManager;
 	
 	private AnglesController(Activity inActivity){
@@ -61,7 +64,13 @@ public class AnglesController {
 	 */
 	public void loginUser(Activity currentActivity)
 	{
+		/*	NOTE: Until the app can determine when an ongoing 
+		 *  activity begins, manually toggle which main page 
+		 *  follows the login screen here.
+		 */
 		eventListHomeEvent(currentActivity);
+		
+		//ongoingEvent(currentActivity);
 	}
 	
 	/**
@@ -103,13 +112,18 @@ public class AnglesController {
 		//makeNewActivity();
 		itsDisplayManager.displayNewAccount(currentActivity);
 		itsTouchManager.setCreateNewAccountListeners(currentActivity);
-		
 	}
 
 	public void eventAngleCreateCompleted(Activity currentActivity) {
 		///makeNewActivity();
 		itsDisplayManager.displayCreateAngleCompleted(currentActivity);
 		itsTouchManager.setAngleCompleteListeners(currentActivity);
-	}
+	} 
 	
+	public void ongoingEvent(Activity currentActivity) {
+		
+		itsDisplayManager.displayOngoingEventActivity(currentActivity);
+		
+		itsTouchManager.setOngoingEventListeners(currentActivity);
+	}
 }

@@ -19,8 +19,6 @@ public class AnglesTouchManager {
 	
 	private AnglesController anglesController;
 	
-	
-	
 	public AnglesTouchManager(AnglesController inController) 
 	{
 		anglesController = inController;
@@ -122,6 +120,29 @@ public class AnglesTouchManager {
 		Button gotIt = (Button) currentActivity.findViewById(R.id.completed_angle_button);
 		gotIt.setOnClickListener(new AnglesClickListener(currentActivity) {
 			public void onClick(View v) {
+				anglesController.eventListHomeEvent(currentActivity);
+			}
+		});
+	}
+	
+	public void setOngoingEventListeners(Activity currentActivity) {
+		
+		Button btnCapturePhoto = (Button) currentActivity.findViewById(R.id.btnCapturePhoto);
+		
+		btnCapturePhoto.setOnClickListener(new AnglesClickListener(currentActivity) {
+			
+			public void onClick(View v) {
+				
+				anglesController.ongoingEvent(currentActivity);
+			}
+		});
+		
+		Button btnEventList = (Button) currentActivity.findViewById(R.id.btnEventList);
+		
+		btnEventList.setOnClickListener(new AnglesClickListener(currentActivity) {
+			
+			public void onClick(View v) {
+				
 				anglesController.eventListHomeEvent(currentActivity);
 			}
 		});
