@@ -38,7 +38,7 @@ public class AnglesDisplayManager {
 		theList.setAdapter(new EventsListAdapter(eventsManager.getEventList(), anglesController, currentActivity));
 	}
 	
-	public void displayCreateAngle(Activity currentActivity){
+	public void displayCreateEvent(Activity currentActivity){
 		currentActivity.setContentView(R.layout.create_event);
 	}
 	
@@ -48,7 +48,7 @@ public class AnglesDisplayManager {
 		TextView eventName = (TextView) currentActivity.findViewById(R.id.eventName);
 		eventName.setText("Event Name: " + event.eventTitle);
 		TextView host = (TextView) currentActivity.findViewById(R.id.host);
-		host.setText("Hosted By: " + event.host.name);
+		host.setText("Hosted By: " + event.getHost());
 		
 		TextView startTime = (TextView) currentActivity.findViewById(R.id.startTime);
 		startTime.setText("Start Time: " + EventsManager.getDisplayDateTime(event.startTime));

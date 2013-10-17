@@ -80,18 +80,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getWritableDatabase();
 		
 		ContentValues values = new ContentValues();
+
+		values.put(KEY_EVENT_ID, event.getEventID().toString());
 		
-		values.put(KEY_EVENT_ID, event.getEventID());
-		
-		values.put(EVENT_TITLE, event.getEventTitle());
+		values.put(EVENT_TITLE, event.eventTitle);
 		
 		/* TODO: HOST_ID must be unique identifier of a User within
 		 * the system. For now it's just "Joe".
 		 */
 		values.put(HOST_ID, "Joe");
 		
-		values.put(START_TIME, event.getStartTime());
+		values.put(START_TIME, EventsManager.getDisplayDateTime(event.startTime));
 		
-		values.put(END_TIME, event.getEndTime());
+		values.put(END_TIME, EventsManager.getDisplayDateTime(event.endTime));
 	}
 }

@@ -42,7 +42,7 @@ public class EventsListAdapter extends BaseAdapter {
 
 	@Override
 	public long getItemId(int index) {
-		return eventsList.get(index).eventID;
+		return eventsList.get(index).getEventID().getLeastSignificantBits();
 	}
 
 	@Override

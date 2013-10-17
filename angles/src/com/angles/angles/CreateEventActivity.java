@@ -9,7 +9,7 @@ public class CreateEventActivity extends Activity {
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
     	 super.onCreate(savedInstanceState);
-    	 AnglesController.getInstance().getDisplayManager().displayCreateAngle(this);
+    	 AnglesController.getInstance().getDisplayManager().displayCreateEvent(this);
     	 AnglesController.getInstance().getTouchManager().setCreateAngleListeners(this);
     }
 }

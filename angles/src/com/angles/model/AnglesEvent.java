@@ -1,108 +1,80 @@
 package com.angles.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
+
+import com.google.api.client.util.DateTime;
 
 public class AnglesEvent implements Serializable {
 	public String eventTitle;
 	public String eventDescription;
 	public Calendar startTime;
 	public Calendar endTime;
-	public boolean inviteIndicator;
-	public List<User> invitees;
-	public User host;
-	public long eventID;
 	
-	public AnglesEvent(String eventTitle, User host, Calendar startTime)
+	private User host;
+	private UUID eventID;
+	private Map<User, Attending> attendees;
+	
+	/**
+	 * Creates a new event initialized with one attendee - the host - who is ATTENDING
+	 * @param eventTitle
+	 * @param eventDescription
+	 * @param startTime
+	 * @param endTime
+	 * @param host
+	 * @param eventID
+	 */
+	public AnglesEvent(String eventTitle, String eventDescription, Calendar startTime, Calendar endTime,
+			User host, UUID eventID)
 	{
 		this.eventTitle = eventTitle;
-		this.host = host;
+		this.eventDescription = eventDescription;
 		this.startTime = startTime;
+		this.endTime = endTime;
+		this.host = host;
+		this.eventID = eventID;
+		
+		this.attendees = new HashMap();
+		this.attendees.put(host, Attending.ATTENDING);
 	}
 	
-	/* GETTERS */
-	public String getEventTitle() {
-		
-		return eventTitle;
-	}
-	
-	public String getEventDescription() {
-		
-		return eventDescription;
-	}
-	
-	public long getStartTime() {
-		
-		return startTime.getTimeInMillis();
-	}
-	
-	public long getEndTime() {
-		
-		return endTime.getTimeInMillis();
-	}
-	
-	public boolean getInviteIndicator() {
-		
-		return inviteIndicator;
-	}
-	
-	public List<User> getInvitees() {
-		
-		return invitees;
-	}
-	
-	public User getHost() {
-		
+	public User getHost()
+	{
 		return host;
 	}
 	
-	public long getEventID() {
-		
+	public UUID getEventID()
+	{
 		return eventID;
 	}
 	
-	/* SETTERS */
-	public void setEventTile(String title) {
-		
-		eventTitle = title;
+	public Map<User, Attending> getAttendees()
+	{
+		return attendees;
 	}
 	
-	public void setEventDescription(String description) {
-		
-		eventDescription = description;
+	public void inviteUsers(Set<User> newInvitees)
+	{
+		for (User user: newInvitees)
+		{
+			//don't add if the user has already been invited
+			if (attendees.get(user) != null)
+			{
+				continue;
+			}
+			
+			attendees.put(user, Attending.UNDECIDED);
+		}
 	}
 	
-	public void setStartTime(Calendar start) {
-		
-		startTime = start;
-	}
-	
-	public void setEndTime(Calendar end) {
-		
-		endTime = end;
-	}
-	
-	public void setInviteIndicator(boolean invite) {
-		
-		inviteIndicator = invite;
-	}
-	
-	public void setInvitees(List<User> listInvitees) {
-		
-		invitees.clear();
-		
-		invitees.addAll(listInvitees);
-	}
-	
-	public void setHost(User user) {
-		
-		host = user;
-	}
-	
-	public void setEventID(long id) {
-		
-		eventID = id;
+	public void uninviteUser(User user)
+	{
+		attendees.remove(user);
 	}
 }
