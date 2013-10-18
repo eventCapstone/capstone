@@ -64,13 +64,9 @@ public class AnglesController {
 	 */
 	public void loginUser(Activity currentActivity)
 	{
-		/*	NOTE: Until the app can determine when an ongoing 
-		 *  activity begins, manually toggle which main page 
-		 *  follows the login screen here.
-		 */
-		eventListHomeEvent(currentActivity);
+		//eventListHomeEvent(currentActivity);
 		
-		//ongoingEvent(currentActivity);
+		ongoingEvent(currentActivity);
 	}
 	
 	/**
@@ -78,7 +74,7 @@ public class AnglesController {
 	 */
 	public void registerUser(Activity currentActivity)
 	{
-		eventListHomeEvent(currentActivity);
+		eventListHomeEvent(currentActivity);	
 	}
 	
 	public void loginEvent(Activity currentActivity){
@@ -122,8 +118,15 @@ public class AnglesController {
 	
 	public void ongoingEvent(Activity currentActivity) {
 		
-		itsDisplayManager.displayOngoingEventActivity(currentActivity);
+		Intent intent = new Intent(currentActivity, OngoingEventActivity.class);
+				
+		currentActivity.startActivity(intent);
+	}
+	
+	public void cameraEvent(Activity currentActivity) {
 		
-		itsTouchManager.setOngoingEventListeners(currentActivity);
+		Intent intent = new Intent(currentActivity, CameraActivity.class);
+		
+		currentActivity.startActivity(intent);
 	}
 }

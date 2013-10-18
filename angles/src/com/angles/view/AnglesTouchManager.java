@@ -1,7 +1,7 @@
 package com.angles.view;
 
-
 import android.app.Activity;
+import android.hardware.Camera;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -11,6 +11,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import com.angles.angles.AnglesController;
+import com.angles.angles.OngoingEventActivity;
 import com.angles.angles.R;
 import com.angles.model.AnglesEvent;
 
@@ -133,7 +134,7 @@ public class AnglesTouchManager {
 			
 			public void onClick(View v) {
 				
-				anglesController.ongoingEvent(currentActivity);
+				anglesController.cameraEvent(currentActivity);
 			}
 		});
 		

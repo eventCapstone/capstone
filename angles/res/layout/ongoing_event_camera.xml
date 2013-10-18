@@ -8,20 +8,18 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
 
-    <TextView
-        android:id="@+id/textView1"
+    <FrameLayout
+        android:id="@+id/camera_preview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        />
+    
+    <Button
+        android:id="@+id/buttonCapture"
+        android:text="Take Photo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="Angles"
-        android:textSize="32sp" />
-
-    <Button
-        android:id="@+id/btnEventList"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView1"
-        android:layout_centerHorizontal="true"
-        android:text="Events" />
+        android:layout_gravity="center"
+        />
+       
 </RelativeLayout>

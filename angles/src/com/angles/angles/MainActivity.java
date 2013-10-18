@@ -13,8 +13,11 @@ public class MainActivity extends Activity {
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+    	
    	 	super.onCreate(savedInstanceState);
+   	 	
      	AnglesController.createInstance(this);
+     	
      	AnglesController.getInstance().loginEvent(this);
     }
    
