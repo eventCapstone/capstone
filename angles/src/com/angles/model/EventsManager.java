@@ -41,7 +41,7 @@ public class EventsManager {
 	    return eventList;
 	}
 	
-	public Calendar makeCalendar(int year, int month, int day, int hour, int minute)
+	public static Calendar makeCalendar(int year, int month, int day, int hour, int minute)
 	{
 		Calendar calendar = new GregorianCalendar();
 		calendar.set(year, month, day, hour, minute);
@@ -50,17 +50,76 @@ public class EventsManager {
 	
 	public static String getDisplayDateTime(Calendar calendar)
 	{
+		return getDisplayDate(calendar) + " at " + getDisplayTime(calendar); 
+	}
+	
+	public static String getDisplayDate(Calendar calendar)
+	{
+		return "" +
+				(calendar.get(Calendar.MONTH) + 1) + "/" +
+				calendar.get(Calendar.DAY_OF_MONTH)+ "/" + 
+				calendar.get(Calendar.YEAR);
+	}
+	
+	public static String getDisplayTime(Calendar calendar)
+	{
 		int hour = calendar.get(Calendar.HOUR_OF_DAY) % 12;
 		if (hour == 0) {
 			hour = 12;
 		}
-		String hourAndMinute = hour + ":" + 
+		return hour + ":" + 
 			String.format("%02d", calendar.get(Calendar.MINUTE)) +
-			(calendar.get(Calendar.HOUR_OF_DAY) < 12 ? "AM" : "PM");
-		return "" +
-			calendar.get(Calendar.MONTH) + "/" +
-			calendar.get(Calendar.DAY_OF_MONTH)+ "/" + 
-			calendar.get(Calendar.YEAR) + " at " +
-			hourAndMinute;
+			(calendar.get(Calendar.HOUR_OF_DAY) < 12 ? " AM" : " PM");
+	}
+	
+	public static Calendar parseDate(String str) {
+		Calendar calendar = Calendar.getInstance();
+		String[] nums = str.split("/");
+		
+		try
+		{
+			calendar.set(Calendar.MONTH, Integer.parseInt(nums[0]));
+			calendar.set(Calendar.DAY_OF_MONTH, Integer.parseInt(nums[1]));
+			calendar.set(Calendar.YEAR, Integer.parseInt(nums[2]));
+		}
+		catch (NumberFormatException e)
+		{
+			return null;
+		}
+		
+		return calendar;
+	}
+	
+	public static Calendar parseTime(String str) 
+	{
+		Calendar calendar = Calendar.getInstance();
+		
+		try
+		{
+			String[] nums = str.split(":");
+			String ampm = nums[1].split(" ")[1];
+			nums[1] = nums[1].split(" ")[0];
+			
+			if (ampm.equals("PM") && !nums[0].equals("12")) {
+				calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(nums[0]) + 12);
+			}
+			else if (ampm.equals("AM") && nums[0].equals("12")) {
+				calendar.set(Calendar.HOUR_OF_DAY, 0);
+			}
+			else {
+				calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(nums[0]));
+			}
+			calendar.set(Calendar.MINUTE, Integer.parseInt(nums[1]));
+		}
+		catch (NullPointerException e)
+		{
+			return null;
+		}
+		catch (NumberFormatException e)
+		{
+			return null;
+		}
+		
+		return calendar;
 	}
 }

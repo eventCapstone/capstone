@@ -1,127 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
+        android:id="@+id/eventNameLabel"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="37dp"
-        android:text="Angle Name:"
+        android:layout_marginTop="5dp"
+        android:text="Event Name:"
+        android:textAppearance="?android:attr/textAppearanceLarge" 
+        android:gravity="center"/>
+    <EditText
+        android:id="@+id/eventNameInput"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:ems="10" />
+    <TextView
+        android:id="@+id/eventDescriptionLabel"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Event Description:"
+        android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <EditText
-        android:id="@+id/editText1"
-        android:layout_width="wrap_content"
+        android:id="@+id/eventDescriptionInput"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/textView1"
-        android:layout_toRightOf="@+id/textView1"
-        android:ems="10" >
-
-        <requestFocus />
-    </EditText>
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/editText1"
-        android:text="Angle Description:"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <EditText
-        android:id="@+id/editText2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/textView2"
         android:ems="10"
         android:inputType="textMultiLine" />
-
-    <EditText
-        android:id="@+id/editText3"
-        android:layout_width="wrap_content"
+     
+     <TextView
+        android:id="@+id/startDateLabel"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/editText2"
-        android:layout_marginTop="34dp"
-        android:ems="10"
-        android:inputType="date" />
-
-    <EditText
-        android:id="@+id/editText4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/editText3"
-        android:layout_toRightOf="@+id/editText3"
-        android:ems="10"
-        android:inputType="time" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/editText4"
-        android:layout_alignParentLeft="true"
-        android:layout_alignRight="@+id/textView1"
+        android:gravity="center"
         android:text="Start Date:" />
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
+     <Button
+        android:id="@+id/startDateButton"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/textView3"
-        android:layout_toRightOf="@+id/editText3"
+        android:gravity="center"
+        android:text="mm-dd-yyyy" />
+     
+     <TextView
+        android:id="@+id/startTimeLabel"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
         android:text="Start Time:" />
-
-    <EditText
-        android:id="@+id/editText5"
-        android:layout_width="wrap_content"
+     <Button
+        android:id="@+id/startTimeButton"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/editText3"
-        android:layout_marginTop="28dp"
-        android:ems="10"
-        android:inputType="date" />
+        android:gravity="center"
+        android:text="hh:mm" />
 
-    <EditText
-        android:id="@+id/editText6"
-        android:layout_width="wrap_content"
+<TextView
+        android:id="@+id/endDateLabel"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/editText5"
-        android:layout_toRightOf="@+id/editText5"
-        android:ems="10"
-        android:inputType="time" />
-
-    <TextView
-        android:id="@+id/TextView01"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/editText6"
-        android:layout_alignParentLeft="true"
+        android:gravity="center"
         android:text="End Date:" />
-
-    <Button
-        android:id="@+id/new_angle_invite_guests"
-        android:layout_width="wrap_content"
+     <Button
+        android:id="@+id/endDateButton"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:text="Invite People!" />
-
-    <TextView
-        android:id="@+id/TextView02"
-        android:layout_width="wrap_content"
+        android:gravity="center"
+        android:text="mm-dd-yyyy" />
+     
+     <TextView
+        android:id="@+id/endTimeLabel"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/TextView01"
-        android:layout_alignBottom="@+id/TextView01"
-        android:layout_toRightOf="@+id/editText3"
+        android:gravity="center"
         android:text="End Time:" />
-
-</RelativeLayout>
+     <Button
+        android:id="@+id/endTimeButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="hh:mm" />
+     
+     <Button
+         android:id="@+id/submitNewEventButton"
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content"
+         android:gravity="center"
+         android:layout_marginTop="10dp"
+         android:text="Create" />
+ </LinearLayout>
