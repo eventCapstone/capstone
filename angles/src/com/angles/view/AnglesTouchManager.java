@@ -111,6 +111,7 @@ public class AnglesTouchManager {
 		Button startTimeButton = (Button)currentActivity.findViewById(R.id.startTimeButton);
 		Button endDateButton = (Button)currentActivity.findViewById(R.id.endDateButton);
 		Button endTimeButton = (Button)currentActivity.findViewById(R.id.endTimeButton);
+		Button submitNewEventButton = (Button)currentActivity.findViewById(R.id.submitNewEventButton);
 		
 		startDateButton.setOnClickListener(new AnglesClickListener(currentActivity) {
 			public void onClick(View v) {
@@ -126,7 +127,7 @@ public class AnglesTouchManager {
 					currentActivity,
 					startDateListener,
 					calendar.get(Calendar.YEAR),
-					calendar.get(Calendar.MONTH)-1,
+					calendar.get(Calendar.MONTH),
 					calendar.get(Calendar.DAY_OF_MONTH));
 				startDatePicker.show();
 			}
@@ -182,7 +183,7 @@ public class AnglesTouchManager {
 					currentActivity,
 					endDateListener,
 					calendar.get(Calendar.YEAR),
-					calendar.get(Calendar.MONTH)-1,
+					calendar.get(Calendar.MONTH),
 					calendar.get(Calendar.DAY_OF_MONTH));
 				endDatePicker.show();
 			}
@@ -221,6 +222,12 @@ public class AnglesTouchManager {
 					calendar.get(Calendar.MINUTE),
 					false);
 				endTimePicker.show();
+			}
+		});
+		
+		submitNewEventButton.setOnClickListener(new AnglesClickListener(currentActivity) {
+			public void onClick(View v) {
+				anglesController.createEvent(currentActivity);
 			}
 		});
 	}

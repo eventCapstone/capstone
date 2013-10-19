@@ -41,6 +41,14 @@ public class EventsManager {
 	    return eventList;
 	}
 	
+	public void addEvent(AnglesEvent event)
+	{
+		eventList.add(event);
+	}
+	
+	/**
+	 * NOTE: Months are indexed from 0 
+	 */
 	public static Calendar makeCalendar(int year, int month, int day, int hour, int minute)
 	{
 		Calendar calendar = new GregorianCalendar();
@@ -78,7 +86,7 @@ public class EventsManager {
 		
 		try
 		{
-			calendar.set(Calendar.MONTH, Integer.parseInt(nums[0]));
+			calendar.set(Calendar.MONTH, Integer.parseInt(nums[0])-1);
 			calendar.set(Calendar.DAY_OF_MONTH, Integer.parseInt(nums[1]));
 			calendar.set(Calendar.YEAR, Integer.parseInt(nums[2]));
 		}
@@ -122,4 +130,30 @@ public class EventsManager {
 		
 		return calendar;
 	}
+	
+	public static String verifyNewEventData(String eventName, String eventDescription,
+			Calendar startDate, Calendar endDate) {
+			String result = "";
+			
+			if (eventName.length() == 0) {
+				result += "Event must have a name\n";
+			}
+			else if (eventName.length() > 30) {
+				result += "Event name must be less than 30 characters\n";
+			}
+			if (eventDescription.length() == 0) {
+				result += "Event must have a description\n";
+			}
+			else if (eventDescription.length() > 500) {
+				result += "Event description must be less than 500 characters\n";
+			}
+			if (startDate.compareTo(endDate) >= 0) {
+				result += "The event must end after it begins\n";
+			}
+			if (startDate.compareTo(Calendar.getInstance()) <= 0) {
+				result += "The event must start in the future\n";
+			}
+			
+			return result;
+		}
 }
