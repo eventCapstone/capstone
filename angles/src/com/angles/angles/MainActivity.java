@@ -18,7 +18,7 @@ public class MainActivity extends Activity {
    	 	
      	AnglesController.createInstance(this);
      	
-     	AnglesController.getInstance().loginEvent(this);
+     	AnglesController.getInstance().loadLoginActivity(this);
     }
    
 }

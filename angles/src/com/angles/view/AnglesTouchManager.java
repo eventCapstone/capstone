@@ -73,7 +73,7 @@ public class AnglesTouchManager {
 		Button createEventButton = (Button) currentActivity.findViewById(R.id.create_event_button);
 		createEventButton.setOnClickListener(new AnglesClickListener(currentActivity) {
 			public void onClick(View v) {
-				anglesController.eventCreateAnglesEvent(currentActivity);
+				anglesController.loadCreateEventActivity(currentActivity);
 				
 			}
 		});
@@ -81,7 +81,7 @@ public class AnglesTouchManager {
 		Button settingsButton = (Button) currentActivity.findViewById(R.id.settingsButton);
 		settingsButton.setOnClickListener(new AnglesClickListener(currentActivity) {
 			public void onClick(View v) {
-				anglesController.changeSettings(currentActivity);
+				anglesController.loadChangeSettingsActivity(currentActivity);
 			}
 		});
 	}
@@ -91,7 +91,7 @@ public class AnglesTouchManager {
 		Button saveSettings = (Button) currentActivity.findViewById(R.id.saveSettingsButton);
 		saveSettings.setOnClickListener(new AnglesClickListener(currentActivity) {
 			public void onClick(View v) {
-				anglesController.eventListHomeEvent(currentActivity);
+				anglesController.loadEventListActivity(currentActivity);
 			}
 		});
 	}
@@ -101,7 +101,7 @@ public class AnglesTouchManager {
 		Button otherAnglesButton = (Button) currentActivity.findViewById(R.id.otherAnglesButton);
 		otherAnglesButton.setOnClickListener(new AnglesClickListener(currentActivity) {
 			public void onClick(View v) {
-				anglesController.eventListHomeEvent(currentActivity);
+				anglesController.loadEventListActivity(currentActivity);
 			}
 		});
 	}
@@ -232,20 +232,11 @@ public class AnglesTouchManager {
 		});
 	}
 	
-	public void setCreateNewAccountListeners(Activity currentActivity){
-		Button submit = (Button) currentActivity.findViewById(R.id.submit_button);
-		submit.setOnClickListener(new AnglesClickListener(currentActivity) {
-			public void onClick(View v) {
-				anglesController.eventListHomeEvent(currentActivity);
-			}
-		});
-	}
-	
 	public void setAngleCompleteListeners(Activity currentActivity){
 		Button gotIt = (Button) currentActivity.findViewById(R.id.completed_angle_button);
 		gotIt.setOnClickListener(new AnglesClickListener(currentActivity) {
 			public void onClick(View v) {
-				anglesController.eventListHomeEvent(currentActivity);
+				anglesController.loadEventListActivity(currentActivity);
 			}
 		});
 	}
@@ -258,7 +249,7 @@ public class AnglesTouchManager {
 			
 			public void onClick(View v) {
 				
-				anglesController.cameraEvent(currentActivity);
+				anglesController.loadCameraActivity(currentActivity);
 			}
 		});
 		
@@ -268,7 +259,7 @@ public class AnglesTouchManager {
 			
 			public void onClick(View v) {
 				
-				anglesController.eventListHomeEvent(currentActivity);
+				anglesController.loadEventListActivity(currentActivity);
 			}
 		});
 	}

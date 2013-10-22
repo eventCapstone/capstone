@@ -68,11 +68,7 @@ public class AnglesDisplayManager {
 		((LinearLayout) currentActivity.findViewById(R.id.signupEmailGroup)).setVisibility(View.INVISIBLE);
 		((LinearLayout) currentActivity.findViewById(R.id.signupPasswordGroup)).setVisibility(View.INVISIBLE);
 	}
-	
-	public void displayNewAccount(Activity currentActivity){
-		currentActivity.setContentView(R.layout.new_account_page);
-	}
-	
+
 	public void displayOngoingEventActivity(Activity currentActivity) {
 		
 		currentActivity.setContentView(R.layout.ongoing_event_activity_main);

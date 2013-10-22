@@ -7,11 +7,12 @@ import java.util.List;
 import java.util.UUID;
 
 public class EventsManager {
-	
+	private User anglesUser;
 	private List<AnglesEvent> eventList;
 	
-	public EventsManager()
+	public EventsManager(User anglesUser)
 	{
+		this.anglesUser = anglesUser;
 		eventList = loadEventsFromDatabase();
 	}
 		
@@ -20,19 +21,21 @@ public class EventsManager {
 	 */
 	public List<AnglesEvent> loadEventsFromDatabase()
 	{
-		User walterWhite = new User("Walter White");
-		List events = new ArrayList<AnglesEvent>();
+		List<AnglesEvent> events = new ArrayList<AnglesEvent>();
 		
 		events.add(new AnglesEvent("John's Wedding", "They grow up so fast", 
 				makeCalendar(2013, 11, 15, 18, 0), makeCalendar(2013, 11, 15, 21, 0), 
-				walterWhite, UUID.randomUUID()));
+				anglesUser, UUID.randomUUID()));
 		events.add(new AnglesEvent("Guns 'n Roses Concert", "The new and improved edition",
 				makeCalendar(2013, 10, 31, 22, 0), makeCalendar(2013, 11, 1, 2, 0),
-				walterWhite, UUID.randomUUID()));
+				anglesUser, UUID.randomUUID()));
 		events.add(new AnglesEvent("My first dance recital", "I learned to tap!",
 				makeCalendar(2014, 1, 1, 14, 0), makeCalendar(2014, 1, 1, 16, 0),
-				walterWhite, UUID.randomUUID()));
-		
+				anglesUser, UUID.randomUUID()));
+		for (AnglesEvent event: events)
+		{
+			event.getGuests().put(anglesUser, Attending.UNDECIDED);
+		}
 		return events;
 	}
 	

@@ -23,31 +23,52 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class AnglesController {
-	
 	private static AnglesController controllerInstance;
-	
 	public static final String TAG = "AnglesController";
 	
 	AnglesDisplayManager itsDisplayManager;
-	
 	AnglesTouchManager  itsTouchManager;
-	
 	EventsManager eventsManager;
 	
+	private User anglesUser;
+	
+	/**
+	 * Constructor that creates the touch manager, display manager, and events manager, and loads the
+	 * anglesUser instance.
+	 * @param inActivity the activity responsible for creating the controller
+	 */
 	private AnglesController(Activity inActivity){
+		anglesUser = new User("Walter White");
+		eventsManager = new EventsManager(anglesUser);
 		itsDisplayManager = new AnglesDisplayManager(this);
 		itsTouchManager = new AnglesTouchManager(this);
-		eventsManager = new EventsManager();
+		
 	}
 	
+	/**
+	 * Creates the anglesController singleton
+	 * @param inActivity the activity that wants access to the controller
+	 */
 	public static void createInstance(Activity inActivity)
 	{
 		controllerInstance = new AnglesController(inActivity);
 	}
 	
+	/**
+	 * Returns the anglesController singleton
+	 * @return the singleton instance
+	 */
 	public static AnglesController getInstance()
 	{
 		return controllerInstance;
+	}
+	
+	/*****************************************************************************
+	 * GETTERS
+	 *****************************************************************************/
+	public User getAnglesUser()
+	{
+		return anglesUser;
 	}
 	
 	public AnglesDisplayManager getDisplayManager()
@@ -65,6 +86,10 @@ public class AnglesController {
 		return eventsManager;
 	}
 	
+	/*****************************************************************************
+	 * LOGIN Business Logic
+	 *****************************************************************************/
+	
 	/**
 	 * TODO: Implement login
 	 */
@@ -72,7 +97,7 @@ public class AnglesController {
 	{
 		//eventListHomeEvent(currentActivity);
 		
-		ongoingEvent(currentActivity);
+		loadOngoingEventActivity(currentActivity);
 	}
 	
 	/**
@@ -80,9 +105,12 @@ public class AnglesController {
 	 */
 	public void registerUser(Activity currentActivity)
 	{
-		eventListHomeEvent(currentActivity);	
+		loadEventListActivity(currentActivity);	
 	}
 	
+	/*****************************************************************************
+	 * CREATE EVENT Business Logic
+	 *****************************************************************************/
 	public void createEvent(Activity currentActivity)
 	{
 		String eventName = 
@@ -112,62 +140,58 @@ public class AnglesController {
 			eventsManager.addEvent(event);
 			
 			Toast.makeText(currentActivity, "Event created!", Toast.LENGTH_SHORT).show();
-			viewEvent(currentActivity, event);
+			loadViewEventActivity(currentActivity, event);
 		} else {
 			Toast.makeText(currentActivity, result, Toast.LENGTH_LONG).show();
 		}
 	}
 	
-	public void loginEvent(Activity currentActivity){
+	/*****************************************************************************
+	 * ACTIVITY LOADERS
+	 *****************************************************************************/
+	public void loadLoginActivity(Activity currentActivity){
 		Intent intent = new Intent(currentActivity, LoginActivity.class);
 		currentActivity.startActivity(intent);
 	}
 	
-	public void eventListHomeEvent(Activity currentActivity){
+	public void loadEventListActivity(Activity currentActivity){
 		Intent intent = new Intent(currentActivity, EventsListActivity.class);
 		currentActivity.startActivity(intent);
 	}
 	
-	public void viewEvent(Activity currentActivity, AnglesEvent event)
+	public void loadViewEventActivity(Activity currentActivity, AnglesEvent event)
 	{
 		Intent intent = new Intent(currentActivity, EventItemActivity.class);
 		intent.putExtra("event", event);
 		currentActivity.startActivity(intent);
 	}
 	
-	public void changeSettings(Activity currentActivity) {
+	public void loadChangeSettingsActivity(Activity currentActivity) {
 		Intent intent = new Intent(currentActivity, SettingsActivity.class);
 		currentActivity.startActivity(intent);
 	}
 	
-	public void eventCreateAnglesEvent(Activity currentActivity){
+	public void loadCreateEventActivity(Activity currentActivity){
 		Intent intent = new Intent(currentActivity, CreateEventActivity.class);
 		currentActivity.startActivity(intent);
 	}
 
-	public void newAccountEvent(Activity currentActivity) {
-		//makeNewActivity();
-		itsDisplayManager.displayNewAccount(currentActivity);
-		itsTouchManager.setCreateNewAccountListeners(currentActivity);
+	public void loadOngoingEventActivity(Activity currentActivity) {
+		Intent intent = new Intent(currentActivity, OngoingEventActivity.class);
+		currentActivity.startActivity(intent);
+	}
+	
+	public void loadCameraActivity(Activity currentActivity) {
+		Intent intent = new Intent(currentActivity, CameraActivity.class);
+		currentActivity.startActivity(intent);
 	}
 
+	/*****************************************************************************
+	 * SCREEN LOADERS (these manipulate the current activity)
+	 *****************************************************************************/
 	public void eventAngleCreateCompleted(Activity currentActivity) {
-		///makeNewActivity();
 		itsDisplayManager.displayCreateAngleCompleted(currentActivity);
 		itsTouchManager.setAngleCompleteListeners(currentActivity);
 	} 
 	
-	public void ongoingEvent(Activity currentActivity) {
-		
-		Intent intent = new Intent(currentActivity, OngoingEventActivity.class);
-				
-		currentActivity.startActivity(intent);
-	}
-	
-	public void cameraEvent(Activity currentActivity) {
-		
-		Intent intent = new Intent(currentActivity, CameraActivity.class);
-		
-		currentActivity.startActivity(intent);
-	}
 }

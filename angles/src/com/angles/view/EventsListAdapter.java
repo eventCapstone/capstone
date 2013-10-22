@@ -1,10 +1,13 @@
 package com.angles.view;
 
 import java.util.List;
+import java.util.Map;
 
 import com.angles.angles.AnglesController;
 import com.angles.angles.R;
 import com.angles.model.AnglesEvent;
+import com.angles.model.Attending;
+import com.angles.model.User;
 
 import android.app.Activity;
 import android.content.Context;
@@ -13,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -50,12 +54,62 @@ public class EventsListAdapter extends BaseAdapter {
 		ViewGroup item = getViewGroup(reuse, parent);
 		TextView eventName = (TextView)item.findViewById(R.id.eventName);
 		TextView eventStatus = (TextView)item.findViewById(R.id.inviteStatus);
+		Button goButton = (Button)item.findViewById(R.id.goButton);
+		Button noGoButton = (Button)item.findViewById(R.id.noGoButton);
+		AnglesEvent event = eventsList.get(index);
 		
-		eventName.setText(eventsList.get(index).eventTitle);
-		//TODO: Implement getting this user's invite status
-		eventStatus.setText("Going");
-		
-		item.setOnClickListener(new EventButtonListener(eventsListActivity, eventsList.get(index)));
+		User user = anglesController.getAnglesUser();
+		switch (event.getStatus(user))
+		{
+			case ATTENDING:
+				eventStatus.setText("     Going");
+				eventStatus.setVisibility(View.VISIBLE);
+				goButton.setVisibility(View.INVISIBLE);
+				noGoButton.setVisibility(View.INVISIBLE);
+				break;
+			case NOT_ATTENDING:
+				eventStatus.setText("     Declined");
+				eventStatus.setVisibility(View.VISIBLE);
+				goButton.setVisibility(View.INVISIBLE);
+				noGoButton.setVisibility(View.INVISIBLE);
+				break;
+			case MAYBE:
+				eventStatus.setText("     Maybe");
+				eventStatus.setVisibility(View.VISIBLE);
+				goButton.setVisibility(View.INVISIBLE);
+				noGoButton.setVisibility(View.INVISIBLE);
+				break;
+			case UNDECIDED:
+				goButton.setOnClickListener(new SelectStatusListener(eventsList.get(index), goButton,
+						noGoButton, eventStatus) {
+					@Override
+					public void onClick(View view) {
+						anglesEvent.acceptInvite(anglesController.getAnglesUser());
+						status.setText("Going");
+						goButton.setVisibility(View.INVISIBLE);
+						noGoButton.setVisibility(View.INVISIBLE);
+						status.setVisibility(View.VISIBLE);
+					}
+				});
+				noGoButton.setOnClickListener(new SelectStatusListener(eventsList.get(index), goButton,
+						noGoButton, eventStatus) {
+					@Override
+					public void onClick(View view) {
+						anglesEvent.declineInvite(anglesController.getAnglesUser());
+						status.setText("Declined");
+						goButton.setVisibility(View.INVISIBLE);
+						noGoButton.setVisibility(View.INVISIBLE);
+						status.setVisibility(View.VISIBLE);
+					}
+				});
+				eventStatus.setVisibility(View.INVISIBLE);
+				goButton.setVisibility(View.VISIBLE);
+				noGoButton.setVisibility(View.VISIBLE);
+		}
+		eventName.setText(event.eventTitle);
+		eventName.setOnClickListener(new SelectEventListener(eventsListActivity, eventsList.get(index)) {
+			
+		});
 				
 		return item;
 	}
@@ -72,12 +126,12 @@ public class EventsListAdapter extends BaseAdapter {
 		return item;
 	}
 	
-	private class EventButtonListener implements OnClickListener
+	private class SelectEventListener implements OnClickListener
 	{
 		AnglesEvent anglesEvent;
 		Activity anglesListActivity;
 		
-		public EventButtonListener(Activity currentActivity, AnglesEvent anglesEvent)
+		public SelectEventListener(Activity currentActivity, AnglesEvent anglesEvent)
 		{
 			this.anglesEvent = anglesEvent;
 			this.anglesListActivity = currentActivity;
@@ -85,7 +139,24 @@ public class EventsListAdapter extends BaseAdapter {
 		
 		@Override
 		public void onClick(View view) {
-			anglesController.viewEvent(anglesListActivity, anglesEvent);
+			anglesController.loadViewEventActivity(anglesListActivity, anglesEvent);
+		}
+	}
+	
+	private abstract class SelectStatusListener implements OnClickListener
+	{
+		AnglesEvent anglesEvent;
+		Button goButton;
+		Button noGoButton;
+		TextView status;
+		
+		public SelectStatusListener(AnglesEvent anglesEvent, Button goButton, Button noGoButton,
+			TextView status)
+		{
+			this.anglesEvent = anglesEvent;
+			this.goButton = goButton;
+			this.noGoButton = noGoButton;
+			this.status = status;
 		}
 	}
 }

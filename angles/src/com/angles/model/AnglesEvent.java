@@ -19,7 +19,7 @@ public class AnglesEvent implements Serializable {
 	
 	private User host;
 	private UUID eventID;
-	private Map<User, Attending> attendees;
+	private Map<User, Attending> guests;
 	
 	/**
 	 * Creates a new event initialized with one attendee - the host - who is ATTENDING
@@ -40,8 +40,8 @@ public class AnglesEvent implements Serializable {
 		this.host = host;
 		this.eventID = eventID;
 		
-		this.attendees = new HashMap();
-		this.attendees.put(host, Attending.ATTENDING);
+		this.guests = new HashMap<User, Attending>();
+		this.guests.put(host, Attending.ATTENDING);
 	}
 	
 	public User getHost()
@@ -54,27 +54,49 @@ public class AnglesEvent implements Serializable {
 		return eventID;
 	}
 	
-	public Map<User, Attending> getAttendees()
+	public Map<User, Attending> getGuests()
 	{
-		return attendees;
+		return guests;
 	}
 	
-	public void inviteUsers(Set<User> newInvitees)
+	public Attending getStatus(User user)
 	{
-		for (User user: newInvitees)
+		return guests.get(user);
+	}
+	
+	public void acceptInvite(User user)
+	{
+		if (guests.containsKey(user))
+		{
+			guests.put(user, Attending.ATTENDING);
+		}
+	}
+	
+	public void declineInvite(User user)
+	{
+		if (guests.containsKey(user))
+		{
+			guests.put(user, Attending.NOT_ATTENDING);
+		}
+	}
+
+	
+	public void inviteGuests(Set<User> newGuests)
+	{
+		for (User user: newGuests)
 		{
 			//don't add if the user has already been invited
-			if (attendees.get(user) != null)
+			if (guests.get(user) != null)
 			{
 				continue;
 			}
 			
-			attendees.put(user, Attending.UNDECIDED);
+			guests.put(user, Attending.UNDECIDED);
 		}
 	}
 	
-	public void uninviteUser(User user)
+	public void uninviteGuest(User user)
 	{
-		attendees.remove(user);
+		guests.remove(user);
 	}
 }
