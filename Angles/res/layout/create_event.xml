@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/eventNameLabel"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="Event Name:"
+        android:textAppearance="?android:attr/textAppearanceLarge" 
+        android:gravity="center"/>
+    <EditText
+        android:id="@+id/eventNameInput"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:ems="10" />
+    <TextView
+        android:id="@+id/eventDescriptionLabel"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Event Description:"
+        android:gravity="center"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <EditText
+        android:id="@+id/eventDescriptionInput"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textMultiLine" />
+     
+     <TextView
+        android:id="@+id/startDateLabel"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Start Date:" />
+     <Button
+        android:id="@+id/startDateButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="mm-dd-yyyy" />
+     
+     <TextView
+        android:id="@+id/startTimeLabel"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Start Time:" />
+     <Button
+        android:id="@+id/startTimeButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="hh:mm" />
+
+<TextView
+        android:id="@+id/endDateLabel"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="End Date:" />
+     <Button
+        android:id="@+id/endDateButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="mm-dd-yyyy" />
+     
+     <TextView
+        android:id="@+id/endTimeLabel"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="End Time:" />
+     <Button
+        android:id="@+id/endTimeButton"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="hh:mm" />
+     
+     <Button
+         android:id="@+id/submitNewEventButton"
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content"
+         android:gravity="center"
+         android:layout_marginTop="10dp"
+         android:text="Create" />
+ </LinearLayout>
