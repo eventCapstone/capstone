@@ -95,9 +95,8 @@ public class AnglesController {
 	 */
 	public void loginUser(Activity currentActivity)
 	{
-		//eventListHomeEvent(currentActivity);
+		loadEventListActivity(currentActivity);
 		
-		loadOngoingEventActivity(currentActivity);
 	}
 	
 	/**

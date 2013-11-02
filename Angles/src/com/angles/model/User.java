@@ -3,12 +3,30 @@ package com.angles.model;
 import java.io.Serializable;
 import java.util.List;
 
+@SuppressWarnings("serial")
 public class User implements Serializable {
-	public String name;
+	
+	public String firstname;
+	
+	public String lastname;
+	
+	public String username;
+	
+	public String phone;
+	
+	public String objectId;
+	
+	public String sessionToken;
+	
+	public String gravatarId;
+	
+	public String avatarUrl;
+	
 	public List<AnglesEvent> events;
 	
 	public User(String name) {
-		this.name = name;
+		
+		this.username = username;
 	}
 	
 	@Override
@@ -16,7 +34,7 @@ public class User implements Serializable {
 	{
 		if (other instanceof User)
 		{
-			return (name.equals(((User)other).name));
+			return (username.equals(((User)other).username));
 		}
 		return false;
 	}
