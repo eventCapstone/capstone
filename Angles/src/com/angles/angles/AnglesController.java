@@ -38,7 +38,7 @@ public class AnglesController {
 	 * @param inActivity the activity responsible for creating the controller
 	 */
 	private AnglesController(Activity inActivity){
-		anglesUser = new User("Walter White");
+		anglesUser = new User("Walter White", "walter@breakingbad.com");
 		eventsManager = new EventsManager(anglesUser);
 		itsDisplayManager = new AnglesDisplayManager(this);
 		itsTouchManager = new AnglesTouchManager(this);
@@ -130,7 +130,7 @@ public class AnglesController {
 		endDate.set(Calendar.HOUR_OF_DAY, endTime.get(Calendar.HOUR_OF_DAY));
 		endDate.set(Calendar.MINUTE, endTime.get(Calendar.MINUTE));
 		
-		User user = new User("Pennywise");
+		User user = new User("Pennywise", "pennywise@epitaph.com", "5555555555");
 		
 		String result = EventsManager.verifyNewEventData(eventName, eventDescription, startDate, endDate);
 		if (result.equals("")) {
