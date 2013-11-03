@@ -13,6 +13,6 @@ public class EventItemActivity extends Activity {
     	 AnglesEvent event = (AnglesEvent)bundle.getSerializable("event");
     	 
     	 AnglesController.getInstance().getDisplayManager().displayEvent(this, event);
-    	 AnglesController.getInstance().getTouchManager().setEventDisplayListeners(this);
+    	 AnglesController.getInstance().getTouchManager().setEventListeners(this, event);
     }
 }

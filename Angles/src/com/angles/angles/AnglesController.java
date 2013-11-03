@@ -1,12 +1,15 @@
 package com.angles.angles;
 
 import java.util.Calendar;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import com.angles.database.ContactDbHelper;
 import com.angles.model.AnglesEvent;
 import com.angles.model.EventsManager;
 import com.angles.model.User;
@@ -31,10 +34,13 @@ public class AnglesController {
 	EventsManager eventsManager;
 	
 	private User anglesUser;
+	private Set<User> contacts;
 	
 	/**
 	 * Constructor that creates the touch manager, display manager, and events manager, and loads the
 	 * anglesUser instance.
+	 * 
+	 * Also populates the set of contacts
 	 * @param inActivity the activity responsible for creating the controller
 	 */
 	private AnglesController(Activity inActivity){
@@ -43,6 +49,13 @@ public class AnglesController {
 		itsDisplayManager = new AnglesDisplayManager(this);
 		itsTouchManager = new AnglesTouchManager(this);
 		
+//		ContactDbHelper helper = new ContactDbHelper(inActivity);
+//		contacts = helper.getContacts();
+		contacts = new HashSet();
+		contacts.add(new User("Joey Ramone", "joey@ramone.com", "6127536755"));
+		contacts.add(new User("Edward Snowden", "wiki@leaks.com", ""));
+		contacts.add(new User("Santa Clause", "santa@northpole.com", ""));
+		contacts.add(new User("Katy Perry", "roar@ikissedagirl.com", "8082224444"));
 	}
 	
 	/**
@@ -66,24 +79,24 @@ public class AnglesController {
 	/*****************************************************************************
 	 * GETTERS
 	 *****************************************************************************/
-	public User getAnglesUser()
-	{
+	public User getAnglesUser() {
 		return anglesUser;
 	}
 	
-	public AnglesDisplayManager getDisplayManager()
-	{
+	public AnglesDisplayManager getDisplayManager() {
 		return itsDisplayManager;
 	}
 	
-	public AnglesTouchManager getTouchManager()
-	{
+	public AnglesTouchManager getTouchManager() {
 		return itsTouchManager;
 	}
 	
-	public EventsManager getEventsManager()
-	{
+	public EventsManager getEventsManager() {
 		return eventsManager;
+	}
+	
+	public Set<User> getContacts() {
+		return contacts;
 	}
 	
 	/*****************************************************************************
@@ -155,6 +168,12 @@ public class AnglesController {
 	
 	public void loadEventListActivity(Activity currentActivity){
 		Intent intent = new Intent(currentActivity, EventsListActivity.class);
+		currentActivity.startActivity(intent);
+	}
+	
+	public void loadInviteListActivity(Activity currentActivity, AnglesEvent event) {
+		Intent intent = new Intent(currentActivity, InviteListActivity.class);
+		intent.putExtra("event", event);
 		currentActivity.startActivity(intent);
 	}
 	

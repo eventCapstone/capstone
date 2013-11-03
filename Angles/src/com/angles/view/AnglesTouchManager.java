@@ -68,6 +68,16 @@ public class AnglesTouchManager {
 		});
 	}
 	
+	public void setInviteListListeners(Activity currentActivity, AnglesEvent event)
+	{
+		Button finishButton = (Button) currentActivity.findViewById(R.id.finishedInvitingButton);
+		finishButton.setOnClickListener(new AnglesEventClickListener(currentActivity, event) {
+			public void onClick(View v) {
+				anglesController.loadViewEventActivity(currentActivity, event);
+			}
+		});
+	}
+	
 	public void setEventsHomeListeners(Activity currentActivity) 
 	{      
 		Button createEventButton = (Button) currentActivity.findViewById(R.id.create_event_button);
@@ -96,12 +106,20 @@ public class AnglesTouchManager {
 		});
 	}
 	
-	public void setEventDisplayListeners(Activity currentActivity)
+	public void setEventListeners(Activity currentActivity, AnglesEvent event)
 	{
-		Button otherAnglesButton = (Button) currentActivity.findViewById(R.id.otherAnglesButton);
-		otherAnglesButton.setOnClickListener(new AnglesClickListener(currentActivity) {
+		Button otherEventsButton = (Button) currentActivity.findViewById(R.id.otherEventsButton);
+		Button inviteGuestsButton = (Button) currentActivity.findViewById(R.id.inviteGuestsButton);
+		
+		otherEventsButton.setOnClickListener(new AnglesClickListener(currentActivity) {
 			public void onClick(View v) {
 				anglesController.loadEventListActivity(currentActivity);
+			}
+		});
+		
+		inviteGuestsButton.setOnClickListener(new AnglesEventClickListener(currentActivity, event) {
+			public void onClick(View v) {
+				anglesController.loadInviteListActivity(currentActivity, event);
 			}
 		});
 	}
@@ -269,6 +287,16 @@ public class AnglesTouchManager {
 		
 		public AnglesClickListener(Activity currentActivity) {
 			this.currentActivity = currentActivity;
+		}
+	}
+	
+	private abstract class AnglesEventClickListener implements OnClickListener {
+		protected Activity currentActivity;
+		AnglesEvent event;
+		
+		public AnglesEventClickListener(Activity currentActivity, AnglesEvent event) {
+			this.currentActivity = currentActivity;
+			this.event = event;
 		}
 	}
 	

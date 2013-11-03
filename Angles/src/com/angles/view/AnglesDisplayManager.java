@@ -10,6 +10,7 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -17,7 +18,9 @@ import android.widget.TextView;
 import com.angles.angles.AnglesController;
 import com.angles.angles.R;
 import com.angles.model.AnglesEvent;
+import com.angles.model.Attending;
 import com.angles.model.EventsManager;
+import com.angles.model.User;
 
 public class AnglesDisplayManager {
 	public static final String KEY = "AnglesDisplayManager"; 
@@ -26,6 +29,12 @@ public class AnglesDisplayManager {
 	
 	public AnglesDisplayManager(AnglesController anglesController){
 		this.anglesController = anglesController;
+	}
+	
+	public void displayInviteList(Activity currentActivity, AnglesEvent event) {
+		currentActivity.setContentView(R.layout.invite_list);
+		ListView theList = (ListView)currentActivity.findViewById(R.id.contactList);
+		theList.setAdapter(new InviteGuestListAdapter(event, anglesController, currentActivity));
 	}
 	
 	public void displaySettings(Activity currentActivity) {
@@ -45,13 +54,29 @@ public class AnglesDisplayManager {
 	public void displayEvent(Activity currentActivity, AnglesEvent event)
 	{
 		currentActivity.setContentView(R.layout.events_view);
+		
+		User user = anglesController.getAnglesUser();
+		if (!event.getHost().equals(user)) {
+			currentActivity.findViewById(R.id.inviteGuestsButton).setVisibility(View.INVISIBLE);
+		}
+		
+		Attending status = event.getGuests().get(user);
+		if (status != Attending.UNDECIDED) {
+			currentActivity.findViewById(R.id.acceptButton).setVisibility(View.INVISIBLE);
+			currentActivity.findViewById(R.id.declineButton).setVisibility(View.INVISIBLE);
+		}
+		
 		TextView eventName = (TextView) currentActivity.findViewById(R.id.eventName);
-		eventName.setText("Event Name: " + event.eventTitle);
+		eventName.setText(event.eventTitle);
+		
 		TextView host = (TextView) currentActivity.findViewById(R.id.host);
 		host.setText("Hosted By: " + event.getHost().userName);
 		
 		TextView startTime = (TextView) currentActivity.findViewById(R.id.startTime);
 		startTime.setText("Start Time: " + EventsManager.getDisplayDateTime(event.startTime));
+		
+		TextView description = (TextView) currentActivity.findViewById(R.id.eventDescription);
+		description.setText(event.eventDescription);
 	}
 	
 	public void displayCreateAngleCompleted(Activity currentActivity){
