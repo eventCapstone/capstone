@@ -48,7 +48,7 @@ public class AnglesDisplayManager {
 		TextView eventName = (TextView) currentActivity.findViewById(R.id.eventName);
 		eventName.setText("Event Name: " + event.eventTitle);
 		TextView host = (TextView) currentActivity.findViewById(R.id.host);
-		host.setText("Hosted By: " + event.getHost().firstname);
+		host.setText("Hosted By: " + event.getHost().userName);
 		
 		TextView startTime = (TextView) currentActivity.findViewById(R.id.startTime);
 		startTime.setText("Start Time: " + EventsManager.getDisplayDateTime(event.startTime));
