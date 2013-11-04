@@ -1,5 +1,6 @@
 package com.angles.view;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -139,7 +140,13 @@ public class EventsListAdapter extends BaseAdapter {
 		
 		@Override
 		public void onClick(View view) {
-			anglesController.loadViewEventActivity(anglesListActivity, anglesEvent);
+			
+			if (isOngoing(anglesEvent)){
+				
+				anglesController.loadOngoingEventActivity(anglesListActivity);
+			}
+			else
+				anglesController.loadViewEventActivity(anglesListActivity, anglesEvent);
 		}
 	}
 	
@@ -158,5 +165,17 @@ public class EventsListAdapter extends BaseAdapter {
 			this.noGoButton = noGoButton;
 			this.status = status;
 		}
+	}
+	
+	private boolean isOngoing(AnglesEvent event) {
+		
+		Calendar now = Calendar.getInstance();
+		
+		if (now.after(event.startTime) && now.before(event.endTime)){
+			
+			return true;
+		}
+		else
+			return false;
 	}
 }

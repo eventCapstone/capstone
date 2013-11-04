@@ -24,7 +24,7 @@ public class EventsManager {
 		List<AnglesEvent> events = new ArrayList<AnglesEvent>();
 		
 		events.add(new AnglesEvent("John's Wedding", "They grow up so fast", 
-				makeCalendar(2013, 11, 15, 18, 0), makeCalendar(2013, 11, 15, 21, 0), 
+				makeCalendar(2013, 10, 3, 18, 0), makeCalendar(2014, 10, 15, 21, 0), 
 				anglesUser, UUID.randomUUID()));
 		events.add(new AnglesEvent("Guns 'n Roses Concert", "The new and improved edition",
 				makeCalendar(2013, 10, 31, 22, 0), makeCalendar(2013, 11, 1, 2, 0),
