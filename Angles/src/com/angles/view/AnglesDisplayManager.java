@@ -27,31 +27,58 @@ public class AnglesDisplayManager {
 	
 	private AnglesController anglesController;
 	
+	/**
+	 * CONSTRUCTOR
+	 * @param anglesController
+	 */
 	public AnglesDisplayManager(AnglesController anglesController){
 		this.anglesController = anglesController;
 	}
 	
+	/**
+	 * INVITE LIST DISPLAY
+	 * @param currentActivity
+	 * @param event
+	 */
 	public void displayInviteList(Activity currentActivity, AnglesEvent event) {
 		currentActivity.setContentView(R.layout.invite_list);
 		ListView theList = (ListView)currentActivity.findViewById(R.id.contactList);
 		theList.setAdapter(new InviteGuestListAdapter(event, anglesController, currentActivity));
 	}
 	
+	/**
+	 * SETTINGS DISPLAY
+	 * @param currentActivity
+	 */
 	public void displaySettings(Activity currentActivity) {
 		currentActivity.setContentView(R.layout.angles_settings);
 	}
 	
-	public void displayEventListHome(Activity currentActivity, EventsManager eventsManager) {
+	/**
+	 * EVENT LIST DISPLAY
+	 * @param currentActivity
+	 * @param eventsManager
+	 */
+	public void displayEventList(Activity currentActivity, EventsManager eventsManager) {
 		currentActivity.setContentView(R.layout.events_list);
 		ListView theList = (ListView) currentActivity.findViewById(R.id.listOfEvents);
 		theList.setAdapter(new EventsListAdapter(eventsManager.getEventList(), anglesController, currentActivity));
 	}
 	
+	/**
+	 * CREATE EVENT DISPLAY
+	 * @param currentActivity
+	 */
 	public void displayCreateEvent(Activity currentActivity){
 		currentActivity.setContentView(R.layout.create_event);
 	}
 	
-	public void displayEvent(Activity currentActivity, AnglesEvent event)
+	/**
+	 * FUTURE EVENT DISPLAY
+	 * @param currentActivity
+	 * @param event
+	 */
+	public void displayFutureEvent(Activity currentActivity, AnglesEvent event)
 	{
 		currentActivity.setContentView(R.layout.events_view);
 		
@@ -79,10 +106,19 @@ public class AnglesDisplayManager {
 		description.setText(event.eventDescription);
 	}
 	
-	public void displayCreateAngleCompleted(Activity currentActivity){
-		currentActivity.setContentView(R.layout.event_create_complete);
+	/**
+	 * ONGOING EVENT DISPLAY
+	 * @param currentActivity
+	 */
+	public void displayOngoingEventActivity(Activity currentActivity) {
+		currentActivity.setContentView(R.layout.ongoing_event_activity_main);
 	}
 	
+	
+	/**
+	 * LOGIN OR REGISTER DISPLAY
+	 * @param currentActivity
+	 */
 	public void displayLogin(Activity currentActivity){
 		//Activity currentActivity = anglesController.getCurrentActivity();
 		currentActivity.setContentView(R.layout.login_screen);
@@ -94,11 +130,6 @@ public class AnglesDisplayManager {
 		((LinearLayout) currentActivity.findViewById(R.id.signupPasswordGroup)).setVisibility(View.INVISIBLE);
 	}
 
-	public void displayOngoingEventActivity(Activity currentActivity) {
-		
-		currentActivity.setContentView(R.layout.ongoing_event_activity_main);
-	}
-	
 	private class StableArrayAdapter extends ArrayAdapter<String> {
 	
 	    HashMap<String, Integer> mIdMap = new HashMap<String, Integer>();

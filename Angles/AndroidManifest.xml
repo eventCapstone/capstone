@@ -36,9 +36,9 @@
             </intent-filter>
         </activity>
         
-        <activity android:label="@string/app_name" android:name="com.angles.angles.EventItemActivity">
+        <activity android:label="@string/app_name" android:name="com.angles.angles.FutureEventActivity">
             <intent-filter>
-                <action android:name="com.angles.angles.EventItemActivity"/>
+                <action android:name="com.angles.angles.FutureEventActivity"/>
             </intent-filter>
         </activity>
         
@@ -66,9 +66,9 @@
              </intent-filter>
          </activity>
          
-         <activity android:label="@string/app_name" android:name="com.angles.angles.OngoingEventActivity">
+         <activity android:label="@string/app_name" android:name="com.angles.angles.CameraPreview">
              <intent-filter>
-                 <action android:name="com.angles.angles.CameraActivity"/>
+                 <action android:name="com.angles.angles.CameraPreview"/>
 			</intent-filter>
          </activity>
                 

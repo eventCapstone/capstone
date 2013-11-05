@@ -143,12 +143,10 @@ public class AnglesController {
 		endDate.set(Calendar.HOUR_OF_DAY, endTime.get(Calendar.HOUR_OF_DAY));
 		endDate.set(Calendar.MINUTE, endTime.get(Calendar.MINUTE));
 		
-		User user = new User("Pennywise", "pennywise@epitaph.com", "5555555555");
-		
 		String result = EventsManager.verifyNewEventData(eventName, eventDescription, startDate, endDate);
 		if (result.equals("")) {
 			AnglesEvent event = new AnglesEvent(eventName, eventDescription,
-				startDate, endDate, user, UUID.randomUUID());
+				startDate, endDate, anglesUser, UUID.randomUUID());
 			eventsManager.addEvent(event);
 			
 			Toast.makeText(currentActivity, "Event created!", Toast.LENGTH_SHORT).show();
@@ -179,7 +177,7 @@ public class AnglesController {
 	
 	public void loadViewEventActivity(Activity currentActivity, AnglesEvent event)
 	{
-		Intent intent = new Intent(currentActivity, EventItemActivity.class);
+		Intent intent = new Intent(currentActivity, FutureEventActivity.class);
 		intent.putExtra("event", event);
 		currentActivity.startActivity(intent);
 	}
@@ -203,13 +201,4 @@ public class AnglesController {
 		Intent intent = new Intent(currentActivity, OngoingEventActivity.class);
 		currentActivity.startActivity(intent);
 	}
-
-	/*****************************************************************************
-	 * SCREEN LOADERS (these manipulate the current activity)
-	 *****************************************************************************/
-	public void eventAngleCreateCompleted(Activity currentActivity) {
-		itsDisplayManager.displayCreateAngleCompleted(currentActivity);
-		itsTouchManager.setAngleCompleteListeners(currentActivity);
-	} 
-	
 }

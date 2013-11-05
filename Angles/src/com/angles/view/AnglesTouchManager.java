@@ -27,11 +27,19 @@ public class AnglesTouchManager {
 	
 	private AnglesController anglesController;
 	
+	/**
+	 * CONSTRUCTOR
+	 * @param inController The application controller
+	 */
 	public AnglesTouchManager(AnglesController inController) 
 	{
 		anglesController = inController;
 	}
 	
+	/**
+	 * LOGIN PAGE LISTENERS
+	 * @param currentActivity The current activity
+	 */
 	public void setLoginPageListeners(Activity currentActivity){
 		Button login = (Button) currentActivity.findViewById(R.id.login_button);
 		login.setOnClickListener(new AnglesClickListener(currentActivity) {
@@ -68,6 +76,11 @@ public class AnglesTouchManager {
 		});
 	}
 	
+	/**
+	 * INVITE LIST LISTENERS
+	 * @param currentActivity The current activity
+	 * @param event The event we want to invite guests to
+	 */
 	public void setInviteListListeners(Activity currentActivity, AnglesEvent event)
 	{
 		Button finishButton = (Button) currentActivity.findViewById(R.id.finishedInvitingButton);
@@ -78,7 +91,11 @@ public class AnglesTouchManager {
 		});
 	}
 	
-	public void setEventsHomeListeners(Activity currentActivity) 
+	/**
+	 * EVENTS LIST LISTENERS
+	 * @param currentActivity The current activity
+	 */
+	public void setEventsListListeners(Activity currentActivity) 
 	{      
 		Button createEventButton = (Button) currentActivity.findViewById(R.id.create_event_button);
 		createEventButton.setOnClickListener(new AnglesClickListener(currentActivity) {
@@ -96,6 +113,10 @@ public class AnglesTouchManager {
 		});
 	}
 	
+	/**
+	 * SETTINGS SCREEN LISTENERS
+	 * @param currentActivity The current activity
+	 */
 	public void setSettingsListeners(Activity currentActivity)
 	{
 		Button saveSettings = (Button) currentActivity.findViewById(R.id.saveSettingsButton);
@@ -106,7 +127,12 @@ public class AnglesTouchManager {
 		});
 	}
 	
-	public void setEventListeners(Activity currentActivity, AnglesEvent event)
+	/**
+	 * FUTURE EVENT VIEW LISTENERS
+	 * @param currentActivity The current activity
+	 * @param event The event to view
+	 */
+	public void setFutureEventListeners(Activity currentActivity, AnglesEvent event)
 	{
 		Button otherEventsButton = (Button) currentActivity.findViewById(R.id.otherEventsButton);
 		Button inviteGuestsButton = (Button) currentActivity.findViewById(R.id.inviteGuestsButton);
@@ -124,6 +150,10 @@ public class AnglesTouchManager {
 		});
 	}
 	
+	/**
+	 * CREATE EVENT LISTENERS
+	 * @param currentActivity The current activity
+	 */
 	public void setCreateEventListeners(Activity currentActivity){
 		Button startDateButton = (Button)currentActivity.findViewById(R.id.startDateButton);
 		Button startTimeButton = (Button)currentActivity.findViewById(R.id.startTimeButton);
@@ -250,15 +280,10 @@ public class AnglesTouchManager {
 		});
 	}
 	
-	public void setAngleCompleteListeners(Activity currentActivity){
-		Button gotIt = (Button) currentActivity.findViewById(R.id.completed_angle_button);
-		gotIt.setOnClickListener(new AnglesClickListener(currentActivity) {
-			public void onClick(View v) {
-				anglesController.loadEventListActivity(currentActivity);
-			}
-		});
-	}
-	
+	/**
+	 * ONGOING EVENT LISTENERS
+	 * @param currentActivity The current activity
+	 */
 	public void setOngoingEventListeners(Activity currentActivity) {
 		
 		Button btnCapturePhoto = (Button) currentActivity.findViewById(R.id.btnCapturePhoto);
@@ -282,6 +307,11 @@ public class AnglesTouchManager {
 		});
 	}
 	
+	/**
+	 * A click listener with a reference to the current activity
+	 * @author Mike
+	 *
+	 */
 	private abstract class AnglesClickListener implements OnClickListener {
 		protected Activity currentActivity;
 		
@@ -290,6 +320,11 @@ public class AnglesTouchManager {
 		}
 	}
 	
+	/**
+	 * A click listener with a refernece to the current activity and a specific event
+	 * @author Mike
+	 *
+	 */
 	private abstract class AnglesEventClickListener implements OnClickListener {
 		protected Activity currentActivity;
 		AnglesEvent event;
@@ -300,6 +335,11 @@ public class AnglesTouchManager {
 		}
 	}
 	
+	/**
+	 * An OnDateSetListener with a reference to the current activity
+	 * @author Mike
+	 *
+	 */
 	private abstract class AnglesDateListener implements DatePickerDialog.OnDateSetListener {
 		protected Activity currentActivity;
 		public AnglesDateListener(Activity currentActivity) {
@@ -307,6 +347,11 @@ public class AnglesTouchManager {
 		}
 	}
 
+	/**
+	 * An OnTimeSetListener with a reference to the current activity
+	 * @author Mike
+	 *
+	 */
 	private abstract class AnglesTimeListener implements TimePickerDialog.OnTimeSetListener {
 		protected Activity currentActivity;
 		public AnglesTimeListener(Activity currentActivity) {

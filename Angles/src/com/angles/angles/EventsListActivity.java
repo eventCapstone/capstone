@@ -13,9 +13,9 @@ public class EventsListActivity extends Activity {
 		
     	 super.onCreate(savedInstanceState);
     	     	 
-    	 AnglesController.getInstance().getDisplayManager().displayEventListHome(this,
+    	 AnglesController.getInstance().getDisplayManager().displayEventList(this,
     			 AnglesController.getInstance().getEventsManager());
     	 
-    	 AnglesController.getInstance().getTouchManager().setEventsHomeListeners(this);
+    	 AnglesController.getInstance().getTouchManager().setEventsListListeners(this);
     }
 }
