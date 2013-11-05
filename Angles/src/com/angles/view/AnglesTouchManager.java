@@ -136,6 +136,7 @@ public class AnglesTouchManager {
 	{
 		Button otherEventsButton = (Button) currentActivity.findViewById(R.id.otherEventsButton);
 		Button inviteGuestsButton = (Button) currentActivity.findViewById(R.id.inviteGuestsButton);
+		Button viewGuestsButton = (Button) currentActivity.findViewById(R.id.viewGuestsButton);
 		
 		otherEventsButton.setOnClickListener(new AnglesClickListener(currentActivity) {
 			public void onClick(View v) {
@@ -146,6 +147,23 @@ public class AnglesTouchManager {
 		inviteGuestsButton.setOnClickListener(new AnglesEventClickListener(currentActivity, event) {
 			public void onClick(View v) {
 				anglesController.loadInviteListActivity(currentActivity, event);
+			}
+		});
+		
+		viewGuestsButton.setOnClickListener(new AnglesEventClickListener(currentActivity, event) {
+			public void onClick(View v) {
+				anglesController.loadGuestListActivity(currentActivity, event);
+			}
+		});
+	}
+	
+	public void setGuestListListeners(Activity currentActivity, AnglesEvent event)
+	{
+		Button backToEventButton = (Button)currentActivity.findViewById(R.id.backToEventButton);
+		backToEventButton.setOnClickListener(new AnglesEventClickListener(currentActivity, event) {
+			@Override
+			public void onClick(View v) {
+				anglesController.loadViewEventActivity(currentActivity, event);
 			}
 		});
 	}

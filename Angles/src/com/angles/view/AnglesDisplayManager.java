@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.app.Activity;
 import android.content.Context;
@@ -44,6 +45,34 @@ public class AnglesDisplayManager {
 		currentActivity.setContentView(R.layout.invite_list);
 		ListView theList = (ListView)currentActivity.findViewById(R.id.contactList);
 		theList.setAdapter(new InviteGuestListAdapter(event, anglesController, currentActivity));
+	}
+	
+	/**
+	 * GUEST LIST DISPLAY
+	 * @param currentActivity
+	 * @param event
+	 */
+	public void displayGuestList(Activity currentActivity, AnglesEvent event) {
+		currentActivity.setContentView(R.layout.guest_list);
+		
+		List<String> attending = new ArrayList();
+		List<String> invited = new ArrayList();
+		Map<User, Attending> guests = event.getGuests();
+		
+		for (User user: guests.keySet()) {
+			if (guests.get(user) == Attending.ATTENDING) {
+				attending.add(user.userName);
+			}
+			else {
+				invited.add(user.userName);
+			}
+		}
+		
+		ListView attendingList = (ListView)currentActivity.findViewById(R.id.attendingList);
+		ListView invitedList = (ListView)currentActivity.findViewById(R.id.invitedList);
+		
+		attendingList.setAdapter(new ViewGuestListAdapter(currentActivity, attending));
+		invitedList.setAdapter(new ViewGuestListAdapter(currentActivity, invited));
 	}
 	
 	/**

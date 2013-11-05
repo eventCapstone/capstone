@@ -174,6 +174,12 @@ public class AnglesController {
 		intent.putExtra("event", event);
 		currentActivity.startActivity(intent);
 	}
+
+	public void loadGuestListActivity(Activity currentActivity, AnglesEvent event) {
+		Intent intent = new Intent(currentActivity, GuestListActivity.class);
+		intent.putExtra("event", event);
+		currentActivity.startActivity(intent);
+	}
 	
 	public void loadViewEventActivity(Activity currentActivity, AnglesEvent event)
 	{

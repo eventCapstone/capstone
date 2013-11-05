@@ -1,41 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/AbsoluteLayout1"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/guestList"
     android:layout_width="wrap_content"
-    android:layout_height="match_parent" >
-
-    <ListView
-        android:id="@+id/listView1"
-        android:layout_width="152dp"
-        android:layout_height="421dp"
-        android:layout_x="1dp"
-        android:layout_y="39dp" >
-    </ListView>
-
-    <ListView
-        android:id="@+id/listView2"
-        android:layout_width="170dp"
-        android:layout_height="418dp"
-        android:layout_x="150dp"
-        android:layout_y="41dp" >
-    </ListView>
-
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+	<Button
+	    android:id="@+id/backToEventButton"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:gravity="center"
+	    android:text="Back to Event"/>
+	
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/eventName"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+    
+    <TextView
+        android:id="@+id/attendingLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_x="10dp"
-        android:layout_y="8dp"
-        android:text="Accepted"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:gravity="left"
+        android:text="Attending:"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+    
+    <ListView
+        android:id="@+id/attendingList"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"/>
 
-    <TextView
-        android:id="@+id/textView2"
+	<TextView
+        android:id="@+id/invitedLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_x="156dp"
-        android:layout_y="9dp"
-        android:text="Declined"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:gravity="left"
+        android:text="Invited:"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-</AbsoluteLayout>
+	<ListView
+        android:id="@+id/invitedList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+</LinearLayout>
