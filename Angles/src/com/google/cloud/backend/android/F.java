@@ -13,11 +13,13 @@
  */
 package com.google.cloud.backend.android;
 
-import com.google.cloud.backend.android.mobilebackend.model.FilterDto;
+
 
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+
+import com.google.android.gms.internal.s;
 
 /**
  * A filter class for a {@link CloudQuery}. See
@@ -27,7 +29,7 @@ import java.util.List;
  */
 public class F {
 
-  public enum Op {
+  public enum Op {s,
     EQ, LT, LE, GT, GE, NE, IN, AND, OR
   }
 

@@ -13,6 +13,10 @@
  */
 package com.google.cloud.backend.android;
 
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
+
 import android.app.Activity;
 import android.app.Fragment;
 import android.util.Log;
@@ -23,14 +27,8 @@ import com.google.api.client.http.ExponentialBackOffPolicy;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.json.gson.GsonFactory;
-import com.google.cloud.backend.android.mobilebackend.Mobilebackend;
-import com.google.cloud.backend.android.mobilebackend.model.EntityDto;
-import com.google.cloud.backend.android.mobilebackend.model.EntityListDto;
-import com.google.cloud.backend.android.mobilebackend.model.QueryDto;
 
-import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
+
 
 /**
  * Base Cloud Backend API class that provides CRUD operation and query operation
