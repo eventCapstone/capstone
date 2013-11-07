@@ -5,12 +5,14 @@ import java.util.Calendar;
 
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.angles.model.EventsManager;
 import com.angles.view.AnglesDisplayManager;
+import com.angles.view.ConfirmPictureDialog;
 import com.google.cloud.backend.android.CloudBackendActivity;
 import com.google.cloud.backend.android.CloudCallbackHandler;
 import com.google.cloud.backend.android.CloudEntity;
@@ -42,15 +44,15 @@ public class CreateEventActivity extends CloudBackendActivity {
 		startTime.clear(Calendar.SECOND);
 		startTime.clear(Calendar.MILLISECOND);
 
-		Button startDateButton = (Button) findViewById(R.id.startDateButton);
+		startDateButton = (Button) findViewById(R.id.startDateButton);
 		startDateButton.setText(EventsManager.getDisplayDate(startTime));
-		Button startTimeButton = (Button) findViewById(R.id.startTimeButton);
+		startTimeButton = (Button) findViewById(R.id.startTimeButton);
 		startTimeButton.setText(EventsManager.getDisplayTime(startTime));
 
 		startTime.add(Calendar.HOUR, 4);
-		Button endDateButton = (Button) findViewById(R.id.endDateButton);
+		endDateButton = (Button) findViewById(R.id.endDateButton);
 		endDateButton.setText(EventsManager.getDisplayDate(startTime));
-		Button endTimeButton = (Button) findViewById(R.id.endTimeButton);
+		endTimeButton = (Button) findViewById(R.id.endTimeButton);
 		endTimeButton.setText(EventsManager.getDisplayTime(startTime));
 
 		AnglesController.getInstance().getTouchManager()
@@ -59,13 +61,13 @@ public class CreateEventActivity extends CloudBackendActivity {
 
 	public void onCreateButtonPressed(View view) {
 		CloudEntity createNewEvent = new CloudEntity(DBTableConstants.DB_TABLE_ANGLES_EVENT);
-		createNewEvent.put(DBTableConstants.DB_EVENT_START_DATE, "this is a start date");
-		createNewEvent.put(DBTableConstants.DB_EVENT_START_TIME, "this is a start time");
-		createNewEvent.put(DBTableConstants.DB_EVENT_END_DATE, "EndDate");
-		createNewEvent.put(DBTableConstants.DB_EVENT_END_TIME, "EndTime");
-		createNewEvent.put(DBTableConstants.DB_EVENT_DESCRIPTION, "Desc");
-		createNewEvent.put(DBTableConstants.DB_EVENT_HOST_USERNAME, "Brently");// gotta grab this from somewhere! whoevers logged in.
-		createNewEvent.put(DBTableConstants.DB_EVENT_TITLE, "Alicia Rocks");
+		createNewEvent.put(DBTableConstants.DB_EVENT_START_DATE,startDateButton.getText().toString());
+		createNewEvent.put(DBTableConstants.DB_EVENT_START_TIME,startTimeButton.getText().toString() );
+		createNewEvent.put(DBTableConstants.DB_EVENT_END_DATE, endDateButton.getText().toString());
+		createNewEvent.put(DBTableConstants.DB_EVENT_END_TIME, endTimeButton.getText().toString());
+		createNewEvent.put(DBTableConstants.DB_EVENT_DESCRIPTION, eventDescription.getText().toString());
+		createNewEvent.put(DBTableConstants.DB_EVENT_HOST_USERNAME, "MrBrent");// gotta grab this from somewhere! whoevers logged in.
+		createNewEvent.put(DBTableConstants.DB_EVENT_TITLE, eventTitle.getText().toString());
 
 		
 		 CloudCallbackHandler<CloudEntity> handler = new CloudCallbackHandler<CloudEntity>() {
@@ -73,7 +75,8 @@ public class CreateEventActivity extends CloudBackendActivity {
 		      public void onComplete(final CloudEntity result) {
 		        //EventList.add(0, result);  returns what we just put in if successful,  add this to the users event list.
 		    	  Toast.makeText(getApplicationContext(),"Event Succesfully Added", Toast.LENGTH_LONG).show();
-		    	  
+		    	 // CHANGE VIEW HERE
+		  	
 		      }
 
 		      @Override
