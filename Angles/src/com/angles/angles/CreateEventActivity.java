@@ -75,16 +75,8 @@ public class CreateEventActivity extends CloudBackendActivity {
 		      public void onComplete(final CloudEntity result) {
 		        //EventList.add(0, result);  returns what we just put in if successful,  add this to the users event list.
 		    	  Toast.makeText(getApplicationContext(),"Event Succesfully Added", Toast.LENGTH_LONG).show();
-<<<<<<< Updated upstream
-		    	 // CHANGE VIEW HERE
-		  	
-=======
-		    	  
-		   
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
+
+		    	 // CHANGE VIEW HERe
 		      }
 
 		      @Override
