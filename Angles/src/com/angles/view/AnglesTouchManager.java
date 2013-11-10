@@ -304,19 +304,9 @@ public class AnglesTouchManager {
 	 * @param currentActivity The current activity
 	 */
 	public void setOngoingEventListeners(Activity currentActivity) {
-<<<<<<< Updated upstream
 		Button btnCapturePhoto = (Button) currentActivity.findViewById(R.id.btnCapturePhoto);
-		Button btnEventList = (Button) currentActivity.findViewById(R.id.btnEventList);
-		
-		btnCapturePhoto.setOnClickListener(new AnglesClickListener(currentActivity) {
-			public void onClick(View v) {
-				anglesController.loadCameraActivity(currentActivity);
-			}
-		});
-=======
 		
 		Button btnEventList = (Button) currentActivity.findViewById(R.id.btnEventList);
->>>>>>> Stashed changes
 		
 		btnEventList.setOnClickListener(new AnglesClickListener(currentActivity) {
 			public void onClick(View v) {
