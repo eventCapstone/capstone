@@ -1,10 +1,7 @@
 package com.angles.angles;
 
-import com.angles.model.AnglesEvent;
-
 import android.app.Activity;
 import android.os.Bundle;
-import android.provider.CalendarContract;
 
 public class EventsListActivity extends Activity {
 		

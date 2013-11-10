@@ -18,6 +18,7 @@ import android.widget.TimePicker;
 
 import com.angles.angles.AnglesController;
 import com.angles.angles.OngoingEventActivity;
+import com.angles.angles.CreateEventActivity;
 import com.angles.angles.R;
 import com.angles.model.AnglesEvent;
 import com.angles.model.EventsManager;
@@ -293,7 +294,7 @@ public class AnglesTouchManager {
 		
 		submitNewEventButton.setOnClickListener(new AnglesClickListener(currentActivity) {
 			public void onClick(View v) {
-				anglesController.createEvent(currentActivity);
+				anglesController.createEvent((CreateEventActivity)currentActivity);
 			}
 		});
 	}
@@ -303,23 +304,17 @@ public class AnglesTouchManager {
 	 * @param currentActivity The current activity
 	 */
 	public void setOngoingEventListeners(Activity currentActivity) {
-		
 		Button btnCapturePhoto = (Button) currentActivity.findViewById(R.id.btnCapturePhoto);
+		Button btnEventList = (Button) currentActivity.findViewById(R.id.btnEventList);
 		
 		btnCapturePhoto.setOnClickListener(new AnglesClickListener(currentActivity) {
-			
 			public void onClick(View v) {
-				
 				anglesController.loadCameraActivity(currentActivity);
 			}
 		});
 		
-		Button btnEventList = (Button) currentActivity.findViewById(R.id.btnEventList);
-		
 		btnEventList.setOnClickListener(new AnglesClickListener(currentActivity) {
-			
 			public void onClick(View v) {
-				
 				anglesController.loadEventListActivity(currentActivity);
 			}
 		});
@@ -339,7 +334,7 @@ public class AnglesTouchManager {
 	}
 	
 	/**
-	 * A click listener with a refernece to the current activity and a specific event
+	 * A click listener with a reference to the current activity and a specific event
 	 * @author Mike
 	 *
 	 */

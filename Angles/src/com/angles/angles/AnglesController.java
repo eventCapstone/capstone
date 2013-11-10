@@ -123,7 +123,7 @@ public class AnglesController {
 	/*****************************************************************************
 	 * CREATE EVENT Business Logic
 	 *****************************************************************************/
-	public void createEvent(Activity currentActivity)
+	public void createEvent(CreateEventActivity currentActivity)
 	{
 		String eventName = 
 			((TextView)currentActivity.findViewById(R.id.eventNameInput)).getText().toString();
@@ -137,7 +137,7 @@ public class AnglesController {
 				((Button)currentActivity.findViewById(R.id.endDateButton)).getText().toString());
 		Calendar endTime = EventsManager.parseTime(
 			((Button)currentActivity.findViewById(R.id.endTimeButton)).getText().toString());
-		
+		Button submitButton = (Button)currentActivity.findViewById(R.id.submitNewEventButton);
 		startDate.set(Calendar.HOUR_OF_DAY, startTime.get(Calendar.HOUR_OF_DAY));
 		startDate.set(Calendar.MINUTE, startTime.get(Calendar.MINUTE));
 		endDate.set(Calendar.HOUR_OF_DAY, endTime.get(Calendar.HOUR_OF_DAY));
@@ -150,6 +150,7 @@ public class AnglesController {
 			eventsManager.addEvent(event);
 			
 			Toast.makeText(currentActivity, "Event created!", Toast.LENGTH_SHORT).show();
+			currentActivity.sendEventToCloud(submitButton);
 			loadViewEventActivity(currentActivity, event);
 		} else {
 			Toast.makeText(currentActivity, result, Toast.LENGTH_LONG).show();
@@ -204,7 +205,7 @@ public class AnglesController {
 	}
 	
 	public void loadCameraActivity(Activity currentActivity) {
-		Intent intent = new Intent(currentActivity, OngoingEventActivity.class);
+		Intent intent = new Intent(currentActivity, CameraActivity.class);
 		currentActivity.startActivity(intent);
 	}
 }

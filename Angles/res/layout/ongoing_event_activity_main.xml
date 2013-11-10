@@ -38,19 +38,4 @@
         android:layout_marginTop="46dp"
         android:background="#FF0000" />
 
-    <FrameLayout
-        android:id="@+id/camera_preview"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_above="@+id/btnCapturePhoto"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true" >
-
-        <FrameLayout
-            android:id="@+id/FrameLayout01"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent" >
-        </FrameLayout>
-    </FrameLayout>
-
 </RelativeLayout>
