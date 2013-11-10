@@ -203,9 +203,4 @@ public class AnglesController {
 		Intent intent = new Intent(currentActivity, OngoingEventActivity.class);
 		currentActivity.startActivity(intent);
 	}
-	
-	public void loadCameraActivity(Activity currentActivity) {
-		Intent intent = new Intent(currentActivity, CameraActivity.class);
-		currentActivity.startActivity(intent);
-	}
 }

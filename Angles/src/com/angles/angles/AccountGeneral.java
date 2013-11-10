@@ -18,5 +18,7 @@ public class AccountGeneral {
 	public static final String AUTHTOKEN_TYPE_FULL_ACCESS = "Full Access";
 	public static final String AUTHTOKEN_TYPE_FULL_ACCESS_LABEL = "Host Access";
 	
-	//instantiate GCM connection//
+	/*	Instantiate GCM connection (?)
+	 * 
+	 */
 }

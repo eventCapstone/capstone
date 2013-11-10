@@ -144,16 +144,6 @@ public class AnglesDisplayManager {
 		currentActivity.setContentView(R.layout.ongoing_event_activity_main);
 	}
 	
-	/**
-	 * ONGOING EVENT CAMERA DISPLAY
-	 * @param currentActivity
-	 */
-	
-	public void displayCameraActivity(Activity currentActivity) {
-		
-		currentActivity.setContentView(R.layout.ongoing_event_camera);
-	}
-	
 	
 	/**
 	 * LOGIN OR REGISTER DISPLAY

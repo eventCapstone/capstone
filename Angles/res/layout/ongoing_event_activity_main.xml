@@ -27,15 +27,13 @@
         android:onClick="onClick"
         android:text="Take a Photo!" />
 
-    <Gallery
-        android:id="@+id/galleryRecentAngles"
+    <ImageView
+        android:id="@+id/imageViewRecentAngle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="46dp"
-        android:background="#FF0000" />
+        android:layout_alignLeft="@+id/btnCapturePhoto"
+        android:maxHeight="100dp"
+        android:maxWidth="50dp"
+        android:src="@drawable/ic_launcher" />
 
 </RelativeLayout>

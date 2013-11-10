@@ -78,7 +78,6 @@ public class CreateEventActivity extends CloudBackendActivity {
 		        //EventList.add(0, result);  returns what we just put in if successful,  add this to the users event list.
 		    	  Toast.makeText(getApplicationContext(),"Event Succesfully Added", Toast.LENGTH_LONG).show();
 
-		    	 // CHANGE VIEW HERe
 		      }
 
 		      @Override
