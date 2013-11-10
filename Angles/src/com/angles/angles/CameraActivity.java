@@ -13,7 +13,7 @@ import com.google.cloud.backend.android.CloudBackendAsync;
 import com.google.cloud.backend.android.CloudCallbackHandler;
 import com.google.cloud.backend.android.CloudEntity;
 import com.google.cloud.backend.android.DBTableConstants;
-
+import com.angles.view.ConfirmPictureDialog;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.pm.PackageManager;
@@ -22,7 +22,6 @@ import android.hardware.Camera.CameraInfo;
 import android.hardware.Camera.PictureCallback;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -37,6 +36,9 @@ private static final String DEBUG_TAG = "CameraActivity";
 	private Camera camera;
 	private CameraPreview cameraPreview;
 	private PictureCallback pictureCallback;
+	
+	private PictureCallback picture;
+	
 	private static final int pictureOkDialog = 11;
 	
 	public void onCreate(Bundle savedInstanceState) {

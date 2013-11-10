@@ -27,7 +27,7 @@ public class CreateEventActivity extends CloudBackendActivity {
 	Button endTimeButton;
 	Calendar startTime;
 	Button createButton;
-	
+
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		AnglesController.getInstance().getDisplayManager()
@@ -96,6 +96,7 @@ public class CreateEventActivity extends CloudBackendActivity {
 	    Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
 	    createButton.setEnabled(true);
 	}
+	 
 }
 
 
