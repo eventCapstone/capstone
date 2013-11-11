@@ -26,10 +26,11 @@
         android:id="@+id/listOfEvents"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/create_angle_button"
+        android:layout_above="@+id/create_event_button"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/textView1"
-        android:gravity="left" >
+        android:gravity="left"
+        android:scrollbarAlwaysDrawVerticalTrack="true" >
 
     </ListView>
 

@@ -4,12 +4,15 @@
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content">
 	
-	<TextView android:id="@+id/eventName" 
-	    android:textSize="20dp"
-		android:textStyle="bold"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:gravity="left|center_vertical"/>
+	<TextView
+	    android:id="@+id/eventName"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:gravity="left|center_vertical"
+	    android:scrollHorizontally="true"
+	    android:textSize="18sp"
+	    android:textStyle="bold"
+	    android:width="190dp" />
 	
 	<TextView android:id="@+id/inviteStatus" 
 	    android:textSize="20dp"
@@ -17,17 +20,20 @@
 	    android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:gravity="right|center_vertical"/>
+
 	<Button
-        android:id="@+id/goButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
-        android:gravity="right|center_vertical"
-        android:text="Go" />
+	    android:id="@+id/goButton"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_marginLeft="5dp"
+	    android:gravity="center_vertical|center_horizontal"
+	    android:text="Go" />
+
 	<Button
-        android:id="@+id/noGoButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="right|center_vertical"
-        android:text="No" />
+	    android:id="@+id/noGoButton"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:gravity="center_vertical|center_horizontal"
+	    android:text="No" />
+
 </LinearLayout>
