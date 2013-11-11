@@ -16,4 +16,14 @@ public class DBTableConstants {
 	public static final String DB_ANGLE_IMAGE = "ANGLE_IMAGE";
 	public static final String DB_ANGLE_CREATED_BY = "ANGLE_CREATED_BY";
 	public static final String DB_ANGLE_CREATED_ON = "ANGLE_CREATED_ON";
+	
+	
+	public static final String DB_USERS_USERNAME = "USR_NME";
+	public static final String DB_USERS_EMAIL = "EMAIL";
+	public static final String DB_USERS_PASSWORD = "USR_PW";
+	public static final String DB_USERS_PHONENUMBER = "USR_PHN_NMBR";
+	public static final String DB_USERS_USERSTABLENAME = "AnglesUsers";
+	
+	
+	
 }

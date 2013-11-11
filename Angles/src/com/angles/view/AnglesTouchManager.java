@@ -68,6 +68,7 @@ public class AnglesTouchManager {
 				v.setOnClickListener(new OnClickListener() {
 					public void onClick(View v)
 					{
+						
 						anglesController.registerUser(currentActivity);
 					}
 				});

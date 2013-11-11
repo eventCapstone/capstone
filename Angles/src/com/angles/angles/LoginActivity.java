@@ -1,16 +1,24 @@
 package com.angles.angles;
 
+import java.io.IOException;
+
 import android.accounts.Account;
-import android.accounts.AccountAuthenticatorActivity;
 import android.accounts.AccountManager;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
-public class LoginActivity extends AccountAuthenticatorActivity {
+import com.google.cloud.backend.android.CloudBackendActivity;
+import com.google.cloud.backend.android.CloudCallbackHandler;
+import com.google.cloud.backend.android.CloudEntity;
+import com.google.cloud.backend.android.DBTableConstants;
+
+public class LoginActivity extends CloudBackendActivity {
 
 	private final int REQ_SIGNUP = 1;
 	
@@ -42,18 +50,59 @@ public class LoginActivity extends AccountAuthenticatorActivity {
     		 authTokenType = AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS;
     	 }
     }
+//
+//	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//		
+//		/* If the user created a new account successfully */
+//		
+//		if (requestCode == REQ_SIGNUP && resultCode == RESULT_OK) {
+//			
+//			finishLogin(data);
+//		}
+//		else
+//			super.onActivityResult(requestCode, resultCode, data);
+//	}
+//	
 	
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	public void createNewUser(View view){
+		EditText UserName = (EditText) findViewById(R.id.signupPassword);
+		EditText Email = (EditText) findViewById(R.id.signupEmail);
+		EditText PW = (EditText) findViewById(R.id.signupUserName);
 		
-		/* If the user created a new account successfully */
 		
-		if (requestCode == REQ_SIGNUP && resultCode == RESULT_OK) {
-			
-			finishLogin(data);
-		}
-		else
-			super.onActivityResult(requestCode, resultCode, data);
+		CloudEntity createNewUser = new CloudEntity(DBTableConstants.DB_USERS_USERSTABLENAME);
+		createNewUser.put(DBTableConstants.DB_USERS_PASSWORD, UserName.getText().toString());
+		createNewUser.put(DBTableConstants.DB_USERS_EMAIL, Email.getText().toString());
+		createNewUser.put(DBTableConstants.DB_USERS_USERNAME,PW.getText().toString() );
+	
+
+
+		
+		 CloudCallbackHandler<CloudEntity> handler = new CloudCallbackHandler<CloudEntity>() {
+		      @Override
+		      public void onComplete(final CloudEntity result) {
+		        //EventList.add(0, result);  returns what we just put in if successful,  add this to the users event list.
+		    	  Toast.makeText(getApplicationContext(),"Event Succesfully Added", Toast.LENGTH_LONG).show();
+
+		      }
+
+		      @Override
+		      public void onError(final IOException exception) {
+		        handleEndpointException(exception);
+		      }
+		};
+
+		    // execute the insertion with the handler
+		getCloudBackend().insert(createNewUser, handler);
+
 	}
+ 
+	private void handleEndpointException(IOException e) {
+	    Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
+
+	}
+		
+		
 	
 	public void submit() {
 		

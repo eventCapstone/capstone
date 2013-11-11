@@ -108,6 +108,7 @@ public class AnglesController {
 	 */
 	public void loginUser(Activity currentActivity)
 	{
+		
 		loadEventListActivity(currentActivity);
 		
 	}
@@ -117,8 +118,12 @@ public class AnglesController {
 	 */
 	public void registerUser(Activity currentActivity)
 	{
+		Button createNewUser = (Button) currentActivity.findViewById(R.id.signup_button);
+		((LoginActivity) currentActivity).createNewUser(createNewUser);
 		loadEventListActivity(currentActivity);	
 	}
+	
+	
 	
 	/*****************************************************************************
 	 * CREATE EVENT Business Logic
