@@ -32,8 +32,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/btnCapturePhoto"
-        android:maxHeight="100dp"
-        android:maxWidth="50dp"
+        android:maxHeight="75dp"
+        android:maxWidth="25dp"
         android:src="@drawable/ic_launcher" />
 
 </RelativeLayout>

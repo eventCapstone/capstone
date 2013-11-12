@@ -12,7 +12,6 @@ import android.widget.Toast;
 
 import com.angles.model.EventsManager;
 import com.angles.view.AnglesDisplayManager;
-import com.angles.view.ConfirmPictureDialog;
 import com.google.cloud.backend.android.CloudBackendActivity;
 import com.google.cloud.backend.android.CloudCallbackHandler;
 import com.google.cloud.backend.android.CloudEntity;
