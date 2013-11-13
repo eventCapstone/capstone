@@ -72,7 +72,7 @@ public class LoginActivity extends CloudBackendActivity {
 		
 		CloudEntity createNewUser = new CloudEntity(DBTableConstants.DB_USERS_USERSTABLENAME);
 		createNewUser.put(DBTableConstants.DB_USERS_PASSWORD, UserName.getText().toString());
-		createNewUser.put(DBTableConstants.DB_USERS_EMAIL, Email.getText().toString());
+		createNewUser.put(DBTableConstants.DB_USERS_EMAIL, Email.getText().toString().toLowerCase());
 		createNewUser.put(DBTableConstants.DB_USERS_USERNAME,PW.getText().toString() );
 	
 
@@ -82,8 +82,7 @@ public class LoginActivity extends CloudBackendActivity {
 		      @Override
 		      public void onComplete(final CloudEntity result) {
 		        //EventList.add(0, result);  returns what we just put in if successful,  add this to the users event list.
-		    	  Toast.makeText(getApplicationContext(),"Event Succesfully Added", Toast.LENGTH_LONG).show();
-
+		    	  
 		      }
 
 		      @Override

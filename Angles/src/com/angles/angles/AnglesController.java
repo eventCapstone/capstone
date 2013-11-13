@@ -1,7 +1,10 @@
 package com.angles.angles;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.Semaphore;
@@ -15,6 +18,11 @@ import com.angles.model.EventsManager;
 import com.angles.model.User;
 import com.angles.view.AnglesDisplayManager;
 import com.angles.view.AnglesTouchManager;
+import com.google.cloud.backend.android.CloudBackend;
+import com.google.cloud.backend.android.CloudEntity;
+import com.google.cloud.backend.android.CloudQuery;
+import com.google.cloud.backend.android.DBTableConstants;
+import com.google.cloud.backend.android.F;
 
 import android.app.Activity;
 import android.content.Context;
@@ -22,6 +30,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +44,7 @@ public class AnglesController {
 	
 	private User anglesUser;
 	private Set<User> contacts;
+	 List<CloudEntity> result;
 	
 	/**
 	 * Constructor that creates the touch manager, display manager, and events manager, and loads the
@@ -108,8 +118,42 @@ public class AnglesController {
 	 */
 	public void loginUser(Activity currentActivity)
 	{
+		String UserName = ((EditText) currentActivity.findViewById(R.id.loginUserName)).getText().toString();
+		String PW = ((EditText) currentActivity.findViewById(R.id.loginPassword)).getText().toString();
 		
-		loadEventListActivity(currentActivity);
+	
+		final CloudBackend cb = new CloudBackend();
+		final CloudQuery cq = new CloudQuery(DBTableConstants.DB_USERS_USERSTABLENAME);
+		
+		cq.setFilter(F.and(F.eq(DBTableConstants.DB_USERS_USERNAME,UserName), F.eq(DBTableConstants.DB_USERS_PASSWORD, PW)));
+		cq.setLimit(1);
+Thread theThread = new Thread() {
+			
+			@Override
+			public void run() {
+				try {
+					result = cb.list(cq);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			};
+			theThread.start();
+			try {
+				theThread.join();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if(result.isEmpty()){
+				Toast.makeText(currentActivity,"Wrong UserName Or Password", Toast.LENGTH_LONG).show();
+
+			}else{
+				Toast.makeText(currentActivity,"Login Successful,Welcome to Angles!", Toast.LENGTH_LONG).show();
+				loadEventListActivity(currentActivity);
+			}
+			
 		
 	}
 	
@@ -118,9 +162,44 @@ public class AnglesController {
 	 */
 	public void registerUser(Activity currentActivity)
 	{
-		Button createNewUser = (Button) currentActivity.findViewById(R.id.signup_button);
-		((LoginActivity) currentActivity).createNewUser(createNewUser);
-		loadEventListActivity(currentActivity);	
+		EditText UserName = (EditText) currentActivity.findViewById(R.id.signupUserName);
+		EditText Email = (EditText) currentActivity.findViewById(R.id.signupEmail);
+		
+		final CloudBackend cb = new CloudBackend();
+		final CloudQuery cq = new CloudQuery(DBTableConstants.DB_USERS_USERSTABLENAME);
+		
+		cq.setFilter(F.or(F.eq(DBTableConstants.DB_USERS_USERNAME,UserName.getText().toString()), F.eq(DBTableConstants.DB_USERS_EMAIL, Email.getText().toString().toLowerCase())));
+		cq.setLimit(1);
+Thread theThread = new Thread() {
+			
+			@Override
+			public void run() {
+				try {
+					result = cb.list(cq);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			};
+			theThread.start();
+			try {
+				theThread.join();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if(result.isEmpty()){
+				
+				Button createNewUser = (Button) currentActivity.findViewById(R.id.signup_button);
+				((LoginActivity) currentActivity).createNewUser(createNewUser);
+				Toast.makeText(currentActivity,"Account created,Welcome to Angles!", Toast.LENGTH_LONG).show();
+				loadEventListActivity(currentActivity);	
+			}else{
+				
+				Toast.makeText(currentActivity,"Username is taken or Email already registered", Toast.LENGTH_LONG).show();
+			}
+		
 	}
 	
 	
@@ -171,6 +250,7 @@ public class AnglesController {
 	}
 	
 	public void loadEventListActivity(Activity currentActivity){
+
 		Intent intent = new Intent(currentActivity, EventsListActivity.class);
 		currentActivity.startActivity(intent);
 	}

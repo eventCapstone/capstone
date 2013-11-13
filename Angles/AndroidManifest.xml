@@ -90,6 +90,7 @@
                 <category android:name="com.google.cloud.backend.android" />
             </intent-filter>
         </receiver>
+         <service android:name="com.google.android.gcm.GcmIntentService" />
     
         <activity android:launchMode="singleTop" android:name=".RegisterActivity"/>
 </application>

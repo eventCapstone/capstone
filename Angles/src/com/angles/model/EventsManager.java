@@ -1,12 +1,20 @@
 package com.angles.model;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.UUID;
 
+import com.google.cloud.backend.android.CloudBackend;
+import com.google.cloud.backend.android.CloudEntity;
+import com.google.cloud.backend.android.CloudQuery;
+import com.google.cloud.backend.android.DBTableConstants;
+import com.google.cloud.backend.android.F;
+
 public class EventsManager {
+	List<CloudEntity> results;
 	private User anglesUser;
 	private List<AnglesEvent> eventList;
 	
@@ -21,6 +29,32 @@ public class EventsManager {
 	 */
 	public List<AnglesEvent> loadEventsFromDatabase()
 	{
+		
+		final CloudBackend cb = new CloudBackend();
+		final CloudQuery cq = new CloudQuery("AnglesEvent");
+		cq.setFilter(F.eq(DBTableConstants.DB_EVENT_HOST_USERNAME, "MrBrent"));
+		cq.setLimit(50);
+		/*
+		Thread theThread = new Thread() {
+			
+			@Override
+			public void run() {
+				try {
+					results = cb.list(cq);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			};
+			theThread.start();
+			try {
+				theThread.join();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			*/
 		List<AnglesEvent> events = new ArrayList<AnglesEvent>();
 		
 		events.add(new AnglesEvent("John's Wedding", "They grow up so fast", 
