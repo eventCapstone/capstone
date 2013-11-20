@@ -71,7 +71,9 @@ public class OngoingEventActivity extends Activity {
 	
 	protected void onActivityResult(int requestCode, int resultCode, Intent returnedIntent) {
 		
-		if (requestCode == 011) {
+		super.onActivityResult(requestCode, resultCode, returnedIntent);
+
+		if (requestCode == Activity.RESULT_OK) {
 						
 			/*	Retrieve data from returned Activity
 			 */
@@ -139,8 +141,6 @@ public class OngoingEventActivity extends Activity {
 			
 			Toast.makeText(this, "Photo not taken.", Toast.LENGTH_SHORT).show();
 		}
-		
-		super.onActivityResult(requestCode, resultCode, returnedIntent);
 	}
 	
 	private byte[] convertImageToByteArray(Uri uri) {

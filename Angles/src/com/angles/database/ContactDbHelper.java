@@ -18,7 +18,7 @@ public class ContactDbHelper extends SQLiteOpenHelper {
 	private static final String DEBUG_TAG= "DatabaseHelper";
 
 	/* Name of the Database */
-	private static final String DATABASE_NAME = "Angles";
+	private static final String DATABASE_NAME = "Angles.db";
 	
 	/* Version Number of the Database */
 	private static final int DATABASE_VERSION = 1;
