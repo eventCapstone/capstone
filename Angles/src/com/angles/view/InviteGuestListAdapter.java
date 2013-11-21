@@ -7,7 +7,7 @@ import java.util.Set;
 
 import com.angles.angles.AnglesController;
 import com.angles.angles.R;
-import com.angles.database.ContactDbHelper;
+import com.angles.database.ContactTable;
 import com.angles.model.AnglesEvent;
 import com.angles.model.Attending;
 import com.angles.model.User;
