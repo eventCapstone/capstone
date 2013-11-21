@@ -38,13 +38,13 @@ public class AnglesController {
 	private static AnglesController controllerInstance;
 	public static final String TAG = "AnglesController";
 	
-	AnglesDisplayManager itsDisplayManager;
-	AnglesTouchManager  itsTouchManager;
-	EventsManager eventsManager;
+	private AnglesDisplayManager itsDisplayManager;
+	private AnglesTouchManager  itsTouchManager;
+	private EventsManager eventsManager;
 	
 	private User anglesUser;
 	private Set<User> contacts;
-	 List<CloudEntity> result;
+	private List<CloudEntity> result;
 	
 	/**
 	 * Constructor that creates the touch manager, display manager, and events manager, and loads the
@@ -87,7 +87,7 @@ public class AnglesController {
 	}
 	
 	/*****************************************************************************
-	 * GETTERS
+	 * GETTERS && SETTERS
 	 *****************************************************************************/
 	public User getAnglesUser() {
 		return anglesUser;
@@ -108,53 +108,50 @@ public class AnglesController {
 	public Set<User> getContacts() {
 		return contacts;
 	}
-	
+
 	/*****************************************************************************
 	 * LOGIN Business Logic
 	 *****************************************************************************/
-	
-	/**
-	 * TODO: Implement login
-	 */
 	public void loginUser(Activity currentActivity)
 	{
-		String UserName = ((EditText) currentActivity.findViewById(R.id.loginUserName)).getText().toString();
-		String PW = ((EditText) currentActivity.findViewById(R.id.loginPassword)).getText().toString();
-		
-	
-		final CloudBackend cb = new CloudBackend();
-		final CloudQuery cq = new CloudQuery(DBTableConstants.DB_USERS_USERSTABLENAME);
-		
-		cq.setFilter(F.and(F.eq(DBTableConstants.DB_USERS_USERNAME,UserName), F.eq(DBTableConstants.DB_USERS_PASSWORD, PW)));
-		cq.setLimit(1);
-Thread theThread = new Thread() {
-			
-			@Override
-			public void run() {
-				try {
-					result = cb.list(cq);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			};
-			theThread.start();
-			try {
-				theThread.join();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			if(result.isEmpty()){
-				Toast.makeText(currentActivity,"Wrong UserName Or Password", Toast.LENGTH_LONG).show();
-
-			}else{
-				Toast.makeText(currentActivity,"Login Successful,Welcome to Angles!", Toast.LENGTH_LONG).show();
-				loadEventListActivity(currentActivity);
-			}
-			
-		
+//		String UserName = ((EditText) currentActivity.findViewById(R.id.loginUserName)).getText().toString();
+//		String PW = ((EditText) currentActivity.findViewById(R.id.loginPassword)).getText().toString();
+//		
+//	
+//		final CloudBackend cb = new CloudBackend();
+//		final CloudQuery cq = new CloudQuery(DBTableConstants.DB_USERS_USERSTABLENAME);
+//		
+//		cq.setFilter(F.and(F.eq(DBTableConstants.DB_USERS_USERNAME,UserName), F.eq(DBTableConstants.DB_USERS_PASSWORD, PW)));
+//		cq.setLimit(1);
+//
+//		Thread theThread = new Thread() {
+//			@Override
+//			public void run() {
+//				try {
+//					result = cb.list(cq);
+//				} catch (IOException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//			}
+//		};
+//		theThread.start();
+//		
+//		try {
+//			theThread.join();
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		
+//		if (result.isEmpty()) {
+//			Toast.makeText(currentActivity,"Wrong UserName Or Password", Toast.LENGTH_LONG).show();
+//
+//		} else {
+//			Toast.makeText(currentActivity,"Login Successful,Welcome to Angles!", Toast.LENGTH_LONG).show();
+//			loadEventListActivity(currentActivity);
+//		}
+		loadEventListActivity(currentActivity);
 	}
 	
 	/**
