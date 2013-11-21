@@ -19,34 +19,24 @@ import com.google.cloud.backend.android.CloudEntity;
 import com.google.cloud.backend.android.DBTableConstants;
 
 public class LoginActivity extends CloudBackendActivity {
-
 	private final int REQ_SIGNUP = 1;
-	
 	private final String DEBUG_TAG = "LoginActivity";
-	
 	private AccountManager accountManager;
-	
 	private String authTokenType;
 	
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
-		
 		/*Instantiate Layout and Managers */
     	 super.onCreate(savedInstanceState);
-    	 
     	 AnglesController.getInstance().getDisplayManager().displayLogin(this);
-    	 
     	 AnglesController.getInstance().getTouchManager().setLoginPageListeners(this);
     	 
     	/*Instantiate Account Authentication */
     	 accountManager = AccountManager.get(getBaseContext());
-    	 
     	 String accountName = getIntent().getStringExtra("ACCOUNT_NAME");
-    	 
     	 authTokenType = getIntent().getStringExtra("AUTH_TYPE");
     	 
     	 if (authTokenType == null) {
-    		 
     		 authTokenType = AccountGeneral.AUTHTOKEN_TYPE_FULL_ACCESS;
     	 }
     }

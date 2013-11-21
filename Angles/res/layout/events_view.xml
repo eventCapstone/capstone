@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/RelativeLayout1"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent" 
+    android:background="@drawable/bg1">
 
    
     <Button
@@ -12,7 +13,8 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/attendingYes"
-        android:text="Guests" />
+        android:text="Guests"
+      	android:background="@drawable/button_rectangle" />
 
     <Button
         android:id="@+id/inviteGuestsButton"
@@ -20,7 +22,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:text="Invite Guests" />
+        android:text="Invite Guests" 
+      	android:background="@drawable/button_oval"/>
 
     <Button
         android:id="@+id/otherEventsButton"
@@ -28,7 +31,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:text="Other Events" />
+        android:text="Other Events"
+      	android:background="@drawable/button_oval" />
 
     <Button
         android:id="@+id/declineButton"
@@ -37,7 +41,8 @@
         android:layout_alignBaseline="@+id/acceptButton"
         android:layout_alignBottom="@+id/acceptButton"
         android:layout_alignLeft="@+id/otherEventsButton"
-        android:text="Decline" />
+        android:text="Decline" 
+      	android:background="@drawable/button_oval"/>
 
     <TextView
         android:id="@+id/eventName"
@@ -55,7 +60,8 @@
         android:layout_above="@+id/viewGuestsButton"
         android:layout_alignRight="@+id/inviteGuestsButton"
         android:layout_marginBottom="78dp"
-        android:text="Accept" />
+        android:text="Accept" 
+      	android:background="@drawable/button_oval"/>
 
     <TextView
         android:id="@+id/host"

@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-
+    android:background="@drawable/bg1"
     android:gravity="center_vertical|center_horizontal|center"
     android:orientation="vertical" >
     
@@ -10,13 +10,15 @@
       android:id="@+id/msgView"
       android:layout_width="fill_parent"
       android:layout_height="wrap_content"
-      android:layout_weight="1" />
+      android:layout_weight="1"
+      android:background="@color/darkRed" />
     	
   <Button
       android:id="@+id/regButton"
       android:layout_width="fill_parent"
       android:layout_height="wrap_content"
       android:layout_weight="0"
-      android:text="Register" />
+      android:text="Register"
+      android:background="@drawable/button_rectangle" />
 
 </LinearLayout>

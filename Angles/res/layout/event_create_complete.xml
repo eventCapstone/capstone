@@ -3,7 +3,8 @@
     android:id="@+id/RelativeLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"  
+    android:background="@drawable/bg1">
 
     <TextView
         android:id="@+id/textView1"
@@ -32,6 +33,7 @@
         android:layout_below="@+id/textView2"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="43dp"
-        android:text="Got it!" />
+        android:text="Got it!"
+      	android:background="@drawable/button_oval" />
 
 </RelativeLayout>

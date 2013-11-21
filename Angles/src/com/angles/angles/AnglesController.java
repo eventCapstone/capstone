@@ -38,13 +38,13 @@ public class AnglesController {
 	private static AnglesController controllerInstance;
 	public static final String TAG = "AnglesController";
 	
-	AnglesDisplayManager itsDisplayManager;
-	AnglesTouchManager  itsTouchManager;
-	EventsManager eventsManager;
+	private AnglesDisplayManager itsDisplayManager;
+	private AnglesTouchManager  itsTouchManager;
+	private EventsManager eventsManager;
 	
 	private User anglesUser;
 	private Set<User> contacts;
-	 List<CloudEntity> result;
+	private List<CloudEntity> result;
 	
 	/**
 	 * Constructor that creates the touch manager, display manager, and events manager, and loads the
@@ -87,7 +87,7 @@ public class AnglesController {
 	}
 	
 	/*****************************************************************************
-	 * GETTERS
+	 * GETTERS && SETTERS
 	 *****************************************************************************/
 	public User getAnglesUser() {
 		return anglesUser;
@@ -108,14 +108,10 @@ public class AnglesController {
 	public Set<User> getContacts() {
 		return contacts;
 	}
-	
+
 	/*****************************************************************************
 	 * LOGIN Business Logic
 	 *****************************************************************************/
-	
-	/**
-	 * TODO: Implement login
-	 */
 	public void loginUser(Activity currentActivity)
 	{
 		String UserName = ((EditText) currentActivity.findViewById(R.id.loginUserName)).getText().toString();
@@ -127,8 +123,8 @@ public class AnglesController {
 		
 		cq.setFilter(F.and(F.eq(DBTableConstants.DB_USERS_USERNAME,UserName), F.eq(DBTableConstants.DB_USERS_PASSWORD, PW)));
 		cq.setLimit(1);
-Thread theThread = new Thread() {
-			
+
+		Thread theThread = new Thread() {
 			@Override
 			public void run() {
 				try {
@@ -138,23 +134,21 @@ Thread theThread = new Thread() {
 					e.printStackTrace();
 				}
 			}
-			};
-			theThread.start();
-			try {
-				theThread.join();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			if(result.isEmpty()){
-				Toast.makeText(currentActivity,"Wrong UserName Or Password", Toast.LENGTH_LONG).show();
-
-			}else{
-				Toast.makeText(currentActivity,"Login Successful,Welcome to Angles!", Toast.LENGTH_LONG).show();
-				loadEventListActivity(currentActivity);
-			}
-			
+		};
+		theThread.start();
 		
+		try {
+			theThread.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if (result.isEmpty()) {
+			Toast.makeText(currentActivity,"Wrong UserName Or Password", Toast.LENGTH_LONG).show();
+		} else {
+			loadEventListActivity(currentActivity);
+		}
 	}
 	
 	/**
@@ -172,34 +166,33 @@ Thread theThread = new Thread() {
 		cq.setLimit(1);
 Thread theThread = new Thread() {
 			
-			@Override
-			public void run() {
-				try {
-					result = cb.list(cq);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			};
-			theThread.start();
+		@Override
+		public void run() {
 			try {
-				theThread.join();
-			} catch (InterruptedException e) {
+				result = cb.list(cq);
+			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			if(result.isEmpty()){
-				
-				Button createNewUser = (Button) currentActivity.findViewById(R.id.signup_button);
-				((LoginActivity) currentActivity).createNewUser(createNewUser);
-				Toast.makeText(currentActivity,"Account created,Welcome to Angles!", Toast.LENGTH_LONG).show();
-				loadEventListActivity(currentActivity);	
-			}else{
-				
-				Toast.makeText(currentActivity,"Username is taken or Email already registered", Toast.LENGTH_LONG).show();
-			}
-		
+		}
+		};
+		theThread.start();
+		try {
+			theThread.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if(result.isEmpty()){
+			
+			Button createNewUser = (Button) currentActivity.findViewById(R.id.signup_button);
+			((LoginActivity) currentActivity).createNewUser(createNewUser);
+			Toast.makeText(currentActivity,"Account created,Welcome to Angles!", Toast.LENGTH_LONG).show();
+			loadEventListActivity(currentActivity);	
+		}else{
+			
+			Toast.makeText(currentActivity,"Username is taken or Email already registered", Toast.LENGTH_LONG).show();
+		}
 	}
 	
 	
@@ -250,7 +243,6 @@ Thread theThread = new Thread() {
 	}
 	
 	public void loadEventListActivity(Activity currentActivity){
-
 		Intent intent = new Intent(currentActivity, EventsListActivity.class);
 		currentActivity.startActivity(intent);
 	}

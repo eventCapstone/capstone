@@ -23,5 +23,6 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dp"
         android:gravity="right|center_vertical"
-        android:text="Invite" />
+        android:text="Invite"
+      	android:background="@drawable/button_oval" />
 </LinearLayout>

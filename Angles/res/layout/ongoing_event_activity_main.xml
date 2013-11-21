@@ -6,34 +6,37 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".MainActivity" >
+    tools:context=".MainActivity"  
+    android:background="@drawable/bg1">
 
     <Button
         android:id="@+id/btnEventList"
         style="?android:attr/buttonStyleSmall"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="Events" />
+        android:text="Events"
+        android:background="@drawable/button_oval"/>
 
     <Button
         android:id="@+id/btnCapturePhoto"
         style="?android:attr/buttonStyleSmall"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/btnEventList"
-        android:layout_alignLeft="@+id/btnEventList"
         android:onClick="onClick"
-        android:text="Take a Photo!" />
+        android:text="Take a Photo!" 
+      	android:background="@drawable/button_oval"
+      	android:layout_centerHorizontal="true"/>
 
     <ImageView
         android:id="@+id/imageViewRecentAngle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/btnCapturePhoto"
-        android:maxHeight="75dp"
-        android:maxWidth="25dp"
+        android:maxHeight="200dp"
+        android:maxWidth="100dp"
+        android:layout_centerHorizontal="true"
         android:src="@drawable/ic_launcher" />
 
 </RelativeLayout>

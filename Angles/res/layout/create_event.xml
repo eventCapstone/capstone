@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"  
+    android:background="@drawable/bg1">
 
     <TextView
         android:id="@+id/eventNameLabel"
@@ -44,7 +45,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="mm-dd-yyyy" />
+        android:text="mm-dd-yyyy"
+      	android:background="@drawable/button_oval" />
      
      <TextView
         android:id="@+id/startTimeLabel"
@@ -57,7 +59,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="hh:mm" />
+        android:text="hh:mm" 
+        android:background="@drawable/button_oval"/>
 
 <TextView
         android:id="@+id/endDateLabel"
@@ -70,7 +73,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="mm-dd-yyyy" />
+        android:text="mm-dd-yyyy"
+      	android:background="@drawable/button_oval" />
      
      <TextView
         android:id="@+id/endTimeLabel"
@@ -83,7 +87,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="hh:mm" />
+        android:text="hh:mm" 
+      	android:background="@drawable/button_oval"/>
      
      <Button
          android:id="@+id/submitNewEventButton"
@@ -92,5 +97,6 @@
          android:gravity="center"
          android:enabled="true"
          android:layout_marginTop="10dp"
-         android:text="Create" />
+         android:text="Create"
+      	android:background="@drawable/button_rectangle" />
  </LinearLayout>
