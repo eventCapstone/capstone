@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?><manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="com.angles.angles">
 
-   <uses-sdk android:minSdkVersion="11" android:targetSdkVersion="18"/>
+   <uses-sdk android:minSdkVersion="11" android:targetSdkVersion="19"/>
    
    <permission android:name="com.angles.angles.permission.C2D_MESSAGE" android:protectionLevel="signature"/>
    
