@@ -27,7 +27,13 @@ import com.google.cloud.backend.android.F;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.provider.ContactsContract.Contacts;
+import android.provider.ContactsContract.RawContacts;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -107,6 +113,57 @@ public class AnglesController {
 	
 	public Set<User> getContacts() {
 		return contacts;
+	}
+	
+	/*****************************************************************************
+	 * INITIALIZATION Business Logic
+	 *****************************************************************************/
+	public void init(Activity activity) {
+		final CloudBackend cb = new CloudBackend();
+		final CloudQuery cq = new CloudQuery(DBTableConstants.DB_USERS_USERSTABLENAME);
+		
+		// Run query
+	    Uri uri = ContactsContract.CommonDataKinds.Email.CONTENT_URI;
+	    String[] projection = new String[] {
+	            ContactsContract.Contacts._ID,
+	            ContactsContract.Contacts.DISPLAY_NAME,
+	            ContactsContract.CommonDataKinds.Email.DATA
+	    };
+	    String selection = ContactsContract.Contacts.IN_VISIBLE_GROUP +"='1'";
+	    //showing only visible contacts  
+	    String[] selectionArgs = null;
+	    
+	    Cursor cursor = activity.getContentResolver().query(uri, projection, selection, selectionArgs, null);
+	    
+	    while (cursor.moveToNext()) {
+	    	String email = cursor.getString(2);
+	    	cq.setFilter(F.eq(DBTableConstants.DB_USERS_EMAIL, email));
+			cq.setLimit(1);
+			
+			Thread theThread = new Thread() {
+				@Override
+				public void run() {
+					try {
+						result = cb.list(cq);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			};
+			theThread.start();
+			try {
+				theThread.join();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if (result != null && !result.isEmpty()) {
+				String userName = (String)result.get(0).get(DBTableConstants.DB_USERS_USERNAME);
+				String phoneNumber = (String)result.get(0).get(DBTableConstants.DB_USERS_PHONENUMBER);
+				contacts.add(new User(userName, email, phoneNumber));
+			}
+	    }
 	}
 
 	/*****************************************************************************
