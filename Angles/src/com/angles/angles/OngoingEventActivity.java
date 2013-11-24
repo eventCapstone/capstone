@@ -33,7 +33,8 @@ public class OngoingEventActivity extends Activity {
 	
 	private static final String DEBUG_TAG = "OngoingEventActivity";
 	
-	public static final int RESULT_OK = 011;
+	public static final int REQUEST_CODE = 011;
+	
 	public ImageView imageView;
 	
 	public Activity currentActivity;
@@ -65,7 +66,7 @@ public class OngoingEventActivity extends Activity {
 		        
 		        recentPhotoUri = Uri.fromFile(tempFile);
 		        
-				startActivityForResult(cameraIntent, 011);
+				startActivityForResult(cameraIntent, REQUEST_CODE);
 			}
 		});
    	}
@@ -74,7 +75,7 @@ public class OngoingEventActivity extends Activity {
 		 
 		Log.d(DEBUG_TAG, "Request code: " + requestCode);
 		
-		if (requestCode == RESULT_OK) {
+		if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
 						
 			/*	Retrieve data from returned Activity
 			 */
