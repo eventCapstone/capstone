@@ -33,6 +33,8 @@ public class OngoingEventActivity extends Activity {
 	
 	private static final String DEBUG_TAG = "OngoingEventActivity";
 	
+	public static final int REQUEST_CODE = 011;
+	
 	public ImageView imageView;
 	
 	public Activity currentActivity;
@@ -64,16 +66,16 @@ public class OngoingEventActivity extends Activity {
 		        
 		        recentPhotoUri = Uri.fromFile(tempFile);
 		        
-				startActivityForResult(cameraIntent, 011);
+				startActivityForResult(cameraIntent, REQUEST_CODE);
 			}
 		});
    	}
 	
 	protected void onActivityResult(int requestCode, int resultCode, Intent returnedIntent) {
+		 
+		Log.d(DEBUG_TAG, "Request code: " + requestCode);
 		
-		super.onActivityResult(requestCode, resultCode, returnedIntent);
-
-		if (requestCode == Activity.RESULT_OK) {
+		if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
 						
 			/*	Retrieve data from returned Activity
 			 */
@@ -141,6 +143,8 @@ public class OngoingEventActivity extends Activity {
 			
 			Toast.makeText(this, "Photo not taken.", Toast.LENGTH_SHORT).show();
 		}
+		
+		super.onActivityResult(requestCode, resultCode, returnedIntent);
 	}
 	
 	private byte[] convertImageToByteArray(Uri uri) {

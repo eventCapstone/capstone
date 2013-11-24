@@ -12,7 +12,7 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import com.angles.database.ContactDbHelper;
+import com.angles.database.ContactTable;
 import com.angles.model.AnglesEvent;
 import com.angles.model.EventsManager;
 import com.angles.model.User;

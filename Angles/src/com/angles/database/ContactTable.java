@@ -12,7 +12,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-public class ContactDbHelper extends SQLiteOpenHelper {
+public class ContactTable extends SQLiteOpenHelper {
 	 
 	/* Name of this Activity for debugging in Logcat */
 	private static final String DEBUG_TAG= "DatabaseHelper";
@@ -39,7 +39,7 @@ public class ContactDbHelper extends SQLiteOpenHelper {
 	private static final String EVENT_ID = "event_id";
 	*/
 			
-	public ContactDbHelper(Context context) {
+	public ContactTable(Context context) {
 		
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}

@@ -1,20 +1,11 @@
 package com.angles.database;
 
-import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-public class EventDbHelper extends SQLiteOpenHelper {
-	 
-	/* Name of this Activity for debugging in Logcat */
-	private static final String DEBUG_TAG= "EventDbHelper";
-
-	/* Name of the Database */
-	private static final String DATABASE_NAME = "Angles.db";
+public class EventTable {
 	
-	/* Version Number of the Database */
-	private static final int DATABASE_VERSION = 1;
+	private static final String DEBUG_TAG = "EventTable";
 	
 	/* Table Name */
 	public static final String EVENTS_TABLE_NAME = "Events";
@@ -33,11 +24,6 @@ public class EventDbHelper extends SQLiteOpenHelper {
 	public static final String EVENTS_COL_END_TIME = "End_Time";
 	
 	public static final String EVENTS_COL_EVENT_PICTURE = "Event_Picture";
-			
-	public EventDbHelper(Context context) {
-		
-		super(context, DATABASE_NAME, null, DATABASE_VERSION);
-	}
 	
 	/* This is a SQLite String that generates the Events table. */
 	public static final String CREATE_EVENTS_TABLE = "CREATE TABLE " +
@@ -51,12 +37,12 @@ public class EventDbHelper extends SQLiteOpenHelper {
 			 EVENTS_COL_EVENT_PICTURE + " BLOB" +
 			 ");";
 		
-	public void onCreate(SQLiteDatabase db) {
+	public static void onCreate(SQLiteDatabase db) {
 		
 		db.execSQL(CREATE_EVENTS_TABLE);
 	}
 	
-	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+	public static void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 	
 		Log.w(DEBUG_TAG, "Upgrading Database from Version " + oldVersion +
 				" to Version " + newVersion + ". This will destroy all data.");
