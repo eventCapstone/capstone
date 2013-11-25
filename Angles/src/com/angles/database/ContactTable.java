@@ -40,7 +40,6 @@ public class ContactTable extends SQLiteOpenHelper {
 	*/
 			
 	public ContactTable(Context context) {
-		
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
 	

@@ -2,6 +2,7 @@ package com.angles.angles;
 
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.UUID;
 
 import android.os.Bundle;
 import android.view.View;
@@ -26,6 +27,7 @@ public class CreateEventActivity extends CloudBackendActivity {
 	Button endTimeButton;
 	Calendar startTime;
 	Button createButton;
+	UUID eventID;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -59,7 +61,7 @@ public class CreateEventActivity extends CloudBackendActivity {
 				.setCreateEventListeners(this);
 	}
 
-	public void sendEventToCloud(View view) {
+	public void sendEventToCloud(View view, UUID eventID) {
 		CloudEntity createNewEvent = new CloudEntity(DBTableConstants.DB_TABLE_ANGLES_EVENT);
 		createNewEvent.put(DBTableConstants.DB_EVENT_START_DATE,startDateButton.getText().toString());
 		createNewEvent.put(DBTableConstants.DB_EVENT_START_TIME,startTimeButton.getText().toString() );
@@ -69,7 +71,7 @@ public class CreateEventActivity extends CloudBackendActivity {
 		createNewEvent.put(DBTableConstants.DB_EVENT_HOST_USERNAME,
 				AnglesController.getInstance().getAnglesUser().userName);
 		createNewEvent.put(DBTableConstants.DB_EVENT_TITLE, eventTitle.getText().toString());
-
+		createNewEvent.put(DBTableConstants.DB_EVENT_ID, eventID.toString());
 		
 		 CloudCallbackHandler<CloudEntity> handler = new CloudCallbackHandler<CloudEntity>() {
 		      @Override

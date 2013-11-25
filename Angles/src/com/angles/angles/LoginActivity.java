@@ -59,20 +59,15 @@ public class LoginActivity extends CloudBackendActivity {
 		EditText Email = (EditText) findViewById(R.id.signupEmail);
 		EditText PW = (EditText) findViewById(R.id.signupUserName);
 		
-		
 		CloudEntity createNewUser = new CloudEntity(DBTableConstants.DB_USERS_USERSTABLENAME);
 		createNewUser.put(DBTableConstants.DB_USERS_PASSWORD, UserName.getText().toString());
 		createNewUser.put(DBTableConstants.DB_USERS_EMAIL, Email.getText().toString().toLowerCase());
 		createNewUser.put(DBTableConstants.DB_USERS_USERNAME,PW.getText().toString() );
-	
-
-
 		
 		 CloudCallbackHandler<CloudEntity> handler = new CloudCallbackHandler<CloudEntity>() {
 		      @Override
 		      public void onComplete(final CloudEntity result) {
 		        //EventList.add(0, result);  returns what we just put in if successful,  add this to the users event list.
-		    	  
 		      }
 
 		      @Override
@@ -81,14 +76,13 @@ public class LoginActivity extends CloudBackendActivity {
 		      }
 		};
 
-		    // execute the insertion with the handler
+	    // execute the insertion with the handler
 		getCloudBackend().insert(createNewUser, handler);
 
 	}
  
 	private void handleEndpointException(IOException e) {
 	    Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
-
 	}
 		
 		

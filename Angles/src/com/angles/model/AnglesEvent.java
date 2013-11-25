@@ -1,5 +1,6 @@
 package com.angles.model;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -10,6 +11,10 @@ import java.util.Set;
 import java.util.UUID;
 
 import com.google.api.client.util.DateTime;
+import com.google.cloud.backend.android.CloudBackend;
+import com.google.cloud.backend.android.CloudEntity;
+import com.google.cloud.backend.android.CloudQuery;
+import com.google.cloud.backend.android.DBTableConstants;
 
 public class AnglesEvent implements Serializable {
 	public String eventTitle;
@@ -68,6 +73,22 @@ public class AnglesEvent implements Serializable {
 	{
 		if (guests.containsKey(user))
 		{
+			//update guest table on cloud
+			CloudBackend cb = new CloudBackend();
+			CloudQuery cq = new CloudQuery(DBTableConstants.DB_TABLE_GUESTS);
+			
+			CloudEntity invite = new CloudEntity(DBTableConstants.DB_TABLE_GUESTS);
+			invite.put(DBTableConstants.DB_GUESTS_EVENT_ID, eventID.toString());
+			invite.put(DBTableConstants.DB_GUESTS_USERNAME, user.userName);
+			invite.put(DBTableConstants.DB_GUESTS_ATTENDING_STATUS, "ATTENDING");
+			
+			try {
+				cb.update(invite);
+			}
+			catch (IOException e) {
+				//don't update guest map if there was an error
+				return;
+			}
 			guests.put(user, Attending.ATTENDING);
 		}
 	}
@@ -76,6 +97,22 @@ public class AnglesEvent implements Serializable {
 	{
 		if (guests.containsKey(user))
 		{
+			//update guest table on cloud
+			CloudBackend cb = new CloudBackend();
+			CloudQuery cq = new CloudQuery(DBTableConstants.DB_TABLE_GUESTS);
+			
+			CloudEntity invite = new CloudEntity(DBTableConstants.DB_TABLE_GUESTS);
+			invite.put(DBTableConstants.DB_GUESTS_EVENT_ID, eventID.toString());
+			invite.put(DBTableConstants.DB_GUESTS_USERNAME, user.userName);
+			invite.put(DBTableConstants.DB_GUESTS_ATTENDING_STATUS, "NOT_ATTENDING");
+			
+			try {
+				cb.update(invite);
+			}
+			catch (IOException e) {
+				//don't update guest map if there was an error
+				return;
+			}
 			guests.put(user, Attending.NOT_ATTENDING);
 		}
 	}

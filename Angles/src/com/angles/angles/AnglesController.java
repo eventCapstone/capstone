@@ -50,6 +50,7 @@ public class AnglesController {
 	
 	private User anglesUser;
 	private Set<User> contacts;
+	
 	private List<CloudEntity> result;
 	
 	/**
@@ -68,10 +69,6 @@ public class AnglesController {
 //		ContactDbHelper helper = new ContactDbHelper(inActivity);
 //		contacts = helper.getContacts();
 		contacts = new HashSet();
-		contacts.add(new User("Joey Ramone", "joey@ramone.com", "6127536755"));
-		contacts.add(new User("Edward Snowden", "wiki@leaks.com", ""));
-		contacts.add(new User("Santa Clause", "santa@northpole.com", ""));
-		contacts.add(new User("Katy Perry", "roar@ikissedagirl.com", "8082224444"));
 	}
 	
 	/**
@@ -119,8 +116,8 @@ public class AnglesController {
 	 * INITIALIZATION Business Logic
 	 *****************************************************************************/
 	public void init(Activity activity) {
-		final CloudBackend cb = new CloudBackend();
-		final CloudQuery cq = new CloudQuery(DBTableConstants.DB_USERS_USERSTABLENAME);
+		CloudBackend cloudBackend = new CloudBackend();
+		CloudQuery cloudQuery = new CloudQuery(DBTableConstants.DB_USERS_USERSTABLENAME);
 		
 		// Run query
 	    Uri uri = ContactsContract.CommonDataKinds.Email.CONTENT_URI;
@@ -134,36 +131,44 @@ public class AnglesController {
 	    String[] selectionArgs = null;
 	    
 	    Cursor cursor = activity.getContentResolver().query(uri, projection, selection, selectionArgs, null);
-	    
+	    F filter = null;
 	    while (cursor.moveToNext()) {
 	    	String email = cursor.getString(2);
-	    	cq.setFilter(F.eq(DBTableConstants.DB_USERS_EMAIL, email));
-			cq.setLimit(1);
-			
-			Thread theThread = new Thread() {
-				@Override
-				public void run() {
-					try {
-						result = cb.list(cq);
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+	    	if (filter == null) {
+	    		filter = F.eq(DBTableConstants.DB_USERS_EMAIL, email);
+	    	}
+	    	else {
+	    		filter = F.or(filter, F.eq(DBTableConstants.DB_USERS_EMAIL, email));
+	    	}
+	    }
+	    cloudQuery.setFilter(filter);
+		
+		Thread theThread = new QueryThread(cloudBackend, cloudQuery) {
+			@Override
+			public void run() {
+				try {
+					result = cb.list(cq);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
-			};
-			theThread.start();
-			try {
-				theThread.join();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
-			if (result != null && !result.isEmpty()) {
-				String userName = (String)result.get(0).get(DBTableConstants.DB_USERS_USERNAME);
-				String phoneNumber = (String)result.get(0).get(DBTableConstants.DB_USERS_PHONENUMBER);
+		};
+		theThread.start();
+		try {
+			theThread.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if (result != null && !result.isEmpty()) {
+			for (int i=0; i < result.size(); i++) {
+				String userName = (String)result.get(i).get(DBTableConstants.DB_USERS_USERNAME);
+				String phoneNumber = (String)result.get(i).get(DBTableConstants.DB_USERS_PHONENUMBER);
+				String email = (String)result.get(i).get(DBTableConstants.DB_USERS_EMAIL);
 				contacts.add(new User(userName, email, phoneNumber));
 			}
-	    }
+		}
 	}
 
 	/*****************************************************************************
@@ -221,7 +226,7 @@ public class AnglesController {
 		
 		cq.setFilter(F.or(F.eq(DBTableConstants.DB_USERS_USERNAME,UserName.getText().toString()), F.eq(DBTableConstants.DB_USERS_EMAIL, Email.getText().toString().toLowerCase())));
 		cq.setLimit(1);
-Thread theThread = new Thread() {
+		Thread theThread = new Thread() {
 			
 		@Override
 		public void run() {
@@ -241,7 +246,6 @@ Thread theThread = new Thread() {
 			e.printStackTrace();
 		}
 		if(result.isEmpty()){
-			
 			Button createNewUser = (Button) currentActivity.findViewById(R.id.signup_button);
 			((LoginActivity) currentActivity).createNewUser(createNewUser);
 			Toast.makeText(currentActivity,"Account created,Welcome to Angles!", Toast.LENGTH_LONG).show();
@@ -279,12 +283,13 @@ Thread theThread = new Thread() {
 		
 		String result = EventsManager.verifyNewEventData(eventName, eventDescription, startDate, endDate);
 		if (result.equals("")) {
+			UUID eventID = UUID.randomUUID();
 			AnglesEvent event = new AnglesEvent(eventName, eventDescription,
-				startDate, endDate, anglesUser, UUID.randomUUID());
+				startDate, endDate, anglesUser, eventID);
 			eventsManager.addEvent(event);
 			
 			Toast.makeText(currentActivity, "Event created!", Toast.LENGTH_SHORT).show();
-			currentActivity.sendEventToCloud(submitButton);
+			currentActivity.sendEventToCloud(submitButton, eventID);
 			loadViewEventActivity(currentActivity, event);
 		} else {
 			Toast.makeText(currentActivity, result, Toast.LENGTH_LONG).show();
@@ -336,5 +341,16 @@ Thread theThread = new Thread() {
 	public void loadOngoingEventActivity(Activity currentActivity) {
 		Intent intent = new Intent(currentActivity, OngoingEventActivity.class);
 		currentActivity.startActivity(intent);
+	}
+	
+	private class QueryThread extends Thread {
+		protected CloudBackend cb;
+		protected CloudQuery cq;
+		
+		public QueryThread(CloudBackend cb, CloudQuery cq) {
+			super();
+			this.cb = cb;
+			this.cq = cq;
+		}
 	}
 }

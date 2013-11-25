@@ -17,7 +17,7 @@ public class MainActivity extends Activity {
    	 	setContentView(R.layout.activity_main);
    	 	
      	AnglesController.createInstance(this);
-     	//AnglesController.getInstance().init(this);
+     	AnglesController.getInstance().init(this);
      	AnglesController.getInstance().loadLoginActivity(this);
     }
    

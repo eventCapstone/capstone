@@ -1,5 +1,6 @@
 package com.angles.view;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,11 @@ import com.angles.database.ContactTable;
 import com.angles.model.AnglesEvent;
 import com.angles.model.Attending;
 import com.angles.model.User;
+import com.google.cloud.backend.android.CloudBackend;
+import com.google.cloud.backend.android.CloudCallbackHandler;
+import com.google.cloud.backend.android.CloudEntity;
+import com.google.cloud.backend.android.CloudQuery;
+import com.google.cloud.backend.android.DBTableConstants;
 
 import android.app.Activity;
 import android.content.Context;
@@ -22,6 +28,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class InviteGuestListAdapter extends BaseAdapter {
 	private AnglesEvent event;
@@ -69,7 +76,7 @@ public class InviteGuestListAdapter extends BaseAdapter {
 		if (attending == null) {
 			invitedStatus.setVisibility(View.INVISIBLE);
 			inviteButton.setVisibility(View.VISIBLE);
-			inviteButton.setOnClickListener(new InviteClickListener(invitedStatus));
+			inviteButton.setOnClickListener(new InviteClickListener(invitedStatus, event, contact));
 		}
 		else {
 			inviteButton.setVisibility(View.INVISIBLE);
@@ -107,13 +114,38 @@ public class InviteGuestListAdapter extends BaseAdapter {
 	
 	private class InviteClickListener implements OnClickListener {
 		TextView inviteStatus;
+		AnglesEvent event;
+		User user;
 		
-		public InviteClickListener(TextView inviteStatus) {
+		public InviteClickListener(TextView inviteStatus, AnglesEvent event, User user) {
 			this.inviteStatus = inviteStatus;
+			this.event = event;
+			this.user = user;
 		}
 		
 		@Override
 		public void onClick(View v) {
+			//update guest table on cloud
+			CloudBackend cb = new CloudBackend();
+			CloudQuery cq = new CloudQuery(DBTableConstants.DB_TABLE_GUESTS);
+			
+			CloudEntity invite = new CloudEntity(DBTableConstants.DB_TABLE_GUESTS);
+			invite.put(DBTableConstants.DB_GUESTS_EVENT_ID, event.getEventID().toString());
+			invite.put(DBTableConstants.DB_GUESTS_USERNAME, user.userName);
+			invite.put(DBTableConstants.DB_GUESTS_ATTENDING_STATUS, "UNDECIDED");
+			
+			try {
+				cb.insert(invite);
+			}
+			catch (IOException e) {
+				//don't add to map or update view if we encountered an error
+				return;
+			}
+
+			//update guest map
+			guests.put(user, Attending.ATTENDING);
+			
+			//update view
 			v.setVisibility(View.INVISIBLE);
 			inviteStatus.setVisibility(View.VISIBLE);
 			inviteStatus.setText("Invited");
