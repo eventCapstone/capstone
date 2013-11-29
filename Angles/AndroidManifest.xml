@@ -24,11 +24,11 @@
    
    <application android:allowBackup="true" android:icon="@drawable/ic_launcher" android:label="@string/app_name" android:theme="@style/AppTheme">
        
-       	<provider
+   <!--  <provider
       		android:name="com.angles.database.AnglesContentProvider"
       		android:authorities="com.angles.database.contentprovider">
    		</provider>
-   			
+   -->			
         <activity android:label="@string/app_name" android:name="com.angles.angles.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

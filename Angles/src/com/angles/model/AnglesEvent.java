@@ -38,6 +38,7 @@ public class AnglesEvent implements Serializable {
 	public AnglesEvent(String eventTitle, String eventDescription, Calendar startTime, Calendar endTime,
 			User host, UUID eventID)
 	{
+		
 		this.eventTitle = eventTitle;
 		this.eventDescription = eventDescription;
 		this.startTime = startTime;

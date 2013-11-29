@@ -21,22 +21,23 @@ public class EventsManager {
 	public EventsManager(User anglesUser)
 	{
 		this.anglesUser = anglesUser;
-		eventList = loadEventsFromDatabase();
+		eventList = loadEventsFromCloud();
 	}
 		
 	/**
 	 * TODO: Load events from remote database for this user
 	 */
-	public List<AnglesEvent> loadEventsFromDatabase()
+	public List<AnglesEvent> loadEventsFromCloud()
 	{
+		
+		List<AnglesEvent> events = new ArrayList<AnglesEvent>();
 		
 		final CloudBackend cb = new CloudBackend();
 		final CloudQuery cq = new CloudQuery("AnglesEvent");
-		cq.setFilter(F.eq(DBTableConstants.DB_EVENT_HOST_USERNAME, "MrBrent"));
-		cq.setLimit(50);
-		/*
+		//Get events where user is host
+		cq.setFilter(F.eq(DBTableConstants.DB_EVENT_HOST_USERNAME, anglesUser.userName));
+
 		Thread theThread = new Thread() {
-			
 			@Override
 			public void run() {
 				try {
@@ -46,30 +47,47 @@ public class EventsManager {
 					e.printStackTrace();
 				}
 			}
-			};
-			theThread.start();
-			try {
-				theThread.join();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			*/
-		List<AnglesEvent> events = new ArrayList<AnglesEvent>();
-		
-		events.add(new AnglesEvent("John's Wedding", "They grow up so fast", 
-				makeCalendar(2013, 10, 3, 18, 0), makeCalendar(2014, 10, 15, 21, 0), 
-				anglesUser, UUID.randomUUID()));
-		events.add(new AnglesEvent("Guns 'n Roses Concert", "The new and improved edition",
-				makeCalendar(2013, 10, 31, 22, 0), makeCalendar(2013, 11, 1, 2, 0),
-				anglesUser, UUID.randomUUID()));
-		events.add(new AnglesEvent("My first dance recital", "I learned to tap!",
-				makeCalendar(2014, 1, 1, 14, 0), makeCalendar(2014, 1, 1, 16, 0),
-				anglesUser, UUID.randomUUID()));
-		for (AnglesEvent event: events)
-		{
-			event.getGuests().put(anglesUser, Attending.UNDECIDED);
+		};
+		theThread.start();
+		try {
+			theThread.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
+		
+		if (results != null && !results.isEmpty()) {
+			for (int i=0; i < results.size(); i++) {
+				CloudEntity entity = results.get(i);
+				Calendar startTime = parseDateTime((String)entity.get(DBTableConstants.DB_EVENT_START_DATE),
+						(String)entity.get(DBTableConstants.DB_EVENT_START_TIME));
+				Calendar endTime = parseDateTime((String)entity.get(DBTableConstants.DB_EVENT_END_DATE),
+						(String)entity.get(DBTableConstants.DB_EVENT_END_TIME));
+				events.add(new AnglesEvent(
+						(String)entity.get(DBTableConstants.DB_EVENT_TITLE),
+						(String)entity.get(DBTableConstants.DB_EVENT_DESCRIPTION),
+						startTime,
+						endTime,
+						anglesUser,
+						UUID.fromString((String)entity.get(DBTableConstants.DB_EVENT_ID))));
+			}
+		}
+		
+		//TODO: Get events where user is guest
+		
+		
+//		events.add(new AnglesEvent("John's Wedding", "They grow up so fast", 
+//				makeCalendar(2013, 10, 3, 18, 0), makeCalendar(2014, 10, 15, 21, 0), 
+//				anglesUser, UUID.randomUUID()));
+//		events.add(new AnglesEvent("Guns 'n Roses Concert", "The new and improved edition",
+//				makeCalendar(2013, 10, 31, 22, 0), makeCalendar(2013, 11, 1, 2, 0),
+//				anglesUser, UUID.randomUUID()));
+//		events.add(new AnglesEvent("My first dance recital", "I learned to tap!",
+//				makeCalendar(2014, 1, 1, 14, 0), makeCalendar(2014, 1, 1, 16, 0),
+//				anglesUser, UUID.randomUUID()));
+//		for (AnglesEvent event: events)
+//		{
+//			event.getGuests().put(anglesUser, Attending.UNDECIDED);
+//		}
 		return events;
 	}
 	
@@ -115,6 +133,15 @@ public class EventsManager {
 		return hour + ":" + 
 			String.format("%02d", calendar.get(Calendar.MINUTE)) +
 			(calendar.get(Calendar.HOUR_OF_DAY) < 12 ? " AM" : " PM");
+	}
+
+	public static Calendar parseDateTime(String date, String time) {
+		Calendar dateCalendar = parseDate(date);
+		Calendar timeCalendar = parseTime(time);
+		
+		dateCalendar.set(Calendar.HOUR_OF_DAY, timeCalendar.get(Calendar.HOUR_OF_DAY));
+		dateCalendar.set(Calendar.MINUTE, timeCalendar.get(Calendar.MINUTE));
+		return dateCalendar;
 	}
 	
 	public static Calendar parseDate(String str) {

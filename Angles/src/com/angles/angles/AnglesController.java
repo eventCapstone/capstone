@@ -13,6 +13,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import com.angles.database.ContactTable;
+import com.angles.database.EventTable;
 import com.angles.model.AnglesEvent;
 import com.angles.model.EventsManager;
 import com.angles.model.User;
@@ -61,13 +62,9 @@ public class AnglesController {
 	 * @param inActivity the activity responsible for creating the controller
 	 */
 	private AnglesController(Activity inActivity){
-		anglesUser = new User("Walter White", "walter@breakingbad.com");
-		eventsManager = new EventsManager(anglesUser);
 		itsDisplayManager = new AnglesDisplayManager(this);
 		itsTouchManager = new AnglesTouchManager(this);
 		
-//		ContactDbHelper helper = new ContactDbHelper(inActivity);
-//		contacts = helper.getContacts();
 		contacts = new HashSet();
 	}
 	
@@ -116,59 +113,86 @@ public class AnglesController {
 	 * INITIALIZATION Business Logic
 	 *****************************************************************************/
 	public void init(Activity activity) {
-		CloudBackend cloudBackend = new CloudBackend();
-		CloudQuery cloudQuery = new CloudQuery(DBTableConstants.DB_USERS_USERSTABLENAME);
-		
-		// Run query
-	    Uri uri = ContactsContract.CommonDataKinds.Email.CONTENT_URI;
-	    String[] projection = new String[] {
-	            ContactsContract.Contacts._ID,
-	            ContactsContract.Contacts.DISPLAY_NAME,
-	            ContactsContract.CommonDataKinds.Email.DATA
-	    };
-	    String selection = ContactsContract.Contacts.IN_VISIBLE_GROUP +"='1'";
-	    //showing only visible contacts  
-	    String[] selectionArgs = null;
-	    
-	    Cursor cursor = activity.getContentResolver().query(uri, projection, selection, selectionArgs, null);
-	    F filter = null;
-	    while (cursor.moveToNext()) {
-	    	String email = cursor.getString(2);
-	    	if (filter == null) {
-	    		filter = F.eq(DBTableConstants.DB_USERS_EMAIL, email);
-	    	}
-	    	else {
-	    		filter = F.or(filter, F.eq(DBTableConstants.DB_USERS_EMAIL, email));
-	    	}
-	    }
-	    cloudQuery.setFilter(filter);
-		
-		Thread theThread = new QueryThread(cloudBackend, cloudQuery) {
+		loadEvents(activity);
+		loadContacts(activity);
+	}
+	
+	public void loadEvents(Activity activity) {
+	
+	}
+	
+	public void loadContacts(Activity activity) {
+		Thread loadContactThread = new ActivityThread(activity) {
 			@Override
 			public void run() {
-				try {
-					result = cb.list(cq);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				ContactTable contactTable = new ContactTable(activity);
+				contacts = contactTable.getContacts();
+				
+				CloudBackend cloudBackend = new CloudBackend();
+				CloudQuery cloudQuery = new CloudQuery(DBTableConstants.DB_USERS_USERSTABLENAME);
+				
+				// Run query
+			    Uri uri = ContactsContract.CommonDataKinds.Email.CONTENT_URI;
+			    String[] projection = new String[] {
+			            ContactsContract.Contacts._ID,
+			            ContactsContract.Contacts.DISPLAY_NAME,
+			            ContactsContract.CommonDataKinds.Email.DATA
+			    };
+			    String selection = ContactsContract.Contacts.IN_VISIBLE_GROUP +"='1'";
+			    //showing only visible contacts  
+			    String[] selectionArgs = null;
+			    
+			    Cursor cursor = activity.getContentResolver().query(uri, projection, selection, selectionArgs, null);
+			    F filter = null;
+			    
+			  //  while (!cursor.isAfterLast()) {
+			    	int counter=0;
+				    while (cursor.moveToNext()) {
+				    	String email = cursor.getString(2);
+				    	if (filter == null) {
+				    		filter = F.eq(DBTableConstants.DB_USERS_EMAIL, email);
+				    	}
+				    	else {
+				    		filter = F.or(filter, F.eq(DBTableConstants.DB_USERS_EMAIL, email));
+				    	}
+				    	counter++;
+				    	if(counter > 20) {
+				    		break;
+				    	}
+				    }
+				    cloudQuery.setFilter(filter);
+					
+					Thread theThread = new ContactQueryThread(cloudBackend, cloudQuery, contactTable) {
+						@Override
+						public void run() {
+							try {
+								result = cb.list(cq);
+								if (result != null && !result.isEmpty()) {
+									for (int i=0; i < result.size(); i++) {
+										String userName = (String)result.get(i).get(DBTableConstants.DB_USERS_USERNAME);
+										String phoneNumber = (String)result.get(i).get(DBTableConstants.DB_USERS_PHONENUMBER);
+										String email = (String)result.get(i).get(DBTableConstants.DB_USERS_EMAIL);
+										User contact = new User(userName, email, phoneNumber);
+										if (!contacts.contains(contact)) {
+											contacts.add(new User(userName, email, phoneNumber));
+											contactTable.addContact(contact);
+										}
+									}
+								}
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+						}
+					};
+					theThread.start();
+					try {
+						theThread.join();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 			}
 		};
-		theThread.start();
-		try {
-			theThread.join();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		if (result != null && !result.isEmpty()) {
-			for (int i=0; i < result.size(); i++) {
-				String userName = (String)result.get(i).get(DBTableConstants.DB_USERS_USERNAME);
-				String phoneNumber = (String)result.get(i).get(DBTableConstants.DB_USERS_PHONENUMBER);
-				String email = (String)result.get(i).get(DBTableConstants.DB_USERS_EMAIL);
-				contacts.add(new User(userName, email, phoneNumber));
-			}
-		}
+		loadContactThread.start();
 	}
 
 	/*****************************************************************************
@@ -176,14 +200,14 @@ public class AnglesController {
 	 *****************************************************************************/
 	public void loginUser(Activity currentActivity)
 	{
-		String UserName = ((EditText) currentActivity.findViewById(R.id.loginUserName)).getText().toString();
-		String PW = ((EditText) currentActivity.findViewById(R.id.loginPassword)).getText().toString();
+		String userName = ((EditText) currentActivity.findViewById(R.id.loginUserName)).getText().toString();
+		String password = ((EditText) currentActivity.findViewById(R.id.loginPassword)).getText().toString();
 		
 	
 		final CloudBackend cb = new CloudBackend();
 		final CloudQuery cq = new CloudQuery(DBTableConstants.DB_USERS_USERSTABLENAME);
 		
-		cq.setFilter(F.and(F.eq(DBTableConstants.DB_USERS_USERNAME,UserName), F.eq(DBTableConstants.DB_USERS_PASSWORD, PW)));
+		cq.setFilter(F.and(F.eq(DBTableConstants.DB_USERS_USERNAME,userName), F.eq(DBTableConstants.DB_USERS_PASSWORD, password)));
 		cq.setLimit(1);
 
 		Thread theThread = new Thread() {
@@ -202,13 +226,18 @@ public class AnglesController {
 		try {
 			theThread.join();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		if (result.isEmpty()) {
 			Toast.makeText(currentActivity,"Wrong UserName Or Password", Toast.LENGTH_LONG).show();
 		} else {
+			String phoneNumber = (String)result.get(0).get(DBTableConstants.DB_USERS_PHONENUMBER);
+			if (phoneNumber == null) {
+				phoneNumber = "";
+			}
+			anglesUser = new User(userName, (String)result.get(0).get(DBTableConstants.DB_USERS_EMAIL), phoneNumber);
+			eventsManager = new EventsManager(anglesUser);
 			loadEventListActivity(currentActivity);
 		}
 	}
@@ -290,6 +319,8 @@ public class AnglesController {
 			
 			Toast.makeText(currentActivity, "Event created!", Toast.LENGTH_SHORT).show();
 			currentActivity.sendEventToCloud(submitButton, eventID);
+			EventTable eventTable = new EventTable(currentActivity);
+			eventTable.addEvent(event);
 			loadViewEventActivity(currentActivity, event);
 		} else {
 			Toast.makeText(currentActivity, result, Toast.LENGTH_LONG).show();
@@ -343,14 +374,25 @@ public class AnglesController {
 		currentActivity.startActivity(intent);
 	}
 	
-	private class QueryThread extends Thread {
+	private class ContactQueryThread extends Thread {
 		protected CloudBackend cb;
 		protected CloudQuery cq;
+		protected ContactTable contactTable;
 		
-		public QueryThread(CloudBackend cb, CloudQuery cq) {
+		public ContactQueryThread(CloudBackend cb, CloudQuery cq, ContactTable contactTable) {
 			super();
 			this.cb = cb;
 			this.cq = cq;
+			this.contactTable = contactTable;
+		}
+	}
+	
+	private class ActivityThread extends Thread {
+		protected Activity activity;
+		
+		public ActivityThread(Activity activity) {
+			super();
+			this.activity = activity;
 		}
 	}
 }

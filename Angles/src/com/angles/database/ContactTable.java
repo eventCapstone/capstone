@@ -28,9 +28,7 @@ public class ContactTable extends SQLiteOpenHelper {
 	
 	/* Contact Table Columns */
 	private static final String USER_NAME = "user_name";
-	
 	private static final String EMAIL = "email";
-	
 	private static final String PHONE_NUMBER = "phone_number";
 	
 	/* Guest Table Columns 
@@ -50,13 +48,15 @@ public class ContactTable extends SQLiteOpenHelper {
 	public static final String CREATE_CONTACTS_TABLE = "CREATE TABLE " +
 			 TABLE_CONTACTS + " ( " + 
 			 USER_NAME + " TEXT PRIMARY KEY, " + 
-			 EMAIL + "TEXT, " +
-			 PHONE_NUMBER + " TEXT";
-		
+			 EMAIL + " TEXT, " +
+			 PHONE_NUMBER + " TEXT" + ")";
+	
+	@Override
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL(CREATE_CONTACTS_TABLE);
 	}
 	
+	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 	
 		Log.w("LOG_TAG", "Upgrading Database from Version " + oldVersion +
@@ -68,9 +68,7 @@ public class ContactTable extends SQLiteOpenHelper {
 	}
 	
 	public void addContact(User user) {
-		
 		SQLiteDatabase db = this.getWritableDatabase();
-		
 		ContentValues values = new ContentValues();
 
 		values.put(USER_NAME, user.userName);
@@ -98,7 +96,6 @@ public class ContactTable extends SQLiteOpenHelper {
 					cursor.getString(phoneNumberIndex)));
 			cursor.moveToNext();
 		}
-		
 		return contacts;
 	}
 }
