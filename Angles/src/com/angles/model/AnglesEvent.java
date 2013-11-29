@@ -10,6 +10,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import android.app.Activity;
+import android.content.Context;
+
+import com.angles.database.EventTable;
 import com.google.api.client.util.DateTime;
 import com.google.cloud.backend.android.CloudBackend;
 import com.google.cloud.backend.android.CloudEntity;
@@ -47,7 +51,6 @@ public class AnglesEvent implements Serializable {
 		this.eventID = eventID;
 		
 		this.guests = new HashMap<User, Attending>();
-		this.guests.put(host, Attending.ATTENDING);
 	}
 	
 	public User getHost()
@@ -67,10 +70,13 @@ public class AnglesEvent implements Serializable {
 	
 	public Attending getStatus(User user)
 	{
+		if (host.equals(user)) {
+			return Attending.ATTENDING;
+		}
 		return guests.get(user);
 	}
 	
-	public void acceptInvite(User user)
+	public void acceptInvite(User user, Context context)
 	{
 		if (guests.containsKey(user))
 		{
@@ -91,6 +97,8 @@ public class AnglesEvent implements Serializable {
 				return;
 			}
 			guests.put(user, Attending.ATTENDING);
+			EventTable eventsTable = new EventTable(context);
+			eventsTable.updateGuestStatus(user.userName, eventID.toString(), "ATTENDING");
 		}
 	}
 	
@@ -136,5 +144,9 @@ public class AnglesEvent implements Serializable {
 	public void uninviteGuest(User user)
 	{
 		guests.remove(user);
+	}
+	
+	public void setGuests(Map<User, Attending> guests) {
+		this.guests = guests;
 	}
 }

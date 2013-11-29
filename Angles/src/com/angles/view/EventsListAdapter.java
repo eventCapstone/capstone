@@ -85,7 +85,7 @@ public class EventsListAdapter extends BaseAdapter {
 						noGoButton, eventStatus) {
 					@Override
 					public void onClick(View view) {
-						anglesEvent.acceptInvite(anglesController.getAnglesUser());
+						anglesEvent.acceptInvite(anglesController.getAnglesUser(), view.getContext());
 						status.setText("Going");
 						goButton.setVisibility(View.INVISIBLE);
 						noGoButton.setVisibility(View.INVISIBLE);

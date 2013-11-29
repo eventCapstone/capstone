@@ -1,8 +1,8 @@
 package com.angles.angles;
 
 public class AccountGeneral {
-
 	/* Account Type ID */
+	
 	public static final String ACCOUNT_TYPE = "com.angles";
 	
 	/* Account Name */

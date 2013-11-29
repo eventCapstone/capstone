@@ -25,7 +25,7 @@ public class User implements Serializable {
 	{
 		if (other instanceof User)
 		{
-			return (userName.equals(((User)other).userName));
+			return userName.equals(((User)other).userName);
 		}
 		return false;
 	}

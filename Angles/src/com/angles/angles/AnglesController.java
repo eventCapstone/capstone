@@ -145,9 +145,10 @@ public class AnglesController {
 			    Cursor cursor = activity.getContentResolver().query(uri, projection, selection, selectionArgs, null);
 			    F filter = null;
 			    
-			  //  while (!cursor.isAfterLast()) {
-			    	int counter=0;
-				    while (cursor.moveToNext()) {
+			    int counter=1;
+			    while (!cursor.isAfterLast()) {
+			    	filter = null;
+			    	while (cursor.moveToNext()) {
 				    	String email = cursor.getString(2);
 				    	if (filter == null) {
 				    		filter = F.eq(DBTableConstants.DB_USERS_EMAIL, email);
@@ -156,12 +157,12 @@ public class AnglesController {
 				    		filter = F.or(filter, F.eq(DBTableConstants.DB_USERS_EMAIL, email));
 				    	}
 				    	counter++;
-				    	if(counter > 20) {
+				    	if(counter % 10 == 0) {
 				    		break;
 				    	}
 				    }
 				    cloudQuery.setFilter(filter);
-					
+				    
 					Thread theThread = new ContactQueryThread(cloudBackend, cloudQuery, contactTable) {
 						@Override
 						public void run() {
@@ -190,6 +191,8 @@ public class AnglesController {
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
+			    }
+			    cursor.close();
 			}
 		};
 		loadContactThread.start();
@@ -229,7 +232,7 @@ public class AnglesController {
 			e.printStackTrace();
 		}
 		
-		if (result.isEmpty()) {
+		if ((result == null) || result.isEmpty()) {
 			Toast.makeText(currentActivity,"Wrong UserName Or Password", Toast.LENGTH_LONG).show();
 		} else {
 			String phoneNumber = (String)result.get(0).get(DBTableConstants.DB_USERS_PHONENUMBER);

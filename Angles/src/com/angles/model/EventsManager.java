@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import com.google.cloud.backend.android.CloudBackend;
@@ -37,20 +39,19 @@ public class EventsManager {
 		//Get events where user is host
 		cq.setFilter(F.eq(DBTableConstants.DB_EVENT_HOST_USERNAME, anglesUser.userName));
 
-		Thread theThread = new Thread() {
+		Thread hostThread = new Thread() {
 			@Override
 			public void run() {
 				try {
 					results = cb.list(cq);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
 		};
-		theThread.start();
+		hostThread.start();
 		try {
-			theThread.join();
+			hostThread.join();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -72,22 +73,151 @@ public class EventsManager {
 			}
 		}
 		
-		//TODO: Get events where user is guest
+		//Get events where user is guest
+		final CloudQuery guestQuery = new CloudQuery(DBTableConstants.DB_TABLE_GUESTS);
+		guestQuery.setFilter(F.eq(DBTableConstants.DB_GUESTS_USERNAME, anglesUser.userName));
 		
+		Thread guestThread = new Thread() {
+			@Override
+			public void run() {
+				try {
+					results = cb.list(guestQuery);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		};
+		guestThread.start();
+		try {
+			guestThread.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		if (results != null && !results.isEmpty()) {
+			//find first event
+			int index=0;
+			F filter=null;
+			while(index < results.size()) {
+				if (!((String)results.get(index).get(DBTableConstants.DB_GUESTS_ATTENDING_STATUS)).equals("NOT_ATTENDING")) {
+					filter = F.eq(DBTableConstants.DB_EVENT_ID, (String)results.get(index).get(DBTableConstants.DB_GUESTS_EVENT_ID));
+					index++;
+					break;
+				}
+				index++;
+			}
+			
+			//add remaining events
+			while(index < results.size()) {
+				if (!((String)results.get(index).get(DBTableConstants.DB_GUESTS_ATTENDING_STATUS)).equals("NOT_ATTENDING")) {
+					filter = filter.or(F.eq(DBTableConstants.DB_EVENT_ID, (String)results.get(index).get(DBTableConstants.DB_GUESTS_EVENT_ID)));
+					break;
+				}
+				index++;
+			}
+			
+			final CloudQuery eventQuery = new CloudQuery(DBTableConstants.DB_TABLE_ANGLES_EVENT);
+			eventQuery.setFilter(filter);
+			
+			Thread eventThread = new Thread() {
+				@Override
+				public void run() {
+					try {
+						results = cb.list(eventQuery);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			};
+			eventThread.start();
+			try {
+				eventThread.join();
+			} 
+			catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+
+		if (results != null && !results.isEmpty()) {
+			for (int i=0; i < results.size(); i++) {
+				CloudEntity entity = results.get(i);
+				Calendar startTime = parseDateTime((String)entity.get(DBTableConstants.DB_EVENT_START_DATE),
+						(String)entity.get(DBTableConstants.DB_EVENT_START_TIME));
+				Calendar endTime = parseDateTime((String)entity.get(DBTableConstants.DB_EVENT_END_DATE),
+						(String)entity.get(DBTableConstants.DB_EVENT_END_TIME));
+				events.add(new AnglesEvent(
+						(String)entity.get(DBTableConstants.DB_EVENT_TITLE),
+						(String)entity.get(DBTableConstants.DB_EVENT_DESCRIPTION),
+						startTime,
+						endTime,
+						new User((String)entity.get(DBTableConstants.DB_EVENT_HOST_USERNAME), ""),
+						UUID.fromString((String)entity.get(DBTableConstants.DB_EVENT_ID))));
+			}
+		}
+		
+		//get guests
+		final CloudQuery addGuestsQuery = new CloudQuery(DBTableConstants.DB_TABLE_GUESTS);
+		F filter = null;
+		
+		if (events.size() > 0) {
+			filter = F.eq(DBTableConstants.DB_GUESTS_EVENT_ID, events.get(0).getEventID().toString());
+			for (int i = 1; i < events.size(); i++) {
+				filter = F.or(filter, F.eq(DBTableConstants.DB_GUESTS_EVENT_ID, events.get(1).getEventID().toString()));
+			}
+			
+			addGuestsQuery.setFilter(filter);
+			Thread addGuestThread = new EventListThread(events) {
+				@Override
+				public void run() {
+					try {
+						results = cb.list(addGuestsQuery);
+						Map<UUID, Map<User, Attending>> doubleMap = new HashMap();
+						for (int i=0; i < results.size(); i++) {
+							UUID eventID = UUID.fromString((String)results.get(i).get(DBTableConstants.DB_GUESTS_EVENT_ID));
+							if (!doubleMap.containsKey(eventID)) {
+								doubleMap.put(eventID, new HashMap<User, Attending>());
+							}
+							User guest = new User((String)results.get(i).get(DBTableConstants.DB_GUESTS_USERNAME), "");
+							String strStatus = (String)results.get(i).get(DBTableConstants.DB_GUESTS_ATTENDING_STATUS);
+							Attending status;
+							if (strStatus.equals("ATTENDING")) {
+								status=Attending.ATTENDING;
+							}
+							else if (strStatus.equals("NOT_ATTENDING")) {
+								status=Attending.NOT_ATTENDING;
+							}
+							else if (strStatus.equals("UNDECIDED")) {
+								status=Attending.UNDECIDED;
+							}
+							else {
+								status=Attending.MAYBE;
+							}
+							doubleMap.get(eventID).put(guest, status);
+						}
+						
+						for (AnglesEvent event: events) {
+							Map<User, Attending> map = doubleMap.get(event.getEventID());
+							if (map == null) {
+								map = new HashMap();
+							}
+							event.setGuests(map);
+						}
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			};
+			addGuestThread.start();
+			try {
+				addGuestThread.join();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 		
 //		events.add(new AnglesEvent("John's Wedding", "They grow up so fast", 
 //				makeCalendar(2013, 10, 3, 18, 0), makeCalendar(2014, 10, 15, 21, 0), 
 //				anglesUser, UUID.randomUUID()));
-//		events.add(new AnglesEvent("Guns 'n Roses Concert", "The new and improved edition",
-//				makeCalendar(2013, 10, 31, 22, 0), makeCalendar(2013, 11, 1, 2, 0),
-//				anglesUser, UUID.randomUUID()));
-//		events.add(new AnglesEvent("My first dance recital", "I learned to tap!",
-//				makeCalendar(2014, 1, 1, 14, 0), makeCalendar(2014, 1, 1, 16, 0),
-//				anglesUser, UUID.randomUUID()));
-//		for (AnglesEvent event: events)
-//		{
-//			event.getGuests().put(anglesUser, Attending.UNDECIDED);
-//		}
 		return events;
 	}
 	
@@ -220,4 +350,12 @@ public class EventsManager {
 			
 			return result;
 		}
+	
+	private class EventListThread extends Thread {
+		List<AnglesEvent> events;
+		
+		public EventListThread(List<AnglesEvent> events) {
+			this.events = events;
+		}
+	}
 }

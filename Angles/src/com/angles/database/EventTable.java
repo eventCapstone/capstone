@@ -18,9 +18,9 @@ import android.util.Log;
 
 public class EventTable extends SQLiteOpenHelper {
 	private static final String DEBUG_TAG = "EventTable";
-	/* Table Name */
+	/* Events Table Name */
 	public static final String EVENTS_TABLE_NAME = "Events";
-	/* Table Columns */
+	/* Events Table Columns */
 	public static final String EVENT_ID = "Event_Id";
 	public static final String HOST_NAME = "Host_Name";
 	public static final String EVENT_NAME = "Event_Name";
@@ -29,6 +29,11 @@ public class EventTable extends SQLiteOpenHelper {
 	public static final String START_DATE = "Start_Date";
 	public static final String END_TIME = "End_Time";
 	public static final String END_DATE = "End_Date";
+	/* Guests Table Name */
+	public static final String GUESTS_TABLE_NAME = "Guests";
+	/* Guests Table Columns */
+	public static final String GUEST_NAME = "Guest_Name";
+	public static final String GUEST_STATUS = "Guest_Status";
 	/* Name of the Database */
 	private static final String DATABASE_NAME = "Angles.db";
 	/* Version Number of the Database */
@@ -94,6 +99,7 @@ public class EventTable extends SQLiteOpenHelper {
 					UUID.fromString(cursor.getString(eventIDIndex)))
 			);
 		}
+		cursor.close();
 		return events;
 	}
 	
@@ -112,5 +118,24 @@ public class EventTable extends SQLiteOpenHelper {
 		
 		db.insert(EVENTS_TABLE_NAME, null, values);
 		//TODO: Insert guests into guest table
+	}
+	
+	public void addGuest(String eventID, String guestName) {
+		SQLiteDatabase db = this.getWritableDatabase();
+		ContentValues values = new ContentValues();
+
+		values.put(EVENT_ID, eventID);
+		values.put(GUEST_NAME, guestName);
+		values.put(GUEST_STATUS, "UNDECIDED");
+		
+		db.insert(GUESTS_TABLE_NAME, null, values);
+	}
+	
+	public void updateGuestStatus(String guestName, String eventID, String status) {
+		SQLiteDatabase db = this.getWritableDatabase();
+		ContentValues values = new ContentValues();
+		values.put(GUEST_STATUS, status);
+
+		db.update(GUESTS_TABLE_NAME, values, GUEST_NAME + "=" + guestName + " and " + EVENT_ID + " = " + eventID, new String[0]);
 	}
 }

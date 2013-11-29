@@ -96,6 +96,7 @@ public class ContactTable extends SQLiteOpenHelper {
 					cursor.getString(phoneNumberIndex)));
 			cursor.moveToNext();
 		}
+		cursor.close();
 		return contacts;
 	}
 }
