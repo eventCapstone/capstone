@@ -2,10 +2,13 @@ package com.angles.database;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import com.angles.model.AnglesEvent;
+import com.angles.model.Attending;
 import com.angles.model.EventsManager;
 import com.angles.model.User;
 
@@ -19,7 +22,7 @@ import android.util.Log;
 public class EventTable extends SQLiteOpenHelper {
 	private static final String DEBUG_TAG = "EventTable";
 	/* Events Table Name */
-	public static final String EVENTS_TABLE_NAME = "Events";
+	public static final String EVENTS_TABLE_NAME = "AnglesEvents";
 	/* Events Table Columns */
 	public static final String EVENT_ID = "Event_Id";
 	public static final String HOST_NAME = "Host_Name";
@@ -35,7 +38,7 @@ public class EventTable extends SQLiteOpenHelper {
 	public static final String GUEST_NAME = "Guest_Name";
 	public static final String GUEST_STATUS = "Guest_Status";
 	/* Name of the Database */
-	private static final String DATABASE_NAME = "Angles.db";
+	private static final String DATABASE_NAME = "AnglesEvent.db";
 	/* Version Number of the Database */
 	private static final int DATABASE_VERSION = 1;
 
@@ -43,21 +46,28 @@ public class EventTable extends SQLiteOpenHelper {
 	/* This is a SQLite String that generates the Events table. */
 	public static final String CREATE_EVENTS_TABLE = "CREATE TABLE " +
 			 EVENTS_TABLE_NAME + " ( " + 
-			 EVENT_ID + " STRING PRIMARY KEY, " +
-			 HOST_NAME + " TEXT, " + 
-			 EVENT_NAME + "TEXT, " +
+			 EVENT_ID + " TEXT PRIMARY KEY, " + 
+			 HOST_NAME + " TEXT, " +
+			 EVENT_NAME + " TEXT, " +
+			 EVENT_DESCRIPTION + " TEXT, " +
+			 START_DATE + " TEXT, " +
 			 START_TIME + " TEXT, " +
-			 END_TIME + " TEXT, " +
-			 EVENT_DESCRIPTION + " TEXT" +
-			 ");";
+			 END_DATE + " TEXT, " +
+			 END_TIME + " TEXT" + ")";
+	
+	public static final String CREATE_GUESTS_TABLE = "CREATE TABLE " +
+			GUESTS_TABLE_NAME + " ( " +
+			EVENT_ID + " TEXT," + 
+			GUEST_NAME + " TEXT, " +
+			GUEST_STATUS + " TEXT);";
 		
 	public EventTable(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
 	
 	public void onCreate(SQLiteDatabase db) {
-		
 		db.execSQL(CREATE_EVENTS_TABLE);
+		db.execSQL(CREATE_GUESTS_TABLE);
 	}
 	
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -88,7 +98,17 @@ public class EventTable extends SQLiteOpenHelper {
 			Calendar startTime = EventsManager.parseDateTime(cursor.getString(startDateIndex), cursor.getString(startTimeIndex));
 			Calendar endTime = EventsManager.parseDateTime(cursor.getString(endDateIndex), cursor.getString(endTimeIndex));
 			
-			//TODO: Load guests from guest table
+			Cursor guestCursor = db.rawQuery("select * from " + GUESTS_TABLE_NAME + " where " 
+					+ EVENT_ID + "='" + cursor.getString(eventIDIndex) + "'", new String[]{});
+			int userIndex = guestCursor.getColumnIndex(GUEST_NAME);
+			int statusIndex = guestCursor.getColumnIndex(GUEST_STATUS);
+			
+			Map<User, Attending> guests = new HashMap();
+			
+			while (guestCursor.moveToNext()) {
+				guests.put(new User(guestCursor.getString(userIndex), ""),
+						EventsManager.parseAttending(guestCursor.getString(statusIndex)));
+			}
 			
 			events.add(new AnglesEvent(
 					cursor.getString(eventNameIndex),
@@ -96,13 +116,18 @@ public class EventTable extends SQLiteOpenHelper {
 					startTime,
 					endTime,
 					new User(cursor.getString(hostNameIndex), ""),
-					UUID.fromString(cursor.getString(eventIDIndex)))
+					UUID.fromString(cursor.getString(eventIDIndex)),
+					guests)
 			);
 		}
 		cursor.close();
 		return events;
 	}
-	
+
+	/**
+	 * NOTE: Does not insert guests
+	 * @param event
+	 */
 	public void addEvent(AnglesEvent event) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues values = new ContentValues();
@@ -116,8 +141,7 @@ public class EventTable extends SQLiteOpenHelper {
 		values.put(END_DATE, EventsManager.getDisplayDate(event.endTime));
 		values.put(END_TIME, EventsManager.getDisplayTime(event.endTime));
 		
-		db.insert(EVENTS_TABLE_NAME, null, values);
-		//TODO: Insert guests into guest table
+		long result = db.insert(EVENTS_TABLE_NAME, null, values);
 	}
 	
 	public void addGuest(String eventID, String guestName) {
@@ -129,6 +153,18 @@ public class EventTable extends SQLiteOpenHelper {
 		values.put(GUEST_STATUS, "UNDECIDED");
 		
 		db.insert(GUESTS_TABLE_NAME, null, values);
+	}
+	
+	public void addGuests(String eventID, Map<User, Attending> guests) {
+		SQLiteDatabase db = this.getWritableDatabase();
+
+		for (User user: guests.keySet()) {
+			ContentValues values = new ContentValues();
+			values.put(EVENT_ID, eventID);
+			values.put(GUEST_NAME, user.userName);
+			values.put(GUEST_STATUS, "UNDECIDED");
+			db.insert(GUESTS_TABLE_NAME, null, values);
+		}
 	}
 	
 	public void updateGuestStatus(String guestName, String eventID, String status) {

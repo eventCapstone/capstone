@@ -40,7 +40,7 @@ public class AnglesEvent implements Serializable {
 	 * @param eventID
 	 */
 	public AnglesEvent(String eventTitle, String eventDescription, Calendar startTime, Calendar endTime,
-			User host, UUID eventID)
+			User host, UUID eventID, Map<User, Attending> guests)
 	{
 		
 		this.eventTitle = eventTitle;
@@ -49,10 +49,14 @@ public class AnglesEvent implements Serializable {
 		this.endTime = endTime;
 		this.host = host;
 		this.eventID = eventID;
-		
-		this.guests = new HashMap<User, Attending>();
+		this.guests = guests;
 	}
 	
+	public AnglesEvent(String eventTitle, String eventDescription, Calendar startTime, Calendar endTime,
+			User host, UUID eventID)
+	{
+		this(eventTitle, eventDescription, startTime, endTime, host, eventID, new HashMap<User, Attending>());
+	}
 	public User getHost()
 	{
 		return host;
@@ -148,5 +152,18 @@ public class AnglesEvent implements Serializable {
 	
 	public void setGuests(Map<User, Attending> guests) {
 		this.guests = guests;
+	}
+	
+	@Override
+	public boolean equals(Object other) {
+		if (other instanceof AnglesEvent) {
+			return eventID.equals(((AnglesEvent)other).getEventID());
+		}
+		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+		return eventID.hashCode();
 	}
 }

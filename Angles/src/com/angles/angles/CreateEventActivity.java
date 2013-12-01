@@ -73,12 +73,10 @@ public class CreateEventActivity extends CloudBackendActivity {
 		createNewEvent.put(DBTableConstants.DB_EVENT_TITLE, eventTitle.getText().toString());
 		createNewEvent.put(DBTableConstants.DB_EVENT_ID, eventID.toString());
 		
-		 CloudCallbackHandler<CloudEntity> handler = new CloudCallbackHandler<CloudEntity>() {
+		CloudCallbackHandler<CloudEntity> handler = new CloudCallbackHandler<CloudEntity>() {
 		      @Override
 		      public void onComplete(final CloudEntity result) {
-		        //EventList.add(0, result);  returns what we just put in if successful,  add this to the users event list.
 		    	  Toast.makeText(getApplicationContext(),"Event Succesfully Added", Toast.LENGTH_LONG).show();
-
 		      }
 
 		      @Override

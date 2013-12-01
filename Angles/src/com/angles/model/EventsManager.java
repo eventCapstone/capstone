@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import android.content.Context;
+
+import com.angles.database.EventTable;
 import com.google.cloud.backend.android.CloudBackend;
 import com.google.cloud.backend.android.CloudEntity;
 import com.google.cloud.backend.android.CloudQuery;
@@ -16,209 +19,230 @@ import com.google.cloud.backend.android.DBTableConstants;
 import com.google.cloud.backend.android.F;
 
 public class EventsManager {
-	List<CloudEntity> results;
-	private User anglesUser;
-	private List<AnglesEvent> eventList;
+	protected List<CloudEntity> results;
+	protected User anglesUser;
+	protected List<AnglesEvent> eventList;
 	
-	public EventsManager(User anglesUser)
+	public EventsManager(User anglesUser, Context context)
 	{
 		this.anglesUser = anglesUser;
-		eventList = loadEventsFromCloud();
+		loadEventsFromLocalDatabase(context);
+		loadEventsFromCloud(context);
+	}
+	
+	public void loadEventsFromLocalDatabase(Context context) {
+		EventTable eventTable = new EventTable(context);
+		eventList = eventTable.getEvents();
+		eventList.add(new AnglesEvent("John's Wedding", "They grow up so fast", 
+						makeCalendar(2013, 10, 3, 18, 0), makeCalendar(2014, 10, 15, 21, 0), 
+						anglesUser, UUID.randomUUID()));
 	}
 		
 	/**
-	 * TODO: Load events from remote database for this user
+	 * Load events from remote database for this user
 	 */
-	public List<AnglesEvent> loadEventsFromCloud()
+	public void loadEventsFromCloud(Context context)
 	{
-		
-		List<AnglesEvent> events = new ArrayList<AnglesEvent>();
-		
-		final CloudBackend cb = new CloudBackend();
-		final CloudQuery cq = new CloudQuery("AnglesEvent");
-		//Get events where user is host
-		cq.setFilter(F.eq(DBTableConstants.DB_EVENT_HOST_USERNAME, anglesUser.userName));
-
-		Thread hostThread = new Thread() {
+		ContextThread thread = new ContextThread(context) {
 			@Override
 			public void run() {
+		
+				EventTable eventTable = new EventTable(threadContext);
+				List<AnglesEvent> events = new ArrayList<AnglesEvent>();
+				
+				final CloudBackend cb = new CloudBackend();
+				final CloudQuery cq = new CloudQuery("AnglesEvent");
+				//Get events where user is host
+				cq.setFilter(F.eq(DBTableConstants.DB_EVENT_HOST_USERNAME, anglesUser.userName));
+		
+				Thread hostThread = new Thread() {
+					@Override
+					public void run() {
+						try {
+							results = cb.list(cq);
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+				};
+				hostThread.start();
 				try {
-					results = cb.list(cq);
-				} catch (IOException e) {
+					hostThread.join();
+				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-			}
-		};
-		hostThread.start();
-		try {
-			hostThread.join();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		
-		if (results != null && !results.isEmpty()) {
-			for (int i=0; i < results.size(); i++) {
-				CloudEntity entity = results.get(i);
-				Calendar startTime = parseDateTime((String)entity.get(DBTableConstants.DB_EVENT_START_DATE),
-						(String)entity.get(DBTableConstants.DB_EVENT_START_TIME));
-				Calendar endTime = parseDateTime((String)entity.get(DBTableConstants.DB_EVENT_END_DATE),
-						(String)entity.get(DBTableConstants.DB_EVENT_END_TIME));
-				events.add(new AnglesEvent(
-						(String)entity.get(DBTableConstants.DB_EVENT_TITLE),
-						(String)entity.get(DBTableConstants.DB_EVENT_DESCRIPTION),
-						startTime,
-						endTime,
-						anglesUser,
-						UUID.fromString((String)entity.get(DBTableConstants.DB_EVENT_ID))));
-			}
-		}
-		
-		//Get events where user is guest
-		final CloudQuery guestQuery = new CloudQuery(DBTableConstants.DB_TABLE_GUESTS);
-		guestQuery.setFilter(F.eq(DBTableConstants.DB_GUESTS_USERNAME, anglesUser.userName));
-		
-		Thread guestThread = new Thread() {
-			@Override
-			public void run() {
+				
+				if (results != null && !results.isEmpty()) {
+					for (int i=0; i < results.size(); i++) {
+						CloudEntity entity = results.get(i);
+						Calendar startTime = parseDateTime((String)entity.get(DBTableConstants.DB_EVENT_START_DATE),
+								(String)entity.get(DBTableConstants.DB_EVENT_START_TIME));
+						Calendar endTime = parseDateTime((String)entity.get(DBTableConstants.DB_EVENT_END_DATE),
+								(String)entity.get(DBTableConstants.DB_EVENT_END_TIME));
+						AnglesEvent hostedEvent = new AnglesEvent(
+								(String)entity.get(DBTableConstants.DB_EVENT_TITLE),
+								(String)entity.get(DBTableConstants.DB_EVENT_DESCRIPTION),
+								startTime,
+								endTime,
+								anglesUser,
+								UUID.fromString((String)entity.get(DBTableConstants.DB_EVENT_ID)));
+						if (!eventList.contains(hostedEvent)) {
+							events.add(hostedEvent);
+							eventTable.addEvent(hostedEvent);
+						}
+					}
+				}
+				
+				//Get events where user is guest
+				final CloudQuery guestQuery = new CloudQuery(DBTableConstants.DB_TABLE_GUESTS);
+				guestQuery.setFilter(F.eq(DBTableConstants.DB_GUESTS_USERNAME, anglesUser.userName));
+				
+				Thread guestThread = new Thread() {
+					@Override
+					public void run() {
+						try {
+							results = cb.list(guestQuery);
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+				};
+				guestThread.start();
 				try {
-					results = cb.list(guestQuery);
-				} catch (IOException e) {
+					guestThread.join();
+				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-			}
-		};
-		guestThread.start();
-		try {
-			guestThread.join();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		
-		if (results != null && !results.isEmpty()) {
-			//find first event
-			int index=0;
-			F filter=null;
-			while(index < results.size()) {
-				if (!((String)results.get(index).get(DBTableConstants.DB_GUESTS_ATTENDING_STATUS)).equals("NOT_ATTENDING")) {
-					filter = F.eq(DBTableConstants.DB_EVENT_ID, (String)results.get(index).get(DBTableConstants.DB_GUESTS_EVENT_ID));
-					index++;
-					break;
-				}
-				index++;
-			}
-			
-			//add remaining events
-			while(index < results.size()) {
-				if (!((String)results.get(index).get(DBTableConstants.DB_GUESTS_ATTENDING_STATUS)).equals("NOT_ATTENDING")) {
-					filter = filter.or(F.eq(DBTableConstants.DB_EVENT_ID, (String)results.get(index).get(DBTableConstants.DB_GUESTS_EVENT_ID)));
-					break;
-				}
-				index++;
-			}
-			
-			final CloudQuery eventQuery = new CloudQuery(DBTableConstants.DB_TABLE_ANGLES_EVENT);
-			eventQuery.setFilter(filter);
-			
-			Thread eventThread = new Thread() {
-				@Override
-				public void run() {
+				
+				if (results != null && !results.isEmpty()) {
+					//find first event
+					int index=0;
+					F filter=null;
+					while(index < results.size()) {
+						if (!((String)results.get(index).get(DBTableConstants.DB_GUESTS_ATTENDING_STATUS)).equals("NOT_ATTENDING")) {
+							filter = F.eq(DBTableConstants.DB_EVENT_ID, (String)results.get(index).get(DBTableConstants.DB_GUESTS_EVENT_ID));
+							index++;
+							break;
+						}
+						index++;
+					}
+					
+					//add remaining events
+					while(index < results.size()) {
+						if (!((String)results.get(index).get(DBTableConstants.DB_GUESTS_ATTENDING_STATUS)).equals("NOT_ATTENDING")) {
+							filter = filter.or(F.eq(DBTableConstants.DB_EVENT_ID, (String)results.get(index).get(DBTableConstants.DB_GUESTS_EVENT_ID)));
+							break;
+						}
+						index++;
+					}
+					
+					final CloudQuery eventQuery = new CloudQuery(DBTableConstants.DB_TABLE_ANGLES_EVENT);
+					eventQuery.setFilter(filter);
+					
+					Thread eventThread = new Thread() {
+						@Override
+						public void run() {
+							try {
+								results = cb.list(eventQuery);
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+						}
+					};
+					eventThread.start();
 					try {
-						results = cb.list(eventQuery);
-					} catch (IOException e) {
+						eventThread.join();
+					} 
+					catch (InterruptedException e) {
 						e.printStackTrace();
 					}
 				}
-			};
-			eventThread.start();
-			try {
-				eventThread.join();
-			} 
-			catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-
-		if (results != null && !results.isEmpty()) {
-			for (int i=0; i < results.size(); i++) {
-				CloudEntity entity = results.get(i);
-				Calendar startTime = parseDateTime((String)entity.get(DBTableConstants.DB_EVENT_START_DATE),
-						(String)entity.get(DBTableConstants.DB_EVENT_START_TIME));
-				Calendar endTime = parseDateTime((String)entity.get(DBTableConstants.DB_EVENT_END_DATE),
-						(String)entity.get(DBTableConstants.DB_EVENT_END_TIME));
-				events.add(new AnglesEvent(
-						(String)entity.get(DBTableConstants.DB_EVENT_TITLE),
-						(String)entity.get(DBTableConstants.DB_EVENT_DESCRIPTION),
-						startTime,
-						endTime,
-						new User((String)entity.get(DBTableConstants.DB_EVENT_HOST_USERNAME), ""),
-						UUID.fromString((String)entity.get(DBTableConstants.DB_EVENT_ID))));
-			}
-		}
 		
-		//get guests
-		final CloudQuery addGuestsQuery = new CloudQuery(DBTableConstants.DB_TABLE_GUESTS);
-		F filter = null;
-		
-		if (events.size() > 0) {
-			filter = F.eq(DBTableConstants.DB_GUESTS_EVENT_ID, events.get(0).getEventID().toString());
-			for (int i = 1; i < events.size(); i++) {
-				filter = F.or(filter, F.eq(DBTableConstants.DB_GUESTS_EVENT_ID, events.get(1).getEventID().toString()));
-			}
-			
-			addGuestsQuery.setFilter(filter);
-			Thread addGuestThread = new EventListThread(events) {
-				@Override
-				public void run() {
+				if (results != null && !results.isEmpty()) {
+					for (int i=0; i < results.size(); i++) {
+						CloudEntity entity = results.get(i);
+						Calendar startTime = parseDateTime((String)entity.get(DBTableConstants.DB_EVENT_START_DATE),
+								(String)entity.get(DBTableConstants.DB_EVENT_START_TIME));
+						Calendar endTime = parseDateTime((String)entity.get(DBTableConstants.DB_EVENT_END_DATE),
+								(String)entity.get(DBTableConstants.DB_EVENT_END_TIME));
+						AnglesEvent guestEvent = new AnglesEvent(
+								(String)entity.get(DBTableConstants.DB_EVENT_TITLE),
+								(String)entity.get(DBTableConstants.DB_EVENT_DESCRIPTION),
+								startTime,
+								endTime,
+								new User((String)entity.get(DBTableConstants.DB_EVENT_HOST_USERNAME), ""),
+								UUID.fromString((String)entity.get(DBTableConstants.DB_EVENT_ID)));
+						if (!eventList.contains(guestEvent)) {
+							events.add(guestEvent);
+							eventTable.addEvent(guestEvent);
+						}
+					}
+				}
+				
+				//get guests
+				final CloudQuery addGuestsQuery = new CloudQuery(DBTableConstants.DB_TABLE_GUESTS);
+				F filter = null;
+				
+				if (events.size() > 0) {
+					filter = F.eq(DBTableConstants.DB_GUESTS_EVENT_ID, events.get(0).getEventID().toString());
+					for (int i = 1; i < events.size(); i++) {
+						filter = F.or(filter, F.eq(DBTableConstants.DB_GUESTS_EVENT_ID, events.get(1).getEventID().toString()));
+					}
+					
+					addGuestsQuery.setFilter(filter);
+					Thread addGuestThread = new EventListThread(events, eventTable) {
+						@Override
+						public void run() {
+							try {
+								results = cb.list(addGuestsQuery);
+								Map<UUID, Map<User, Attending>> doubleMap = new HashMap();
+								for (int i=0; i < results.size(); i++) {
+									UUID eventID = UUID.fromString((String)results.get(i).get(DBTableConstants.DB_GUESTS_EVENT_ID));
+									if (!doubleMap.containsKey(eventID)) {
+										doubleMap.put(eventID, new HashMap<User, Attending>());
+									}
+									User guest = new User((String)results.get(i).get(DBTableConstants.DB_GUESTS_USERNAME), "");
+									String strStatus = (String)results.get(i).get(DBTableConstants.DB_GUESTS_ATTENDING_STATUS);
+									Attending status;
+									if (strStatus.equals("ATTENDING")) {
+										status=Attending.ATTENDING;
+									}
+									else if (strStatus.equals("NOT_ATTENDING")) {
+										status=Attending.NOT_ATTENDING;
+									}
+									else if (strStatus.equals("UNDECIDED")) {
+										status=Attending.UNDECIDED;
+									}
+									else {
+										status=Attending.MAYBE;
+									}
+									doubleMap.get(eventID).put(guest, status);
+								}
+								
+								for (AnglesEvent event: events) {
+									Map<User, Attending> map = doubleMap.get(event.getEventID());
+									if (map == null) {
+										map = new HashMap();
+									}
+									event.setGuests(map);
+									eventTable.addGuests(event.getEventID().toString(), map);
+								}
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+						}
+					};
+					addGuestThread.start();
 					try {
-						results = cb.list(addGuestsQuery);
-						Map<UUID, Map<User, Attending>> doubleMap = new HashMap();
-						for (int i=0; i < results.size(); i++) {
-							UUID eventID = UUID.fromString((String)results.get(i).get(DBTableConstants.DB_GUESTS_EVENT_ID));
-							if (!doubleMap.containsKey(eventID)) {
-								doubleMap.put(eventID, new HashMap<User, Attending>());
-							}
-							User guest = new User((String)results.get(i).get(DBTableConstants.DB_GUESTS_USERNAME), "");
-							String strStatus = (String)results.get(i).get(DBTableConstants.DB_GUESTS_ATTENDING_STATUS);
-							Attending status;
-							if (strStatus.equals("ATTENDING")) {
-								status=Attending.ATTENDING;
-							}
-							else if (strStatus.equals("NOT_ATTENDING")) {
-								status=Attending.NOT_ATTENDING;
-							}
-							else if (strStatus.equals("UNDECIDED")) {
-								status=Attending.UNDECIDED;
-							}
-							else {
-								status=Attending.MAYBE;
-							}
-							doubleMap.get(eventID).put(guest, status);
-						}
-						
-						for (AnglesEvent event: events) {
-							Map<User, Attending> map = doubleMap.get(event.getEventID());
-							if (map == null) {
-								map = new HashMap();
-							}
-							event.setGuests(map);
-						}
-					} catch (IOException e) {
+						addGuestThread.join();
+					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
 				}
-			};
-			addGuestThread.start();
-			try {
-				addGuestThread.join();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+				eventList.addAll(events);
 			}
-		}
-		
-//		events.add(new AnglesEvent("John's Wedding", "They grow up so fast", 
-//				makeCalendar(2013, 10, 3, 18, 0), makeCalendar(2014, 10, 15, 21, 0), 
-//				anglesUser, UUID.randomUUID()));
-		return events;
+		};
+		thread.start();
 	}
 	
 	public List<AnglesEvent> getEventList(){
@@ -327,35 +351,60 @@ public class EventsManager {
 	
 	public static String verifyNewEventData(String eventName, String eventDescription,
 			Calendar startDate, Calendar endDate) {
-			String result = "";
-			
-			if (eventName.length() == 0) {
-				result += "Event must have a name\n";
-			}
-			else if (eventName.length() > 30) {
-				result += "Event name must be less than 30 characters\n";
-			}
-			if (eventDescription.length() == 0) {
-				result += "Event must have a description\n";
-			}
-			else if (eventDescription.length() > 500) {
-				result += "Event description must be less than 500 characters\n";
-			}
-			if (startDate.compareTo(endDate) >= 0) {
-				result += "The event must end after it begins\n";
-			}
-			if (startDate.compareTo(Calendar.getInstance()) <= 0) {
-				result += "The event must start in the future\n";
-			}
-			
-			return result;
+		String result = "";
+		
+		if (eventName.length() == 0) {
+			result += "Event must have a name\n";
 		}
+		else if (eventName.length() > 30) {
+			result += "Event name must be less than 30 characters\n";
+		}
+		if (eventDescription.length() == 0) {
+			result += "Event must have a description\n";
+		}
+		else if (eventDescription.length() > 500) {
+			result += "Event description must be less than 500 characters\n";
+		}
+		if (startDate.compareTo(endDate) >= 0) {
+			result += "The event must end after it begins\n";
+		}
+		if (startDate.compareTo(Calendar.getInstance()) <= 0) {
+			result += "The event must start in the future\n";
+		}
+		
+		return result;
+	}
+	
+	public static Attending parseAttending(String status) {
+		if (status.equals("ATTENDING")) {
+			return Attending.ATTENDING;
+		}
+		else if (status.equals("NOT_ATTENDING")) {
+			return Attending.NOT_ATTENDING;
+		}
+		else if (status.equals("MAYBE")) {
+			return Attending.MAYBE;
+		}
+		else {
+			return Attending.UNDECIDED;
+		}
+	}
 	
 	private class EventListThread extends Thread {
-		List<AnglesEvent> events;
+		protected List<AnglesEvent> events;
+		protected EventTable eventTable;
 		
-		public EventListThread(List<AnglesEvent> events) {
+		public EventListThread(List<AnglesEvent> events, EventTable eventTable) {
 			this.events = events;
+			this.eventTable = eventTable;
+		}
+	}
+	
+	private class ContextThread extends Thread {
+		protected Context threadContext;
+		
+		public ContextThread(Context context) {
+			this.threadContext = context;
 		}
 	}
 }

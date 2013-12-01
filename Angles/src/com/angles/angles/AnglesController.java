@@ -113,21 +113,17 @@ public class AnglesController {
 	 * INITIALIZATION Business Logic
 	 *****************************************************************************/
 	public void init(Activity activity) {
-		loadEvents(activity);
 		loadContacts(activity);
 	}
 	
-	public void loadEvents(Activity activity) {
-	
-	}
-	
 	public void loadContacts(Activity activity) {
+		ContactTable contactTable = new ContactTable(activity);
+		contacts = contactTable.getContacts();
+		
 		Thread loadContactThread = new ActivityThread(activity) {
 			@Override
 			public void run() {
 				ContactTable contactTable = new ContactTable(activity);
-				contacts = contactTable.getContacts();
-				
 				CloudBackend cloudBackend = new CloudBackend();
 				CloudQuery cloudQuery = new CloudQuery(DBTableConstants.DB_USERS_USERSTABLENAME);
 				
@@ -240,7 +236,7 @@ public class AnglesController {
 				phoneNumber = "";
 			}
 			anglesUser = new User(userName, (String)result.get(0).get(DBTableConstants.DB_USERS_EMAIL), phoneNumber);
-			eventsManager = new EventsManager(anglesUser);
+			eventsManager = new EventsManager(anglesUser, currentActivity);
 			loadEventListActivity(currentActivity);
 		}
 	}
