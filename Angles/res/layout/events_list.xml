@@ -15,7 +15,7 @@
 	    android:textSize="20dp" 
       	android:background="@drawable/button_oval"/>
 	    
-    <TextView
+    <com.angles.view.AlpineFont
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
