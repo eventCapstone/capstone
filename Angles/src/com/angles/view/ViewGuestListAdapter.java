@@ -38,6 +38,7 @@ public class ViewGuestListAdapter extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		TextView guest = new TextView(activity);
 		guest.setText(guests.get(position));
+		guest.setTextSize(20);
 		return guest;
 	}
 

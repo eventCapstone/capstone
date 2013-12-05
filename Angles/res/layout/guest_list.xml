@@ -7,9 +7,9 @@
     android:background="@drawable/bg1" >
 	<Button
 	    android:id="@+id/backToEventButton"
-	    android:layout_width="wrap_content"
+	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
-	    android:gravity="right"
+	    android:gravity="center"
 	    android:text="Back to Event"
       	android:background="@drawable/button_rectangle"/>
 	
@@ -18,7 +18,9 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:textSize="25dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_marginLeft="20sp" />
     
     <TextView
         android:id="@+id/attendingLabel"
@@ -26,12 +28,15 @@
         android:layout_height="wrap_content"
         android:gravity="left"
         android:text="Attending:"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textSize="20dp"
+        android:textAppearance="?android:attr/textAppearanceMedium" 
+        android:layout_marginLeft="20sp"/>
     
     <ListView
         android:id="@+id/attendingList"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20sp"/>
 
 	<TextView
         android:id="@+id/invitedLabel"
@@ -39,10 +44,13 @@
         android:layout_height="wrap_content"
         android:gravity="left"
         android:text="Invited:"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textSize="20dp"
+        android:textAppearance="?android:attr/textAppearanceMedium" 
+        android:layout_marginLeft="20sp"/>
 
 	<ListView
         android:id="@+id/invitedList"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20sp"/>
 </LinearLayout>

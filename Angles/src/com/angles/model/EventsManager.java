@@ -130,7 +130,7 @@ public class EventsManager {
 					//add remaining events
 					while(index < results.size()) {
 						if (!((String)results.get(index).get(DBTableConstants.DB_GUESTS_ATTENDING_STATUS)).equals("NOT_ATTENDING")) {
-							filter = filter.or(F.eq(DBTableConstants.DB_EVENT_ID, (String)results.get(index).get(DBTableConstants.DB_GUESTS_EVENT_ID)));
+							filter = F.or(filter, F.eq(DBTableConstants.DB_EVENT_ID, (String)results.get(index).get(DBTableConstants.DB_GUESTS_EVENT_ID)));
 							break;
 						}
 						index++;
