@@ -2,6 +2,7 @@ package com.angles.database;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -119,18 +120,22 @@ public class EventTable extends SQLiteOpenHelper {
 						EventsManager.parseAttending(guestCursor.getString(statusIndex)));
 			}
 			
-			events.add(new AnglesEvent(
-					cursor.getString(eventNameIndex),
-					cursor.getString(eventDescriptionIndex),
-					startTime,
-					endTime,
-					new User(cursor.getString(hostNameIndex), ""),
-					UUID.fromString(cursor.getString(eventIDIndex)),
-					guests)
-			);
+			if (Calendar.getInstance().compareTo(startTime) <= 0) {
+				events.add(new AnglesEvent(
+						cursor.getString(eventNameIndex),
+						cursor.getString(eventDescriptionIndex),
+						startTime,
+						endTime,
+						new User(cursor.getString(hostNameIndex), ""),
+						UUID.fromString(cursor.getString(eventIDIndex)),
+						guests)
+				);
+			}
 		}
 		cursor.close();
 		db.close();
+		
+		Collections.sort(events);
 		return events;
 	}
 

@@ -246,7 +246,7 @@ public class AnglesController {
 	 *****************************************************************************/
 	public void reloadEvents(Activity currentActivity)
 	{
-		eventsManager = new EventsManager(anglesUser, currentActivity);
+		eventsManager.loadEventsFromLocalDatabase(currentActivity);
 		loadEventListActivity(currentActivity);
 	}
 	

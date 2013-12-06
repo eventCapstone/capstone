@@ -20,7 +20,7 @@ import com.google.cloud.backend.android.CloudEntity;
 import com.google.cloud.backend.android.CloudQuery;
 import com.google.cloud.backend.android.DBTableConstants;
 
-public class AnglesEvent implements Serializable {
+public class AnglesEvent implements Serializable, Comparable {
 	public String eventTitle;
 	public String eventDescription;
 	public Calendar startTime;
@@ -165,5 +165,13 @@ public class AnglesEvent implements Serializable {
 	@Override
 	public int hashCode() {
 		return eventID.hashCode();
+	}
+
+	@Override
+	public int compareTo(Object otherEvent) {
+		if (otherEvent instanceof AnglesEvent) {
+			return (startTime.compareTo(((AnglesEvent)otherEvent).startTime));
+		}
+		return 0;
 	}
 }
