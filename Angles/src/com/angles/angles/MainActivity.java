@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 
 import com.angles.angles.AnglesController;
+import com.angles.database.EventTable;
 
 @SuppressWarnings("unused")
 public class MainActivity extends Activity {

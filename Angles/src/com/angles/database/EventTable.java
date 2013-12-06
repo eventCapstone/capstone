@@ -80,6 +80,15 @@ public class EventTable extends SQLiteOpenHelper {
 		onCreate(db);
 	}
 	
+	public void emptyTables() {
+		SQLiteDatabase db = this.getReadableDatabase();
+		db.execSQL("DROP TABLE IF EXISTS " + EVENTS_TABLE_NAME);
+		db.execSQL("DROP TABLE IF EXISTS " + GUESTS_TABLE_NAME);
+		
+		onCreate(db);
+		db.close();
+	}
+	
 	public List<AnglesEvent> getEvents() {
 		List<AnglesEvent> events = new ArrayList();
 		SQLiteDatabase db = this.getReadableDatabase();
@@ -121,6 +130,7 @@ public class EventTable extends SQLiteOpenHelper {
 			);
 		}
 		cursor.close();
+		db.close();
 		return events;
 	}
 
@@ -165,6 +175,7 @@ public class EventTable extends SQLiteOpenHelper {
 			values.put(GUEST_STATUS, "UNDECIDED");
 			db.insert(GUESTS_TABLE_NAME, null, values);
 		}
+		db.close();
 	}
 	
 	public void updateGuestStatus(String guestName, String eventID, String status) {
@@ -173,5 +184,6 @@ public class EventTable extends SQLiteOpenHelper {
 		values.put(GUEST_STATUS, status);
 
 		db.update(GUESTS_TABLE_NAME, values, GUEST_NAME + "=" + guestName + " and " + EVENT_ID + " = " + eventID, new String[0]);
+		db.close();
 	}
 }

@@ -241,6 +241,15 @@ public class AnglesController {
 		}
 	}
 	
+	/*****************************************************************************
+	 * RELOAD EVENTS Business Logic
+	 *****************************************************************************/
+	public void reloadEvents(Activity currentActivity)
+	{
+		eventsManager = new EventsManager(anglesUser, currentActivity);
+		loadEventListActivity(currentActivity);
+	}
+	
 	/**
 	 * TODO: Implement register new user
 	 */
@@ -337,6 +346,12 @@ public class AnglesController {
 	public void loadEventListActivity(Activity currentActivity){
 		Intent intent = new Intent(currentActivity, EventsListActivity.class);
 		currentActivity.startActivity(intent);
+	}
+	
+	public void reloadEvents(Context context) {
+		
+		Intent intent = new Intent(context, ReloadEventsListActivity.class);
+		context.startActivity(intent);
 	}
 	
 	public void loadInviteListActivity(Activity currentActivity, AnglesEvent event) {

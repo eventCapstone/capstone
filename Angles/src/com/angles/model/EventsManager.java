@@ -11,6 +11,7 @@ import java.util.UUID;
 
 import android.content.Context;
 
+import com.angles.angles.AnglesController;
 import com.angles.database.EventTable;
 import com.google.cloud.backend.android.CloudBackend;
 import com.google.cloud.backend.android.CloudEntity;
@@ -116,11 +117,12 @@ public class EventsManager {
 				
 				if (results != null && !results.isEmpty()) {
 					//find first event
-					int index=0;
 					F filter=null;
+					int index=0;
 					while(index < results.size()) {
-						if (!((String)results.get(index).get(DBTableConstants.DB_GUESTS_ATTENDING_STATUS)).equals("NOT_ATTENDING")) {
-							filter = F.eq(DBTableConstants.DB_EVENT_ID, (String)results.get(index).get(DBTableConstants.DB_GUESTS_EVENT_ID));
+						CloudEntity eventEntity = results.get(index);
+						if (!((String)eventEntity.get(DBTableConstants.DB_GUESTS_ATTENDING_STATUS)).equals("NOT_ATTENDING")) {
+							filter = F.eq(DBTableConstants.DB_EVENT_ID, (String)eventEntity.get(DBTableConstants.DB_GUESTS_EVENT_ID));
 							index++;
 							break;
 						}
@@ -129,32 +131,37 @@ public class EventsManager {
 					
 					//add remaining events
 					while(index < results.size()) {
-						if (!((String)results.get(index).get(DBTableConstants.DB_GUESTS_ATTENDING_STATUS)).equals("NOT_ATTENDING")) {
-							filter = F.or(filter, F.eq(DBTableConstants.DB_EVENT_ID, (String)results.get(index).get(DBTableConstants.DB_GUESTS_EVENT_ID)));
-							break;
+						CloudEntity eventEntity = results.get(index);
+						if (!((String)eventEntity.get(DBTableConstants.DB_GUESTS_ATTENDING_STATUS)).equals("NOT_ATTENDING")) {
+							filter = F.or(filter, F.eq(DBTableConstants.DB_EVENT_ID, (String)eventEntity.get(DBTableConstants.DB_GUESTS_EVENT_ID)));
 						}
 						index++;
 					}
 					
-					final CloudQuery eventQuery = new CloudQuery(DBTableConstants.DB_TABLE_ANGLES_EVENT);
-					eventQuery.setFilter(filter);
-					
-					Thread eventThread = new Thread() {
-						@Override
-						public void run() {
-							try {
-								results = cb.list(eventQuery);
-							} catch (IOException e) {
-								e.printStackTrace();
+					if (filter != null) {
+						final CloudQuery eventQuery = new CloudQuery(DBTableConstants.DB_TABLE_ANGLES_EVENT);
+						eventQuery.setFilter(filter);
+						
+						Thread eventThread = new Thread() {
+							@Override
+							public void run() {
+								try {
+									results = cb.list(eventQuery);
+								} catch (IOException e) {
+									e.printStackTrace();
+								}
 							}
+						};
+						eventThread.start();
+						try {
+							eventThread.join();
+						} 
+						catch (InterruptedException e) {
+							e.printStackTrace();
 						}
-					};
-					eventThread.start();
-					try {
-						eventThread.join();
-					} 
-					catch (InterruptedException e) {
-						e.printStackTrace();
+					}
+					else {
+						results = null;
 					}
 				}
 		
@@ -186,7 +193,7 @@ public class EventsManager {
 				if (events.size() > 0) {
 					filter = F.eq(DBTableConstants.DB_GUESTS_EVENT_ID, events.get(0).getEventID().toString());
 					for (int i = 1; i < events.size(); i++) {
-						filter = F.or(filter, F.eq(DBTableConstants.DB_GUESTS_EVENT_ID, events.get(1).getEventID().toString()));
+						filter = F.or(filter, F.eq(DBTableConstants.DB_GUESTS_EVENT_ID, events.get(i).getEventID().toString()));
 					}
 					
 					addGuestsQuery.setFilter(filter);
@@ -239,7 +246,9 @@ public class EventsManager {
 						e.printStackTrace();
 					}
 				}
-				eventList.addAll(events);
+				if (events.size() > 0) {
+					AnglesController.getInstance().reloadEvents(threadContext);
+				}
 			}
 		};
 		thread.start();
