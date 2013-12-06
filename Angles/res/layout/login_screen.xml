@@ -5,18 +5,22 @@
     android:orientation="vertical" 
     android:background="@drawable/bg1">
     
-    <TextView
+    <com.angles.view.AlpineTextView
         android:id="@+id/welcomeMessage"
+		android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
         android:text="Welcome to Angles!"
         android:textAppearance="?android:attr/textAppearanceLarge"/>
-	<Button
+	<com.angles.view.AlpineButton
         android:id="@+id/login_button"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:gravity="center"
         android:text="Login"
         android:background="@drawable/button_rectangle"/>
@@ -26,10 +30,10 @@
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:orientation="horizontal"
-	    android:layout_marginLeft="10dp" 
+	    android:layout_marginLeft="20dp" 
 	    android:layout_marginTop="10dp">
 
-		<TextView
+		<com.angles.view.AlpineTextView
 	        android:id="@+id/loginUserNameLabel"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
@@ -41,7 +45,8 @@
 	        android:id="@+id/loginUserName"
 	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
-	        android:layout_marginTop="10dp" 
+	        android:layout_marginTop="10dp"
+	        android:layout_marginRight="10dp"
 	        android:ems="10"/>    
 	
 	</LinearLayout>
@@ -51,10 +56,11 @@
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:orientation="horizontal" 
-	    android:layout_marginLeft="10dp" 
-	    android:layout_marginTop="10dp">
+	    android:layout_marginLeft="20dp" 
+	    android:layout_marginTop="10dp"
+	    android:layout_marginRight="10dp">
 	    
-	    <TextView
+	    <com.angles.view.AlpineTextView
 	        android:id="@+id/loginPasswordLabel"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
@@ -70,11 +76,13 @@
 	    </EditText>
 
 	</LinearLayout>
-    <Button
+    <com.angles.view.AlpineButton
         android:id="@+id/signup_button"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:text="Signup"
         android:gravity="center"
         android:background="@drawable/button_rectangle"/>
@@ -84,10 +92,11 @@
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:orientation="horizontal"
-	    android:layout_marginLeft="10dp" 
-	    android:layout_marginTop="10dp">
+	    android:layout_marginLeft="20dp" 
+	    android:layout_marginTop="10dp"
+	    android:layout_marginRight="10dp">
 
-		<TextView
+		<com.angles.view.AlpineTextView
 	        android:id="@+id/signupUserNameLabel"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
@@ -109,10 +118,11 @@
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:orientation="horizontal"
-	    android:layout_marginLeft="10dp" 
+	    android:layout_marginLeft="20dp"
+	    android:layout_marginRight="10dp" 
 	    android:layout_marginTop="10dp">
 
-		<TextView
+		<com.angles.view.AlpineTextView
 	        android:id="@+id/signupEmailLabel"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
@@ -134,10 +144,11 @@
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:orientation="horizontal"
-	    android:layout_marginLeft="10dp" 
+	    android:layout_marginLeft="20dp"
+	    android:layout_marginRight="10dp" 
 	    android:layout_marginTop="10dp">
 	    
-	    <TextView
+	    <com.angles.view.AlpineTextView
 	        android:id="@+id/signupPasswordLabel"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"

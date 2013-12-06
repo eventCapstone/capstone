@@ -20,7 +20,6 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 public class EventsListAdapter extends BaseAdapter {
 	private List<AnglesEvent> eventsList;
@@ -53,10 +52,10 @@ public class EventsListAdapter extends BaseAdapter {
 	@Override
 	public View getView(int index, View reuse, ViewGroup parent) {
 		ViewGroup item = getViewGroup(reuse, parent);
-		TextView eventName = (TextView)item.findViewById(R.id.eventName);
-		TextView eventStatus = (TextView)item.findViewById(R.id.inviteStatus);
-		Button goButton = (Button)item.findViewById(R.id.goButton);
-		Button noGoButton = (Button)item.findViewById(R.id.noGoButton);
+		AlpineTextView eventName = (AlpineTextView)item.findViewById(R.id.eventName);
+		AlpineTextView eventStatus = (AlpineTextView)item.findViewById(R.id.inviteStatus);
+		AlpineButton goButton = (AlpineButton)item.findViewById(R.id.goButton);
+		AlpineButton noGoButton = (AlpineButton)item.findViewById(R.id.noGoButton);
 		AnglesEvent event = eventsList.get(index);
 		
 		User user = anglesController.getAnglesUser();
@@ -153,12 +152,12 @@ public class EventsListAdapter extends BaseAdapter {
 	private abstract class SelectStatusListener implements OnClickListener
 	{
 		AnglesEvent anglesEvent;
-		Button goButton;
-		Button noGoButton;
-		TextView status;
+		AlpineButton goButton;
+		AlpineButton noGoButton;
+		AlpineTextView status;
 		
-		public SelectStatusListener(AnglesEvent anglesEvent, Button goButton, Button noGoButton,
-			TextView status)
+		public SelectStatusListener(AnglesEvent anglesEvent, AlpineButton goButton, AlpineButton noGoButton,
+				AlpineTextView status)
 		{
 			this.anglesEvent = anglesEvent;
 			this.goButton = goButton;

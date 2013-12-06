@@ -3,10 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" 
     android:background="@drawable/bg1" >
-    <TextView
+    <com.angles.view.AlpineTextView
         android:id="@+id/inviteGuestsLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/settingsButton"
         android:text="Invite Guests:"
@@ -16,6 +18,7 @@
         android:id="@+id/contactList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
         android:layout_above="@+id/finishedInvitingButton"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/inviteGuestsLabel"
@@ -23,10 +26,14 @@
 
     </ListView>
 
-    <Button
+    <com.angles.view.AlpineButton
         android:id="@+id/finishedInvitingButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"

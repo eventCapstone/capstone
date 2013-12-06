@@ -36,7 +36,7 @@ public class ViewGuestListAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		TextView guest = new TextView(activity);
+		TextView guest = new AlpineTextView(activity);
 		guest.setText(guests.get(position));
 		guest.setTextSize(20);
 		return guest;

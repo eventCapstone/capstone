@@ -29,7 +29,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class InviteGuestListAdapter extends BaseAdapter {
@@ -67,36 +66,19 @@ public class InviteGuestListAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View reuse, ViewGroup parent) {
 		ViewGroup item = getViewGroup(reuse, parent);
-		TextView userName = (TextView)item.findViewById(R.id.inviteUserName);
-		TextView invitedStatus = (TextView)item.findViewById(R.id.invitedStatus);
-		Button inviteButton = (Button)item.findViewById(R.id.inviteButton);
+		AlpineTextView userName = (AlpineTextView)item.findViewById(R.id.inviteUserName);
+		AlpineButton inviteButton = (AlpineButton)item.findViewById(R.id.inviteButton);
 		User contact = contacts.get(position);
 		Attending attending = guests.get(contact); 
 		
 		userName.setText(contact.userName);		
 		
 		if (attending == null) {
-			invitedStatus.setVisibility(View.INVISIBLE);
 			inviteButton.setVisibility(View.VISIBLE);
-			inviteButton.setOnClickListener(new InviteClickListener(invitedStatus, event, contact, parent.getContext()));
+			inviteButton.setOnClickListener(new InviteClickListener(event, contact, parent.getContext()));
 		}
 		else {
 			inviteButton.setVisibility(View.INVISIBLE);
-			invitedStatus.setVisibility(View.VISIBLE);
-			switch (attending) {
-				case UNDECIDED:
-					invitedStatus.setText("Invited");
-					break;
-				case ATTENDING:
-					invitedStatus.setText("Going");
-					break;
-				case MAYBE:
-					invitedStatus.setText("Maybe");
-					break;
-				case NOT_ATTENDING:
-					invitedStatus.setText("Not going");
-					break;
-			}
 		}
 		
 		return item;
@@ -115,13 +97,11 @@ public class InviteGuestListAdapter extends BaseAdapter {
 	}
 	
 	private class InviteClickListener implements OnClickListener {
-		TextView inviteStatus;
 		AnglesEvent event;
 		User user;
 		Context currentActivity;
 		
-		public InviteClickListener(TextView inviteStatus, AnglesEvent event, User user, Context currentActivity) {
-			this.inviteStatus = inviteStatus;
+		public InviteClickListener(AnglesEvent event, User user, Context currentActivity) {
 			this.event = event;
 			this.user = user;
 			this.currentActivity = currentActivity;
@@ -141,7 +121,7 @@ public class InviteGuestListAdapter extends BaseAdapter {
 			      @Override
 			      public void onComplete(final CloudEntity result) {
 						//update guest map
-						guests.put(user, Attending.ATTENDING);
+						guests.put(user, Attending.UNDECIDED);
 						
 						//update local guest table
 						EventTable eventTable = new EventTable(currentActivity);
@@ -157,8 +137,6 @@ public class InviteGuestListAdapter extends BaseAdapter {
 			cb.insert(invite, handler);
 			//update view
 			v.setVisibility(View.INVISIBLE);
-			inviteStatus.setVisibility(View.VISIBLE);
-			inviteStatus.setText("Invited");
 		}
 	}
 }

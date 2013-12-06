@@ -5,92 +5,104 @@
     android:orientation="vertical"  
     android:background="@drawable/bg1">
 
-    <TextView
+    <com.angles.view.AlpineTextView
         android:id="@+id/eventNameLabel"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
         android:text="Event Name:"
         android:textAppearance="?android:attr/textAppearanceLarge" 
-        android:gravity="center"/>
+        android:gravity="center"
+        android:layout_marginLeft="20dp"
+    	android:layout_marginTop="20dp"/>
     <EditText
         android:id="@+id/eventNameInput"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
-        android:ems="10" />
-    <TextView
+        android:ems="10" 
+        android:layout_marginLeft="20dp"/>
+    <com.angles.view.AlpineTextView
         android:id="@+id/eventDescriptionLabel"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="Event Description:"
         android:gravity="center"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:textAppearance="?android:attr/textAppearanceLarge" 
+        android:layout_marginLeft="20dp"/>
 
     <EditText
         android:id="@+id/eventDescriptionInput"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textMultiLine" />
+        android:inputType="textMultiLine" 
+        android:layout_marginLeft="20dp"/>
      
-     <TextView
+     <com.angles.view.AlpineTextView
         android:id="@+id/startDateLabel"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Start Date:" />
-     <Button
+        android:text="Start Date:" 
+        android:layout_marginLeft="20dp"/>
+     <com.angles.view.AlpineButton
         android:id="@+id/startDateButton"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="mm-dd-yyyy"
-      	android:background="@drawable/button_oval" />
+      	android:background="@drawable/button_oval" 
+      	android:layout_marginLeft="20dp"/>
      
-     <TextView
+     <com.angles.view.AlpineTextView
         android:id="@+id/startTimeLabel"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Start Time:" />
-     <Button
+        android:text="Start Time:" 
+        android:layout_marginLeft="20dp"/>
+     <com.angles.view.AlpineButton
         android:id="@+id/startTimeButton"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="hh:mm" 
-        android:background="@drawable/button_oval"/>
+        android:background="@drawable/button_oval"
+        android:layout_marginLeft="20dp"/>
 
-<TextView
+	<com.angles.view.AlpineTextView
         android:id="@+id/endDateLabel"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="End Date:" />
-     <Button
+        android:text="End Date:" 
+        android:layout_marginLeft="20dp"/>
+     <com.angles.view.AlpineButton
         android:id="@+id/endDateButton"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="mm-dd-yyyy"
-      	android:background="@drawable/button_oval" />
+      	android:background="@drawable/button_oval" 
+      	android:layout_marginLeft="20dp"/>
      
-     <TextView
+     <com.angles.view.AlpineTextView
         android:id="@+id/endTimeLabel"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="End Time:" />
-     <Button
+        android:text="End Time:" 
+        android:layout_marginLeft="20dp"/>
+     <com.angles.view.AlpineButton
         android:id="@+id/endTimeButton"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="hh:mm" 
-      	android:background="@drawable/button_oval"/>
+      	android:background="@drawable/button_oval"
+      	android:layout_marginLeft="20dp"/>
      
-     <Button
+     <com.angles.view.AlpineButton
          android:id="@+id/submitNewEventButton"
          android:layout_width="fill_parent"
          android:layout_height="wrap_content"
@@ -98,5 +110,6 @@
          android:enabled="true"
          android:layout_marginTop="10dp"
          android:text="Create"
-      	android:background="@drawable/button_rectangle" />
+      	 android:background="@drawable/button_rectangle" 
+      	 android:layout_marginLeft="20dp"/>
  </LinearLayout>

@@ -4,24 +4,26 @@
     android:layout_height="match_parent"  
     android:background="@drawable/bg1">
 
-    <Button
+    <com.angles.view.AlpineButton
         android:id="@+id/saveSettingsButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/loginAutomaticallyCheckBox"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="22dp"
         android:text="Save Settings"
-      android:background="@drawable/button_rectangle" />
+      	android:background="@drawable/button_rectangle"
+      	android:layout_marginLeft="20dp"
+    	android:layout_marginTop="20dp" />
 
-    <CheckBox
+    <com.angles.view.AlpineCheckBox
         android:id="@+id/loginAutomaticallyCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="28dp"
         android:text="Login Automatically"
-        android:textSize="20dp" />
+        android:textSize="20dp" 
+        android:layout_marginLeft="20dp"
+    	android:layout_marginTop="20dp"/>
 
 </RelativeLayout>

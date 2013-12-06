@@ -5,52 +5,60 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" 
     android:background="@drawable/bg1" >
-	<Button
+	<com.angles.view.AlpineButton
 	    android:id="@+id/backToEventButton"
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
+	    android:layout_marginLeft="10dp"
+	    android:layout_marginRight="10dp"
+	    android:layout_marginTop="10dp"
 	    android:gravity="center"
 	    android:text="Back to Event"
       	android:background="@drawable/button_rectangle"/>
 	
-    <TextView
+    <com.angles.view.AlpineTextView
         android:id="@+id/eventName"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
         android:gravity="center"
         android:textSize="25dp"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:layout_marginLeft="20sp" />
+        android:textAppearance="?android:attr/textAppearanceLarge"/>
     
-    <TextView
+    <com.angles.view.AlpineTextView
         android:id="@+id/attendingLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
         android:gravity="left"
         android:text="Attending:"
         android:textSize="20dp"
-        android:textAppearance="?android:attr/textAppearanceMedium" 
-        android:layout_marginLeft="20sp"/>
+        android:textAppearance="?android:attr/textAppearanceMedium" />
     
     <ListView
         android:id="@+id/attendingList"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20sp"/>
-
-	<TextView
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"/>
+    
+    <com.angles.view.AlpineTextView
         android:id="@+id/invitedLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="left"
         android:text="Invited:"
         android:textSize="20dp"
-        android:textAppearance="?android:attr/textAppearanceMedium" 
-        android:layout_marginLeft="20sp"/>
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
 
 	<ListView
         android:id="@+id/invitedList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20sp"/>
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"/>
 </LinearLayout>

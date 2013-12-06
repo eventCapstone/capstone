@@ -4,7 +4,7 @@
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content">
 	
-	<TextView
+	<com.angles.view.AlpineTextView
 	    android:id="@+id/eventName"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
@@ -14,14 +14,13 @@
 	    android:textStyle="bold"
 	    android:width="190dp" />
 	
-	<TextView android:id="@+id/inviteStatus" 
+	<com.angles.view.AlpineTextView android:id="@+id/inviteStatus" 
 	    android:textSize="20dp"
-	    android:layout_marginLeft="5dp"
 	    android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:gravity="right|center_vertical"/>
 
-	<Button
+	<com.angles.view.AlpineButton
 	    android:id="@+id/goButton"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
@@ -30,10 +29,11 @@
 	    android:text="Go"
 	    android:background="@drawable/button_oval" />
 
-	<Button
+	<com.angles.view.AlpineButton
 	    android:id="@+id/noGoButton"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
+	    android:layout_marginLeft="5dp"
 	    android:gravity="center_vertical|center_horizontal"
 	    android:text="No" 
       	android:background="@drawable/button_oval"/>

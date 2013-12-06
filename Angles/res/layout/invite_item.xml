@@ -4,24 +4,20 @@
 	android:layout_width="fill_parent"
 	android:layout_height="wrap_content">
 	
-	<TextView android:id="@+id/inviteUserName" 
+	<com.angles.view.AlpineTextView android:id="@+id/inviteUserName" 
 	    android:textSize="20dp"
 		android:textStyle="bold"
-		android:layout_width="wrap_content"
+		android:layout_width="190dp"
 		android:layout_height="wrap_content"
+		android:layout_marginLeft="20dp"
+		android:scrollHorizontally="true"
 		android:gravity="left|center_vertical"/>
 	
-	<TextView android:id="@+id/invitedStatus" 
-	    android:textSize="20dp"
-	    android:layout_marginLeft="5dp"
-	    android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:gravity="right|center_vertical"/>
-	<Button
+	<com.angles.view.AlpineButton
         android:id="@+id/inviteButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="5dp"
+        android:layout_marginLeft="20dp"
         android:gravity="right|center_vertical"
         android:text="Invite"
       	android:background="@drawable/button_oval" />

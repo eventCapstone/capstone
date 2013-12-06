@@ -9,7 +9,7 @@
     tools:context=".MainActivity"  
     android:background="@drawable/bg1">
 
-    <Button
+    <com.angles.view.AlpineButton
         android:id="@+id/btnEventList"
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
@@ -19,7 +19,7 @@
         android:text="Events"
         android:background="@drawable/button_oval"/>
 
-    <Button
+    <com.angles.view.AlpineButton
         android:id="@+id/btnCapturePhoto"
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
