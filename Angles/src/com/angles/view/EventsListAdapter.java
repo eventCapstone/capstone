@@ -58,6 +58,9 @@ public class EventsListAdapter extends BaseAdapter {
 		AlpineButton noGoButton = (AlpineButton)item.findViewById(R.id.noGoButton);
 		AnglesEvent event = eventsList.get(index);
 		
+		eventName.setText(event.eventTitle);
+//		eventName.setOnClickListener(new SelectEventListener(eventsListActivity, eventsList.get(index)));
+		item.setOnClickListener(new SelectEventListener(eventsListActivity, eventsList.get(index)));
 		User user = anglesController.getAnglesUser();
 		switch (event.getStatus(user))
 		{
@@ -105,11 +108,7 @@ public class EventsListAdapter extends BaseAdapter {
 				goButton.setVisibility(View.VISIBLE);
 				noGoButton.setVisibility(View.VISIBLE);
 		}
-		eventName.setText(event.eventTitle);
-		eventName.setOnClickListener(new SelectEventListener(eventsListActivity, eventsList.get(index)) {
-			
-		});
-				
+
 		return item;
 	}
 	
