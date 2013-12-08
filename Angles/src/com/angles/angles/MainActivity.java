@@ -17,7 +17,7 @@ public class MainActivity extends Activity {
    	 	
 //   	 	EventTable te = new EventTable(this);
 //   	 	te.emptyTables();
-   	 	
+//   	 	
      	AnglesController.createInstance(this);
      	AnglesController.getInstance().init(this);
      	AnglesController.getInstance().getTouchManager().setMainActivityListeners(this);

@@ -59,7 +59,6 @@ public class EventsListAdapter extends BaseAdapter {
 		AnglesEvent event = eventsList.get(index);
 		
 		eventName.setText(event.eventTitle);
-//		eventName.setOnClickListener(new SelectEventListener(eventsListActivity, eventsList.get(index)));
 		item.setOnClickListener(new SelectEventListener(eventsListActivity, eventsList.get(index)));
 		User user = anglesController.getAnglesUser();
 		switch (event.getStatus(user))
