@@ -58,7 +58,7 @@ public class EventsListAdapter extends BaseAdapter {
 		AlpineButton noGoButton = (AlpineButton)item.findViewById(R.id.noGoButton);
 		AnglesEvent event = eventsList.get(index);
 		
-		eventName.setText(event.eventTitle);
+		eventName.setText(event.getEventTitle());
 		item.setOnClickListener(new SelectEventListener(eventsListActivity, eventsList.get(index)));
 		User user = anglesController.getAnglesUser();
 		switch (event.getStatus(user))
@@ -167,7 +167,7 @@ public class EventsListAdapter extends BaseAdapter {
 		
 		Calendar now = Calendar.getInstance();
 		
-		if (now.after(event.startTime) && now.before(event.endTime)){
+		if (now.after(event.getStartTime()) && now.before(event.getEndTime())){
 			
 			return true;
 		}

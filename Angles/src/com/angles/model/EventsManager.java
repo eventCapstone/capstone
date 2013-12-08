@@ -33,10 +33,10 @@ public class EventsManager {
 	
 	public void loadEventsFromLocalDatabase(Context context) {
 		EventTable eventTable = new EventTable(context);
-		eventList = eventTable.getEvents(AnglesController.getInstance().getAnglesUser().userName);
-		eventList.add(new AnglesEvent("John's Wedding", "They grow up so fast", 
-						makeCalendar(2013, 10, 3, 18, 0), makeCalendar(2014, 10, 15, 21, 0), 
-						anglesUser, UUID.randomUUID()));
+		eventList = eventTable.getEvents(AnglesController.getInstance().getAnglesUser().getUserName());
+//		eventList.add(new AnglesEvent("John's Wedding", "They grow up so fast", 
+//						makeCalendar(2013, 10, 3, 18, 0), makeCalendar(2014, 10, 15, 21, 0), 
+//						anglesUser, UUID.randomUUID()));
 	}
 		
 	/**
@@ -54,7 +54,7 @@ public class EventsManager {
 				final CloudBackend cb = new CloudBackend();
 				final CloudQuery cq = new CloudQuery("AnglesEvent");
 				//Get events where user is host
-				cq.setFilter(F.eq(DBTableConstants.DB_EVENT_HOST_USERNAME, anglesUser.userName));
+				cq.setFilter(F.eq(DBTableConstants.DB_EVENT_HOST_USERNAME, anglesUser.getUserName()));
 		
 				Thread hostThread = new Thread() {
 					@Override
@@ -96,7 +96,7 @@ public class EventsManager {
 				
 				//Get events where user is guest
 				final CloudQuery guestQuery = new CloudQuery(DBTableConstants.DB_TABLE_GUESTS);
-				guestQuery.setFilter(F.eq(DBTableConstants.DB_GUESTS_USERNAME, anglesUser.userName));
+				guestQuery.setFilter(F.eq(DBTableConstants.DB_GUESTS_USERNAME, anglesUser.getUserName()));
 				
 				Thread guestThread = new Thread() {
 					@Override

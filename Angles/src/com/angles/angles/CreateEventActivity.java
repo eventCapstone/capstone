@@ -69,7 +69,7 @@ public class CreateEventActivity extends CloudBackendActivity {
 		createNewEvent.put(DBTableConstants.DB_EVENT_END_TIME, endTimeButton.getText().toString());
 		createNewEvent.put(DBTableConstants.DB_EVENT_DESCRIPTION, eventDescription.getText().toString());
 		createNewEvent.put(DBTableConstants.DB_EVENT_HOST_USERNAME,
-				AnglesController.getInstance().getAnglesUser().userName);
+				AnglesController.getInstance().getAnglesUser().getUserName());
 		createNewEvent.put(DBTableConstants.DB_EVENT_TITLE, eventTitle.getText().toString());
 		createNewEvent.put(DBTableConstants.DB_EVENT_ID, eventID.toString());
 		

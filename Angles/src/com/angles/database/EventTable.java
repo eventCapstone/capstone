@@ -191,13 +191,13 @@ public class EventTable extends SQLiteOpenHelper {
 		ContentValues values = new ContentValues();
 
 		values.put(EVENT_ID, event.getEventID().toString());
-		values.put(HOST_NAME, event.getHost().userName);
-		values.put(EVENT_NAME, event.eventTitle);
-		values.put(EVENT_DESCRIPTION, event.eventDescription);
-		values.put(START_DATE, EventsManager.getDisplayDate(event.startTime));
-		values.put(START_TIME, EventsManager.getDisplayTime(event.startTime));
-		values.put(END_DATE, EventsManager.getDisplayDate(event.endTime));
-		values.put(END_TIME, EventsManager.getDisplayTime(event.endTime));
+		values.put(HOST_NAME, event.getHost().getUserName());
+		values.put(EVENT_NAME, event.getEventTitle());
+		values.put(EVENT_DESCRIPTION, event.getEventDescription());
+		values.put(START_DATE, EventsManager.getDisplayDate(event.getStartTime()));
+		values.put(START_TIME, EventsManager.getDisplayTime(event.getStartTime()));
+		values.put(END_DATE, EventsManager.getDisplayDate(event.getEndTime()));
+		values.put(END_TIME, EventsManager.getDisplayTime(event.getEndTime()));
 		
 		long result = db.insert(EVENTS_TABLE_NAME, null, values);
 	}
@@ -230,7 +230,7 @@ public class EventTable extends SQLiteOpenHelper {
 		for (User user: guests.keySet()) {
 			ContentValues values = new ContentValues();
 			values.put(EVENT_ID, eventID);
-			values.put(GUEST_NAME, user.userName);
+			values.put(GUEST_NAME, user.getUserName());
 			values.put(GUEST_STATUS, "UNDECIDED");
 			db.insert(GUESTS_TABLE_NAME, null, values);
 		}
@@ -256,7 +256,7 @@ public class EventTable extends SQLiteOpenHelper {
 			}
 			ContentValues values = new ContentValues();
 			values.put(EVENT_ID, eventID);
-			values.put(GUEST_NAME, user.userName);
+			values.put(GUEST_NAME, user.getUserName());
 			values.put(GUEST_STATUS, status);
 			db.insert(GUESTS_TABLE_NAME, null, values);
 		}

@@ -23,11 +23,10 @@ import com.google.cloud.backend.android.DBTableConstants;
 import com.google.cloud.backend.android.F;
 
 public class AnglesEvent implements Serializable, Comparable {
-	public String eventTitle;
-	public String eventDescription;
-	public Calendar startTime;
-	public Calendar endTime;
-	
+	private String eventTitle;
+	private String eventDescription;
+	private Calendar startTime;
+	private Calendar endTime;
 	private User host;
 	private UUID eventID;
 	private Map<User, Attending> guests;
@@ -82,6 +81,48 @@ public class AnglesEvent implements Serializable, Comparable {
 		return guests.get(user);
 	}
 	
+	
+	
+	public String getEventTitle() {
+		return eventTitle;
+	}
+
+	public void setEventTitle(String eventTitle) {
+		this.eventTitle = eventTitle;
+	}
+
+	public String getEventDescription() {
+		return eventDescription;
+	}
+
+	public void setEventDescription(String eventDescription) {
+		this.eventDescription = eventDescription;
+	}
+
+	public Calendar getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(Calendar startTime) {
+		this.startTime = startTime;
+	}
+
+	public Calendar getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(Calendar endTime) {
+		this.endTime = endTime;
+	}
+
+	public void setHost(User host) {
+		this.host = host;
+	}
+
+	public void setEventID(UUID eventID) {
+		this.eventID = eventID;
+	}
+
 	public void acceptInvite(Context context)
 	{
 		if (guests.containsKey(AnglesController.getInstance().getAnglesUser()))
@@ -96,7 +137,7 @@ public class AnglesEvent implements Serializable, Comparable {
 					
 					CloudEntity invite = new CloudEntity(DBTableConstants.DB_TABLE_GUESTS);
 					invite.put(DBTableConstants.DB_GUESTS_EVENT_ID, eventID.toString());
-					invite.put(DBTableConstants.DB_GUESTS_USERNAME, user.userName);
+					invite.put(DBTableConstants.DB_GUESTS_USERNAME, user.getUserName());
 					invite.put(DBTableConstants.DB_GUESTS_ATTENDING_STATUS, "ATTENDING");
 					
 					try {
@@ -109,7 +150,7 @@ public class AnglesEvent implements Serializable, Comparable {
 					}
 					guests.put(AnglesController.getInstance().getAnglesUser(), Attending.ATTENDING);
 					EventTable eventsTable = new EventTable(context);
-					eventsTable.updateGuestStatus(user.userName, eventID.toString(), "ATTENDING");		
+					eventsTable.updateGuestStatus(user.getUserName(), eventID.toString(), "ATTENDING");		
 				}
 			};
 			thread.start();
@@ -130,7 +171,7 @@ public class AnglesEvent implements Serializable, Comparable {
 					
 					CloudEntity invite = new CloudEntity(DBTableConstants.DB_TABLE_GUESTS);
 					invite.put(DBTableConstants.DB_GUESTS_EVENT_ID, eventID.toString());
-					invite.put(DBTableConstants.DB_GUESTS_USERNAME, user.userName);
+					invite.put(DBTableConstants.DB_GUESTS_USERNAME, user.getUserName());
 					invite.put(DBTableConstants.DB_GUESTS_ATTENDING_STATUS, "NOT_ATTENDING");
 					
 					try {
@@ -143,7 +184,7 @@ public class AnglesEvent implements Serializable, Comparable {
 					}
 					guests.put(AnglesController.getInstance().getAnglesUser(), Attending.NOT_ATTENDING);
 					EventTable eventsTable = new EventTable(context);
-					eventsTable.updateGuestStatus(user.userName, eventID.toString(), "NOT_ATTENDING");		
+					eventsTable.updateGuestStatus(user.getUserName(), eventID.toString(), "NOT_ATTENDING");		
 				}
 			};
 			thread.start();

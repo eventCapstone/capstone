@@ -61,10 +61,10 @@ public class AnglesDisplayManager {
 		
 		for (User user: guests.keySet()) {
 			if (guests.get(user) == Attending.ATTENDING) {
-				attending.add(user.userName);
+				attending.add(user.getUserName());
 			}
 			else {
-				invited.add(user.userName);
+				invited.add(user.getUserName());
 			}
 		}
 		
@@ -73,14 +73,6 @@ public class AnglesDisplayManager {
 		
 		attendingList.setAdapter(new ViewGuestListAdapter(currentActivity, attending));
 		invitedList.setAdapter(new ViewGuestListAdapter(currentActivity, invited));
-	}
-	
-	/**
-	 * SETTINGS DISPLAY
-	 * @param currentActivity
-	 */
-	public void displaySettings(Activity currentActivity) {
-		currentActivity.setContentView(R.layout.angles_settings);
 	}
 	
 	/**
@@ -123,16 +115,16 @@ public class AnglesDisplayManager {
 		}
 		
 		TextView eventName = (TextView) currentActivity.findViewById(R.id.eventName);
-		eventName.setText(event.eventTitle);
+		eventName.setText(event.getEventTitle());
 		
 		TextView host = (TextView) currentActivity.findViewById(R.id.host);
-		host.setText("Hosted By: " + event.getHost().userName);
+		host.setText("Hosted By: " + event.getHost().getUserName());
 		
 		TextView startTime = (TextView) currentActivity.findViewById(R.id.startTime);
-		startTime.setText("Start Time: " + EventsManager.getDisplayDateTime(event.startTime));
+		startTime.setText("Start Time: " + EventsManager.getDisplayDateTime(event.getStartTime()));
 		
 		TextView description = (TextView) currentActivity.findViewById(R.id.eventDescription);
-		description.setText(event.eventDescription);
+		description.setText(event.getEventDescription());
 	}
 	
 	/**

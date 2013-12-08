@@ -109,13 +109,6 @@ public class AnglesTouchManager {
 			}
 		});
 		
-		Button settingsButton = (Button) currentActivity.findViewById(R.id.settingsButton);
-		settingsButton.setOnClickListener(new AnglesClickListener(currentActivity) {
-			public void onClick(View v) {
-				anglesController.loadChangeSettingsActivity(currentActivity);
-			}
-		});
-		
 		Button logoutButton = (Button) currentActivity.findViewById(R.id.logoutButton);
 		logoutButton.setOnClickListener(new AnglesClickListener(currentActivity) {
 			public void onClick(View v) {
@@ -128,20 +121,6 @@ public class AnglesTouchManager {
 			public void onClick(View v) {
 				Toast.makeText(currentActivity, "Reloading Events...", Toast.LENGTH_LONG).show();
 				anglesController.getEventsManager().loadEventsFromCloud(currentActivity);
-			}
-		});
-	}
-	
-	/**
-	 * SETTINGS SCREEN LISTENERS
-	 * @param currentActivity The current activity
-	 */
-	public void setSettingsListeners(Activity currentActivity)
-	{
-		Button saveSettings = (Button) currentActivity.findViewById(R.id.saveSettingsButton);
-		saveSettings.setOnClickListener(new AnglesClickListener(currentActivity) {
-			public void onClick(View v) {
-				anglesController.loadEventListActivity(currentActivity);
 			}
 		});
 	}

@@ -8,9 +8,10 @@
 	    android:id="@+id/logoutButton"
 	    android:layout_height="wrap_content"
 	    android:layout_width="wrap_content"
-	    android:layout_alignParentLeft="true"
+	    android:layout_alignParentRight="true"
 	    android:layout_alignParentTop="true"
 	    android:layout_marginTop="10dp"
+	    android:layout_marginRight="10dp"
 	    android:text="Logout"
 	    android:textSize="20dp" 
       	android:background="@drawable/button_oval"/>
@@ -22,24 +23,13 @@
 	    android:layout_height="50dp"
 	    android:layout_width="50dp"
 	    android:layout_marginTop="10dp"/>    
-	<com.angles.view.AlpineButton
-	    android:id="@+id/settingsButton"
-	    android:layout_height="wrap_content"
-	    android:layout_width="wrap_content"
-	    android:layout_alignParentRight="true"
-	    android:layout_alignParentTop="true"
-	    android:layout_toRightOf="@+id/textView1"
-	    android:layout_marginTop="10dp"
-	    android:text="Settings"
-	    android:textSize="20dp" 
-      	android:background="@drawable/button_oval"/>
 	    
     <com.angles.view.AlpineTextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/settingsButton"
+        android:layout_below="@+id/logoutButton"
         android:text="Your Events:"
         android:textSize="32dp" 
         android:layout_marginLeft="10dp"

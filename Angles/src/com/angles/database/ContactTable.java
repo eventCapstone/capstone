@@ -71,9 +71,9 @@ public class ContactTable extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues values = new ContentValues();
 
-		values.put(USER_NAME, user.userName);
-		values.put(EMAIL, user.email);
-		values.put(PHONE_NUMBER, user.phoneNumber);
+		values.put(USER_NAME, user.getUserName());
+		values.put(EMAIL, user.getEmail());
+		values.put(PHONE_NUMBER, user.getPhoneNumber());
 		
 		long result = db.insert(TABLE_CONTACTS, null, values);
 	}

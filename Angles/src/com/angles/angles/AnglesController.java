@@ -373,11 +373,6 @@ public class AnglesController {
 		currentActivity.startActivity(intent);
 	}
 	
-	public void loadChangeSettingsActivity(Activity currentActivity) {
-		Intent intent = new Intent(currentActivity, SettingsActivity.class);
-		currentActivity.startActivity(intent);
-	}
-	
 	public void loadCreateEventActivity(Activity currentActivity){
 		Intent intent = new Intent(currentActivity, CreateEventActivity.class);
 		currentActivity.startActivity(intent);
