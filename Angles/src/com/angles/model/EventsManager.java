@@ -88,7 +88,7 @@ public class EventsManager {
 								anglesUser,
 								UUID.fromString((String)entity.get(DBTableConstants.DB_EVENT_ID)));
 						events.add(hostedEvent);
-						if (!eventList.contains(hostedEvent)) {
+						if (!eventTable.containsEvent(hostedEvent.getEventID().toString())) {
 							eventTable.addEvent(hostedEvent);
 						}
 					}
@@ -180,7 +180,7 @@ public class EventsManager {
 								new User((String)entity.get(DBTableConstants.DB_EVENT_HOST_USERNAME), ""),
 								UUID.fromString((String)entity.get(DBTableConstants.DB_EVENT_ID)));
 						events.add(guestEvent);
-						if (!eventList.contains(guestEvent)) {
+						if (!eventTable.containsEvent(guestEvent.getEventID().toString())) {
 							eventTable.addEvent(guestEvent);
 						}
 					}

@@ -159,6 +159,17 @@ public class EventTable extends SQLiteOpenHelper {
 		long result = db.insert(EVENTS_TABLE_NAME, null, values);
 	}
 	
+	public boolean containsEvent(String eventID) {
+		SQLiteDatabase db = this.getWritableDatabase();
+		Cursor cursor = db.rawQuery("select * from " + EVENTS_TABLE_NAME + " where " + EVENT_ID + "=\"" + eventID + "\"", new String[]{} );
+		if (cursor.isAfterLast()) {
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
+	
 	public void addGuest(String eventID, String guestName) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues values = new ContentValues();
