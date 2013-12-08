@@ -15,6 +15,7 @@
 	    android:textSize="20dp" 
       	android:background="@drawable/button_oval"/>
 	<ImageView
+	    android:id="@+id/refreshIcon"
 	    android:src="@drawable/refresh_icon"
 	    android:layout_centerHorizontal="true"
 	    android:layout_alignParentTop="true"

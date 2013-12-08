@@ -14,12 +14,14 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
    	 	super.onCreate(savedInstanceState);
    	 	setContentView(R.layout.activity_main);
-   	 	EventTable te = new EventTable(this);
-   	 	te.emptyTables();
+   	 	
+//   	 	EventTable te = new EventTable(this);
+//   	 	te.emptyTables();
    	 	
      	AnglesController.createInstance(this);
      	AnglesController.getInstance().init(this);
-     	AnglesController.getInstance().loadLoginActivity(this);
+     	AnglesController.getInstance().getTouchManager().setMainActivityListeners(this);
+   	 	AnglesController.getInstance().loadLoginActivity(this);
     }
    
 }

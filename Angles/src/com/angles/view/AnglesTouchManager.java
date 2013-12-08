@@ -11,10 +11,12 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.angles.angles.AnglesController;
 import com.angles.angles.OngoingEventActivity;
@@ -113,6 +115,21 @@ public class AnglesTouchManager {
 				anglesController.loadChangeSettingsActivity(currentActivity);
 			}
 		});
+		
+		Button logoutButton = (Button) currentActivity.findViewById(R.id.logoutButton);
+		logoutButton.setOnClickListener(new AnglesClickListener(currentActivity) {
+			public void onClick(View v) {
+				anglesController.loadLoginActivity(currentActivity);
+			}
+		});
+		
+		ImageView refreshImage = (ImageView) currentActivity.findViewById(R.id.refreshIcon);
+		refreshImage.setOnClickListener(new AnglesClickListener(currentActivity) {
+			public void onClick(View v) {
+				Toast.makeText(currentActivity, "Reloading Events...", Toast.LENGTH_LONG).show();
+				anglesController.getEventsManager().loadEventsFromCloud(currentActivity);
+			}
+		});
 	}
 	
 	/**
@@ -188,6 +205,16 @@ public class AnglesTouchManager {
 			@Override
 			public void onClick(View v) {
 				anglesController.loadViewEventActivity(currentActivity, event);
+			}
+		});
+	}
+	
+	public void setMainActivityListeners(Activity currentActivity) {
+		Button enterButton = (Button) currentActivity.findViewById(R.id.enterButton);
+		enterButton.setOnClickListener(new AnglesClickListener(currentActivity) {
+			@Override
+			public void onClick(View v) {
+				anglesController.loadLoginActivity(currentActivity);
 			}
 		});
 	}
