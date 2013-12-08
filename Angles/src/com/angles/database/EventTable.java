@@ -38,6 +38,10 @@ public class EventTable extends SQLiteOpenHelper {
 	/* Guests Table Columns */
 	public static final String GUEST_NAME = "Guest_Name";
 	public static final String GUEST_STATUS = "Guest_Status";
+	/* User Table Name */
+	public static final String USER_TABLE_NAME = "LastUser";
+	/* User Table Columns */
+	public static final String USER_LAST_USER = "User_Name";
 	/* Name of the Database */
 	private static final String DATABASE_NAME = "AnglesEvent.db";
 	/* Version Number of the Database */
@@ -61,6 +65,10 @@ public class EventTable extends SQLiteOpenHelper {
 			EVENT_ID + " TEXT," + 
 			GUEST_NAME + " TEXT, " +
 			GUEST_STATUS + " TEXT);";
+	
+	public static final String CREATE_USER_TABLE = "CREATE TABLE " +
+			USER_TABLE_NAME + " ( " +
+			USER_LAST_USER + " TEXT);";
 		
 	public EventTable(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -69,6 +77,7 @@ public class EventTable extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL(CREATE_EVENTS_TABLE);
 		db.execSQL(CREATE_GUESTS_TABLE);
+		db.execSQL(CREATE_USER_TABLE);
 	}
 	
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -85,14 +94,48 @@ public class EventTable extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getReadableDatabase();
 		db.execSQL("DROP TABLE IF EXISTS " + EVENTS_TABLE_NAME);
 		db.execSQL("DROP TABLE IF EXISTS " + GUESTS_TABLE_NAME);
+		db.execSQL("DROP TABLE IF EXISTS " + USER_TABLE_NAME);
 		
 		onCreate(db);
 		db.close();
 	}
 	
-	public List<AnglesEvent> getEvents() {
-		List<AnglesEvent> events = new ArrayList();
+	public void setUser(String userName) {
 		SQLiteDatabase db = this.getReadableDatabase();
+		db.rawQuery("delete from " + USER_TABLE_NAME, new String[]{});
+		
+		ContentValues values = new ContentValues();
+		values.put(USER_LAST_USER, userName);
+		db.insert(USER_TABLE_NAME, null, values);
+	}
+	
+	public String getLastUser() {
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor cursor = db.rawQuery("select * from " + USER_TABLE_NAME,  new String[]{});
+		if (cursor.isAfterLast()) {
+			return null;
+		}
+		
+		cursor.moveToFirst();
+		int index = cursor.getColumnIndex(USER_LAST_USER);
+		return cursor.getString(index);
+	}
+	
+	public List<AnglesEvent> getEvents(String userName) {
+		SQLiteDatabase db;
+		
+		String lastUser = getLastUser();
+		
+		if (!getLastUser().equals(userName)) {
+			emptyTables();
+			db = this.getReadableDatabase();
+			setUser(userName);
+			return new ArrayList<AnglesEvent>();
+		}
+		
+		db = this.getReadableDatabase();
+		
+		List<AnglesEvent> events = new ArrayList();
 		Cursor cursor = db.rawQuery("select * from " + EVENTS_TABLE_NAME, new String[]{});
 		
 		int eventIDIndex = cursor.getColumnIndex(EVENT_ID);
@@ -148,15 +191,26 @@ public class EventTable extends SQLiteOpenHelper {
 		ContentValues values = new ContentValues();
 
 		values.put(EVENT_ID, event.getEventID().toString());
-		values.put(HOST_NAME, event.getHost().userName);
-		values.put(EVENT_NAME, event.eventTitle);
-		values.put(EVENT_DESCRIPTION, event.eventDescription);
-		values.put(START_DATE, EventsManager.getDisplayDate(event.startTime));
-		values.put(START_TIME, EventsManager.getDisplayTime(event.startTime));
-		values.put(END_DATE, EventsManager.getDisplayDate(event.endTime));
-		values.put(END_TIME, EventsManager.getDisplayTime(event.endTime));
+		values.put(HOST_NAME, event.getHost().getUserName());
+		values.put(EVENT_NAME, event.getEventTitle());
+		values.put(EVENT_DESCRIPTION, event.getEventDescription());
+		values.put(START_DATE, EventsManager.getDisplayDate(event.getStartTime()));
+		values.put(START_TIME, EventsManager.getDisplayTime(event.getStartTime()));
+		values.put(END_DATE, EventsManager.getDisplayDate(event.getEndTime()));
+		values.put(END_TIME, EventsManager.getDisplayTime(event.getEndTime()));
 		
 		long result = db.insert(EVENTS_TABLE_NAME, null, values);
+	}
+	
+	public boolean containsEvent(String eventID) {
+		SQLiteDatabase db = this.getWritableDatabase();
+		Cursor cursor = db.rawQuery("select * from " + EVENTS_TABLE_NAME + " where " + EVENT_ID + "=\"" + eventID + "\"", new String[]{} );
+		if (cursor.isAfterLast()) {
+			return false;
+		}
+		else {
+			return true;
+		}
 	}
 	
 	public void addGuest(String eventID, String guestName) {
@@ -176,11 +230,36 @@ public class EventTable extends SQLiteOpenHelper {
 		for (User user: guests.keySet()) {
 			ContentValues values = new ContentValues();
 			values.put(EVENT_ID, eventID);
-			values.put(GUEST_NAME, user.userName);
+			values.put(GUEST_NAME, user.getUserName());
 			values.put(GUEST_STATUS, "UNDECIDED");
 			db.insert(GUESTS_TABLE_NAME, null, values);
 		}
 		db.close();
+	}
+	
+	
+	public void setGuests(String eventID, Map<User, Attending> guests) {
+		SQLiteDatabase db = this.getWritableDatabase();
+		db.rawQuery("delete from " + GUESTS_TABLE_NAME + " where " + EVENT_ID + "=\"" + eventID + "\"", new String[]{} );
+		
+		for (User user: guests.keySet()) {
+			String status;
+			Attending attending = guests.get(user);
+			if (attending==Attending.ATTENDING) {
+				status = "ATTENDING";
+			}
+			else if (attending==Attending.NOT_ATTENDING) {
+				status = "NOT_ATTENDING";
+			}
+			else {
+				status = "UNDECIDED";
+			}
+			ContentValues values = new ContentValues();
+			values.put(EVENT_ID, eventID);
+			values.put(GUEST_NAME, user.getUserName());
+			values.put(GUEST_STATUS, status);
+			db.insert(GUESTS_TABLE_NAME, null, values);
+		}
 	}
 	
 	public void updateGuestStatus(String guestName, String eventID, String status) {
@@ -188,7 +267,7 @@ public class EventTable extends SQLiteOpenHelper {
 		ContentValues values = new ContentValues();
 		values.put(GUEST_STATUS, status);
 
-		db.update(GUESTS_TABLE_NAME, values, GUEST_NAME + "=" + guestName + " and " + EVENT_ID + " = " + eventID, new String[0]);
+		db.update(GUESTS_TABLE_NAME, values, GUEST_NAME + "==\"" + guestName + "\" and " + EVENT_ID + "==\"" + eventID + "\"", new String[0]);
 		db.close();
 	}
 }

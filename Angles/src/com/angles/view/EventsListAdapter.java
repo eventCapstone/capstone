@@ -58,6 +58,8 @@ public class EventsListAdapter extends BaseAdapter {
 		AlpineButton noGoButton = (AlpineButton)item.findViewById(R.id.noGoButton);
 		AnglesEvent event = eventsList.get(index);
 		
+		eventName.setText(event.getEventTitle());
+		item.setOnClickListener(new SelectEventListener(eventsListActivity, eventsList.get(index)));
 		User user = anglesController.getAnglesUser();
 		switch (event.getStatus(user))
 		{
@@ -84,33 +86,28 @@ public class EventsListAdapter extends BaseAdapter {
 						noGoButton, eventStatus) {
 					@Override
 					public void onClick(View view) {
-						anglesEvent.acceptInvite(anglesController.getAnglesUser(), view.getContext());
-						status.setText("Going");
+						anglesEvent.acceptInvite(view.getContext());
 						goButton.setVisibility(View.INVISIBLE);
 						noGoButton.setVisibility(View.INVISIBLE);
-						status.setVisibility(View.VISIBLE);
+						status.setVisibility(View.VISIBLE);status.setText("Going");
 					}
 				});
 				noGoButton.setOnClickListener(new SelectStatusListener(eventsList.get(index), goButton,
 						noGoButton, eventStatus) {
 					@Override
 					public void onClick(View view) {
-						anglesEvent.declineInvite(anglesController.getAnglesUser());
-						status.setText("Declined");
+						anglesEvent.declineInvite(view.getContext());
 						goButton.setVisibility(View.INVISIBLE);
 						noGoButton.setVisibility(View.INVISIBLE);
 						status.setVisibility(View.VISIBLE);
+						status.setText("Declined");
 					}
 				});
 				eventStatus.setVisibility(View.INVISIBLE);
 				goButton.setVisibility(View.VISIBLE);
 				noGoButton.setVisibility(View.VISIBLE);
 		}
-		eventName.setText(event.eventTitle);
-		eventName.setOnClickListener(new SelectEventListener(eventsListActivity, eventsList.get(index)) {
-			
-		});
-				
+
 		return item;
 	}
 	
@@ -170,7 +167,7 @@ public class EventsListAdapter extends BaseAdapter {
 		
 		Calendar now = Calendar.getInstance();
 		
-		if (now.after(event.startTime) && now.before(event.endTime)){
+		if (now.after(event.getStartTime()) && now.before(event.getEndTime())){
 			
 			return true;
 		}

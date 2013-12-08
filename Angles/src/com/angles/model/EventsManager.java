@@ -9,7 +9,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import android.app.Activity;
 import android.content.Context;
+import android.widget.Toast;
 
 import com.angles.angles.AnglesController;
 import com.angles.database.EventTable;
@@ -24,19 +26,20 @@ public class EventsManager {
 	protected User anglesUser;
 	protected List<AnglesEvent> eventList;
 	
-	public EventsManager(User anglesUser, Context context)
+	public EventsManager(User anglesUser, Activity currentActivity)
 	{
 		this.anglesUser = anglesUser;
-		loadEventsFromLocalDatabase(context);
-		loadEventsFromCloud(context);
+		loadEventsFromLocalDatabase(currentActivity);
+		loadEventsFromCloud(currentActivity);
+		Toast.makeText(currentActivity, "Loading events...", Toast.LENGTH_LONG).show();
 	}
 	
 	public void loadEventsFromLocalDatabase(Context context) {
 		EventTable eventTable = new EventTable(context);
-		eventList = eventTable.getEvents();
-		eventList.add(new AnglesEvent("John's Wedding", "They grow up so fast", 
-						makeCalendar(2013, 10, 3, 18, 0), makeCalendar(2014, 10, 15, 21, 0), 
-						anglesUser, UUID.randomUUID()));
+		eventList = eventTable.getEvents(AnglesController.getInstance().getAnglesUser().getUserName());
+//		eventList.add(new AnglesEvent("John's Wedding", "They grow up so fast", 
+//						makeCalendar(2013, 10, 3, 18, 0), makeCalendar(2014, 10, 15, 21, 0), 
+//						anglesUser, UUID.randomUUID()));
 	}
 		
 	/**
@@ -54,7 +57,7 @@ public class EventsManager {
 				final CloudBackend cb = new CloudBackend();
 				final CloudQuery cq = new CloudQuery("AnglesEvent");
 				//Get events where user is host
-				cq.setFilter(F.eq(DBTableConstants.DB_EVENT_HOST_USERNAME, anglesUser.userName));
+				cq.setFilter(F.eq(DBTableConstants.DB_EVENT_HOST_USERNAME, anglesUser.getUserName()));
 		
 				Thread hostThread = new Thread() {
 					@Override
@@ -87,8 +90,8 @@ public class EventsManager {
 								endTime,
 								anglesUser,
 								UUID.fromString((String)entity.get(DBTableConstants.DB_EVENT_ID)));
-						if (!eventList.contains(hostedEvent)) {
-							events.add(hostedEvent);
+						events.add(hostedEvent);
+						if (!eventTable.containsEvent(hostedEvent.getEventID().toString())) {
 							eventTable.addEvent(hostedEvent);
 						}
 					}
@@ -96,7 +99,7 @@ public class EventsManager {
 				
 				//Get events where user is guest
 				final CloudQuery guestQuery = new CloudQuery(DBTableConstants.DB_TABLE_GUESTS);
-				guestQuery.setFilter(F.eq(DBTableConstants.DB_GUESTS_USERNAME, anglesUser.userName));
+				guestQuery.setFilter(F.eq(DBTableConstants.DB_GUESTS_USERNAME, anglesUser.getUserName()));
 				
 				Thread guestThread = new Thread() {
 					@Override
@@ -179,8 +182,8 @@ public class EventsManager {
 								endTime,
 								new User((String)entity.get(DBTableConstants.DB_EVENT_HOST_USERNAME), ""),
 								UUID.fromString((String)entity.get(DBTableConstants.DB_EVENT_ID)));
-						if (!eventList.contains(guestEvent)) {
-							events.add(guestEvent);
+						events.add(guestEvent);
+						if (!eventTable.containsEvent(guestEvent.getEventID().toString())) {
 							eventTable.addEvent(guestEvent);
 						}
 					}
@@ -223,7 +226,10 @@ public class EventsManager {
 									else {
 										status=Attending.MAYBE;
 									}
-									doubleMap.get(eventID).put(guest, status);
+									if (doubleMap.get(eventID).get(guest) == null ||
+											doubleMap.get(eventID).get(guest) == Attending.UNDECIDED) {
+										doubleMap.get(eventID).put(guest, status);
+									}
 								}
 								
 								for (AnglesEvent event: events) {
@@ -232,7 +238,7 @@ public class EventsManager {
 										map = new HashMap();
 									}
 									event.setGuests(map);
-									eventTable.addGuests(event.getEventID().toString(), map);
+									eventTable.setGuests(event.getEventID().toString(), map);
 								}
 							} catch (IOException e) {
 								e.printStackTrace();
@@ -255,7 +261,6 @@ public class EventsManager {
 	}
 	
 	public List<AnglesEvent> getEventList(){
-		
 	    return eventList;
 	}
 	

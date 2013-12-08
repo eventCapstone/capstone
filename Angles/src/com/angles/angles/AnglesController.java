@@ -261,7 +261,8 @@ public class AnglesController {
 		final CloudBackend cb = new CloudBackend();
 		final CloudQuery cq = new CloudQuery(DBTableConstants.DB_USERS_USERSTABLENAME);
 		
-		cq.setFilter(F.or(F.eq(DBTableConstants.DB_USERS_USERNAME,UserName.getText().toString()), F.eq(DBTableConstants.DB_USERS_EMAIL, Email.getText().toString().toLowerCase())));
+		cq.setFilter(F.or(F.eq(DBTableConstants.DB_USERS_USERNAME,UserName.getText().toString()), 
+				F.eq(DBTableConstants.DB_USERS_EMAIL, Email.getText().toString().toLowerCase())));
 		cq.setLimit(1);
 		Thread theThread = new Thread() {
 			
@@ -270,7 +271,6 @@ public class AnglesController {
 			try {
 				result = cb.list(cq);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -279,7 +279,6 @@ public class AnglesController {
 		try {
 			theThread.join();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		if(result.isEmpty()){
@@ -287,8 +286,8 @@ public class AnglesController {
 			((LoginActivity) currentActivity).createNewUser(createNewUser);
 			Toast.makeText(currentActivity,"Account created,Welcome to Angles!", Toast.LENGTH_LONG).show();
 			loadEventListActivity(currentActivity);	
-		}else{
-			
+		}
+		else {
 			Toast.makeText(currentActivity,"Username is taken or Email already registered", Toast.LENGTH_LONG).show();
 		}
 	}
@@ -343,7 +342,7 @@ public class AnglesController {
 		currentActivity.startActivity(intent);
 	}
 	
-	public void loadEventListActivity(Activity currentActivity){
+	public void loadEventListActivity(Activity currentActivity) {
 		Intent intent = new Intent(currentActivity, EventsListActivity.class);
 		currentActivity.startActivity(intent);
 	}
@@ -370,11 +369,6 @@ public class AnglesController {
 	{
 		Intent intent = new Intent(currentActivity, FutureEventActivity.class);
 		intent.putExtra("event", event);
-		currentActivity.startActivity(intent);
-	}
-	
-	public void loadChangeSettingsActivity(Activity currentActivity) {
-		Intent intent = new Intent(currentActivity, SettingsActivity.class);
 		currentActivity.startActivity(intent);
 	}
 	

@@ -71,7 +71,7 @@ public class InviteGuestListAdapter extends BaseAdapter {
 		User contact = contacts.get(position);
 		Attending attending = guests.get(contact); 
 		
-		userName.setText(contact.userName);		
+		userName.setText(contact.getUserName());		
 		
 		if (attending == null) {
 			inviteButton.setVisibility(View.VISIBLE);
@@ -115,18 +115,12 @@ public class InviteGuestListAdapter extends BaseAdapter {
 			
 			CloudEntity invite = new CloudEntity(DBTableConstants.DB_TABLE_GUESTS);
 			invite.put(DBTableConstants.DB_GUESTS_EVENT_ID, event.getEventID().toString());
-			invite.put(DBTableConstants.DB_GUESTS_USERNAME, user.userName);
+			invite.put(DBTableConstants.DB_GUESTS_USERNAME, user.getUserName());
 			invite.put(DBTableConstants.DB_GUESTS_ATTENDING_STATUS, "UNDECIDED");
+			
 			 CloudCallbackHandler<CloudEntity> handler = new CloudCallbackHandler<CloudEntity>() {
-			      @Override
-			      public void onComplete(final CloudEntity result) {
-						//update guest map
-						guests.put(user, Attending.UNDECIDED);
-						
-						//update local guest table
-						EventTable eventTable = new EventTable(currentActivity);
-						eventTable.addGuest(event.getEventID().toString(), user.userName);
-			      }
+				 @Override
+			      public void onComplete(final CloudEntity result) {}
 
 			      @Override
 			      public void onError(final IOException exception) {
@@ -134,7 +128,13 @@ public class InviteGuestListAdapter extends BaseAdapter {
 			      }
 			};
 
+			//update guests on the cloud
 			cb.insert(invite, handler);
+			//update guests in memory
+			guests.put(user, Attending.UNDECIDED);
+			//update local guest table
+			EventTable eventTable = new EventTable(currentActivity);
+			eventTable.addGuest(event.getEventID().toString(), user.getUserName());
 			//update view
 			v.setVisibility(View.INVISIBLE);
 		}

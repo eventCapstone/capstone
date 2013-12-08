@@ -141,7 +141,7 @@ public class OngoingEventActivity extends Activity {
 			Angle newAngle = new Angle(data, user);
 			CloudEntity entity = new CloudEntity(DBTableConstants.DB_TABLE_ANGLE);
 			entity.put(DBTableConstants.DB_ANGLE_IMAGE, newAngle.getImage());
-			entity.put(DBTableConstants.DB_ANGLE_CREATED_BY, newAngle.getCreatedBy().userName);
+			entity.put(DBTableConstants.DB_ANGLE_CREATED_BY, newAngle.getCreatedBy().getUserName());
 			
 			CloudCallbackHandler<CloudEntity> handler = new CloudCallbackHandler<CloudEntity>() {
 				
