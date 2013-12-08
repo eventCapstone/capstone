@@ -14,19 +14,28 @@ import com.google.cloud.backend.android.CloudCallbackHandler;
 import com.google.cloud.backend.android.CloudEntity;
 import com.google.cloud.backend.android.DBTableConstants;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 public class OngoingEventActivity extends Activity {
@@ -44,6 +53,14 @@ public class OngoingEventActivity extends Activity {
 	private Uri recentPhotoUri;
 	
 	private Bitmap recentPhoto;
+	
+	private LinearLayout recentPhotoGallery;
+	
+	private int sizeOfGallery = 0;
+		
+	private File tempFile;
+	
+	private Display display;
 			
 	public void onCreate(Bundle savedInstanceState) {
 		
@@ -52,14 +69,18 @@ public class OngoingEventActivity extends Activity {
 		AnglesController.getInstance().getDisplayManager().displayOngoingEventActivity(this);
 
    	 	AnglesController.getInstance().getTouchManager().setOngoingEventListeners(this);
-   	 	   	 	   	 	
+   	 	
+   	 	display = getWindowManager().getDefaultDisplay();
+   	    	 	
+   	 	recentPhotoGallery = (LinearLayout)findViewById(R.id.recentPhotoGallery);
+   	 	
    	 	findViewById(R.id.btnCapturePhoto).setOnClickListener (new OnClickListener() {
- 		
+   	 	   	 		
 			public void onClick(View v) {
 				
 				Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 												
-		        File tempFile = new File(Environment.getExternalStorageDirectory(),  
+		        tempFile = new File(Environment.getExternalStorageDirectory(),  
 		        		"angle" + String.valueOf(Calendar.getInstance().getTimeInMillis()) + ".jpg");
 		        
 		        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(tempFile));
@@ -92,22 +113,24 @@ public class OngoingEventActivity extends Activity {
 
                  Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
-			
-			/* Display the recently taken picture
-	   	 	 */
-            
-            ((ImageView)findViewById(R.id.imageViewRecentAngle)).setImageBitmap(recentPhoto);
-																											
-			/*Creating a time stamp of when the picture was taken. This will
-			 * be appended to the filename for the picture taken.
-			 */
-			String timeStamp = String.valueOf((Calendar.getInstance()).getTimeInMillis());
-			String filename = "angle" + timeStamp;
-			File rawImageFile = new File(getFilesDir().toString());
+                        																											
+			/* Display the recently taken picture in the gallery.
+			 * The gallery size is kept to no more than 4 pictures. */
+            if (sizeOfGallery > 3) {
+            	
+            	recentPhotoGallery.removeViewAt(3);
+            	
+            	recentPhotoGallery.addView(insertPhoto(tempFile.getAbsolutePath()), 0);
 
-			/*	Sending Image to Cloud Datastore
-			 * 
-			 */
+            }
+            else {
+            	
+            	recentPhotoGallery.addView(insertPhoto(tempFile.getAbsolutePath()), 0);
+            	
+            	sizeOfGallery++;
+            }
+            
+			/*	Sending Image to Cloud */
 			user = AnglesController.getInstance().getAnglesUser();
 			
 			byte[] data = convertImageToByteArray(recentPhotoUri);
@@ -172,4 +195,100 @@ public class OngoingEventActivity extends Activity {
 		
 		return data;
 	}
+	
+	@SuppressLint("NewApi")
+	public View insertPhoto(String path) {
+    	
+    	/* The bitmap is currently decoded based on calculations
+    	 * from a relative screen size. It assumes the picture should
+    	 * have a height no more than half the screen height, and a
+    	 * width no more than half the screen width.
+    	 */
+		int targetWidth = 0;
+		
+		int targetHeight = 0;
+		
+		/*	The previous means for calculating screen height and width
+		 *  have been deprecated as of API level 13. This check uses
+		 *  the current recommended getSize() method for API levels 13
+		 *  and up, and the supported way for previous API levels otherwise.
+		 */
+		
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
+
+			Point size = new Point();
+    	
+			display.getSize(size);
+			
+			targetWidth = (size.x)/2;
+			
+			targetHeight = (size.y)/2;
+		}
+		else {
+		
+			targetWidth = (getWindowManager().getDefaultDisplay().getWidth()) / 2;
+			
+			targetHeight = (getWindowManager().getDefaultDisplay().getHeight()) / 2;
+		}
+		
+        Bitmap bm = decodeSampledBitmapFromUri(path, 400, 600);
+        
+        LinearLayout layout = new LinearLayout(getApplicationContext());
+        layout.setLayoutParams(new LayoutParams(targetWidth, targetHeight));
+        layout.setGravity(Gravity.CENTER);
+        
+        Toast.makeText(this, "Size.x: " + targetWidth
+        		+ ", Size.y: " + targetHeight, Toast.LENGTH_LONG).show();
+        
+        ImageView imageView = new ImageView(getApplicationContext());
+        imageView.setLayoutParams(new LayoutParams(targetWidth, targetHeight));
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        imageView.setImageBitmap(bm);
+        
+        layout.addView(imageView);
+        
+        return layout;
+    }
+    
+    public Bitmap decodeSampledBitmapFromUri(String path, int reqWidth, int reqHeight) {
+    	
+        Bitmap bm = null;
+        
+        // First decode with inJustDecodeBounds=true to check dimensions
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(path, options);
+        
+        // Calculate inSampleSize
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+        
+        // Decode bitmap with inSampleSize set
+        options.inJustDecodeBounds = false;
+        bm = BitmapFactory.decodeFile(path, options); 
+        
+        return bm;
+    }
+    
+    public int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+    	
+    	final int height = options.outHeight;
+    	
+    	final int width = options.outWidth;
+    	
+    	int inSampleSize = 1;
+    	        
+    	if (height > reqHeight || width > reqWidth) {
+    		
+    		if (width > height) {
+    			
+    			inSampleSize = Math.round((float)height / (float)reqHeight);
+    		}
+    		else {
+    			
+    			inSampleSize = Math.round((float)width / (float)reqWidth);
+    		}
+    	}
+    	
+    	return inSampleSize;
+    }
 }
