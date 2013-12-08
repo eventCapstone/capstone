@@ -9,7 +9,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import android.app.Activity;
 import android.content.Context;
+import android.widget.Toast;
 
 import com.angles.angles.AnglesController;
 import com.angles.database.EventTable;
@@ -24,11 +26,12 @@ public class EventsManager {
 	protected User anglesUser;
 	protected List<AnglesEvent> eventList;
 	
-	public EventsManager(User anglesUser, Context context)
+	public EventsManager(User anglesUser, Activity currentActivity)
 	{
 		this.anglesUser = anglesUser;
-		loadEventsFromLocalDatabase(context);
-		loadEventsFromCloud(context);
+		loadEventsFromLocalDatabase(currentActivity);
+		loadEventsFromCloud(currentActivity);
+		Toast.makeText(currentActivity, "Loading events...", Toast.LENGTH_LONG).show();
 	}
 	
 	public void loadEventsFromLocalDatabase(Context context) {
