@@ -47,7 +47,8 @@
 	        android:layout_height="wrap_content"
 	        android:layout_marginTop="10dp"
 	        android:layout_marginRight="10dp"
-	        android:ems="10"/>    
+	        android:ems="10"
+	        android:lines="1"/>    
 	
 	</LinearLayout>
 	

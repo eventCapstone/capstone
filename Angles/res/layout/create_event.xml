@@ -22,7 +22,8 @@
         android:inputType="text"
         android:ems="10"
         android:layout_marginRight="20dp" 
-        android:layout_marginLeft="20dp"/>
+        android:layout_marginLeft="20dp"
+        android:lines="1"/>
     <com.angles.view.AlpineTextView
         android:id="@+id/eventDescriptionLabel"
         android:layout_width="fill_parent"
