@@ -163,7 +163,7 @@ public class EventTable extends SQLiteOpenHelper {
 						EventsManager.parseAttending(guestCursor.getString(statusIndex)));
 			}
 			
-			if (Calendar.getInstance().compareTo(startTime) <= 0) {
+			if (Calendar.getInstance().compareTo(endTime) <= 0) {
 				events.add(new AnglesEvent(
 						cursor.getString(eventNameIndex),
 						cursor.getString(eventDescriptionIndex),
