@@ -13,12 +13,14 @@ import java.util.UUID;
 import android.app.Activity;
 import android.content.Context;
 
+import com.angles.angles.AnglesController;
 import com.angles.database.EventTable;
 import com.google.api.client.util.DateTime;
 import com.google.cloud.backend.android.CloudBackend;
 import com.google.cloud.backend.android.CloudEntity;
 import com.google.cloud.backend.android.CloudQuery;
 import com.google.cloud.backend.android.DBTableConstants;
+import com.google.cloud.backend.android.F;
 
 public class AnglesEvent implements Serializable, Comparable {
 	public String eventTitle;
@@ -80,53 +82,71 @@ public class AnglesEvent implements Serializable, Comparable {
 		return guests.get(user);
 	}
 	
-	public void acceptInvite(User user, Context context)
+	public void acceptInvite(Context context)
 	{
-		if (guests.containsKey(user))
+		if (guests.containsKey(AnglesController.getInstance().getAnglesUser()))
 		{
-			//update guest table on cloud
-			CloudBackend cb = new CloudBackend();
-			CloudQuery cq = new CloudQuery(DBTableConstants.DB_TABLE_GUESTS);
-			
-			CloudEntity invite = new CloudEntity(DBTableConstants.DB_TABLE_GUESTS);
-			invite.put(DBTableConstants.DB_GUESTS_EVENT_ID, eventID.toString());
-			invite.put(DBTableConstants.DB_GUESTS_USERNAME, user.userName);
-			invite.put(DBTableConstants.DB_GUESTS_ATTENDING_STATUS, "ATTENDING");
-			
-			try {
-				cb.update(invite);
-			}
-			catch (IOException e) {
-				//don't update guest map if there was an error
-				return;
-			}
-			guests.put(user, Attending.ATTENDING);
-			EventTable eventsTable = new EventTable(context);
-			eventsTable.updateGuestStatus(user.userName, eventID.toString(), "ATTENDING");
+			Thread thread = new ContextThread(context) {
+				public void run() {
+					//update guest table on cloud
+					List<CloudEntity> result=null;
+					User user = AnglesController.getInstance().getAnglesUser();
+					CloudBackend cb = new CloudBackend();
+					CloudQuery cq = new CloudQuery(DBTableConstants.DB_TABLE_GUESTS);
+					
+					CloudEntity invite = new CloudEntity(DBTableConstants.DB_TABLE_GUESTS);
+					invite.put(DBTableConstants.DB_GUESTS_EVENT_ID, eventID.toString());
+					invite.put(DBTableConstants.DB_GUESTS_USERNAME, user.userName);
+					invite.put(DBTableConstants.DB_GUESTS_ATTENDING_STATUS, "ATTENDING");
+					
+					try {
+						cb.insert(invite);
+					}
+					catch (IOException e) {
+						//don't update guest map if there was an error
+						e.printStackTrace();
+						return;
+					}
+					guests.put(AnglesController.getInstance().getAnglesUser(), Attending.ATTENDING);
+					EventTable eventsTable = new EventTable(context);
+					eventsTable.updateGuestStatus(user.userName, eventID.toString(), "ATTENDING");		
+				}
+			};
+			thread.start();
 		}
 	}
 	
-	public void declineInvite(User user)
+	public void declineInvite(Context context)
 	{
-		if (guests.containsKey(user))
+		if (guests.containsKey(AnglesController.getInstance().getAnglesUser()))
 		{
-			//update guest table on cloud
-			CloudBackend cb = new CloudBackend();
-			CloudQuery cq = new CloudQuery(DBTableConstants.DB_TABLE_GUESTS);
-			
-			CloudEntity invite = new CloudEntity(DBTableConstants.DB_TABLE_GUESTS);
-			invite.put(DBTableConstants.DB_GUESTS_EVENT_ID, eventID.toString());
-			invite.put(DBTableConstants.DB_GUESTS_USERNAME, user.userName);
-			invite.put(DBTableConstants.DB_GUESTS_ATTENDING_STATUS, "NOT_ATTENDING");
-			
-			try {
-				cb.update(invite);
-			}
-			catch (IOException e) {
-				//don't update guest map if there was an error
-				return;
-			}
-			guests.put(user, Attending.NOT_ATTENDING);
+			Thread thread = new ContextThread(context) {
+				public void run() {
+					//update guest table on cloud
+					List<CloudEntity> result=null;
+					User user = AnglesController.getInstance().getAnglesUser();
+					CloudBackend cb = new CloudBackend();
+					CloudQuery cq = new CloudQuery(DBTableConstants.DB_TABLE_GUESTS);
+					
+					CloudEntity invite = new CloudEntity(DBTableConstants.DB_TABLE_GUESTS);
+					invite.put(DBTableConstants.DB_GUESTS_EVENT_ID, eventID.toString());
+					invite.put(DBTableConstants.DB_GUESTS_USERNAME, user.userName);
+					invite.put(DBTableConstants.DB_GUESTS_ATTENDING_STATUS, "NOT_ATTENDING");
+					
+					try {
+						cb.insert(invite);
+					}
+					catch (IOException e) {
+						//don't update guest map if there was an error
+						e.printStackTrace();
+						return;
+					}
+					guests.put(AnglesController.getInstance().getAnglesUser(), Attending.NOT_ATTENDING);
+					EventTable eventsTable = new EventTable(context);
+					eventsTable.updateGuestStatus(user.userName, eventID.toString(), "NOT_ATTENDING");		
+				}
+			};
+			thread.start();
 		}
 	}
 
@@ -173,5 +193,13 @@ public class AnglesEvent implements Serializable, Comparable {
 			return (startTime.compareTo(((AnglesEvent)otherEvent).startTime));
 		}
 		return 0;
+	}
+	
+	private class ContextThread extends Thread {
+		protected Context context;
+		
+		public ContextThread(Context context) {
+			this.context = context;
+		}
 	}
 }

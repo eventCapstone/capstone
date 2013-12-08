@@ -84,22 +84,21 @@ public class EventsListAdapter extends BaseAdapter {
 						noGoButton, eventStatus) {
 					@Override
 					public void onClick(View view) {
-						anglesEvent.acceptInvite(anglesController.getAnglesUser(), view.getContext());
-						status.setText("Going");
+						anglesEvent.acceptInvite(view.getContext());
 						goButton.setVisibility(View.INVISIBLE);
 						noGoButton.setVisibility(View.INVISIBLE);
-						status.setVisibility(View.VISIBLE);
+						status.setVisibility(View.VISIBLE);status.setText("Going");
 					}
 				});
 				noGoButton.setOnClickListener(new SelectStatusListener(eventsList.get(index), goButton,
 						noGoButton, eventStatus) {
 					@Override
 					public void onClick(View view) {
-						anglesEvent.declineInvite(anglesController.getAnglesUser());
-						status.setText("Declined");
+						anglesEvent.declineInvite(view.getContext());
 						goButton.setVisibility(View.INVISIBLE);
 						noGoButton.setVisibility(View.INVISIBLE);
 						status.setVisibility(View.VISIBLE);
+						status.setText("Declined");
 					}
 				});
 				eventStatus.setVisibility(View.INVISIBLE);

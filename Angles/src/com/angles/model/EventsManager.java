@@ -87,8 +87,8 @@ public class EventsManager {
 								endTime,
 								anglesUser,
 								UUID.fromString((String)entity.get(DBTableConstants.DB_EVENT_ID)));
+						events.add(hostedEvent);
 						if (!eventList.contains(hostedEvent)) {
-							events.add(hostedEvent);
 							eventTable.addEvent(hostedEvent);
 						}
 					}
@@ -179,8 +179,8 @@ public class EventsManager {
 								endTime,
 								new User((String)entity.get(DBTableConstants.DB_EVENT_HOST_USERNAME), ""),
 								UUID.fromString((String)entity.get(DBTableConstants.DB_EVENT_ID)));
+						events.add(guestEvent);
 						if (!eventList.contains(guestEvent)) {
-							events.add(guestEvent);
 							eventTable.addEvent(guestEvent);
 						}
 					}
@@ -223,7 +223,10 @@ public class EventsManager {
 									else {
 										status=Attending.MAYBE;
 									}
-									doubleMap.get(eventID).put(guest, status);
+									if (doubleMap.get(eventID).get(guest) == null ||
+											doubleMap.get(eventID).get(guest) == Attending.UNDECIDED) {
+										doubleMap.get(eventID).put(guest, status);
+									}
 								}
 								
 								for (AnglesEvent event: events) {
@@ -232,7 +235,7 @@ public class EventsManager {
 										map = new HashMap();
 									}
 									event.setGuests(map);
-									eventTable.addGuests(event.getEventID().toString(), map);
+									eventTable.setGuests(event.getEventID().toString(), map);
 								}
 							} catch (IOException e) {
 								e.printStackTrace();
@@ -255,7 +258,6 @@ public class EventsManager {
 	}
 	
 	public List<AnglesEvent> getEventList(){
-		
 	    return eventList;
 	}
 	

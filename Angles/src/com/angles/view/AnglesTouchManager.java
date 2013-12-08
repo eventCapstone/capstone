@@ -139,6 +139,8 @@ public class AnglesTouchManager {
 		Button otherEventsButton = (Button) currentActivity.findViewById(R.id.otherEventsButton);
 		Button inviteGuestsButton = (Button) currentActivity.findViewById(R.id.inviteGuestsButton);
 		Button viewGuestsButton = (Button) currentActivity.findViewById(R.id.viewGuestsButton);
+		Button acceptButton = (Button) currentActivity.findViewById(R.id.acceptButton);
+		Button declineButton = (Button) currentActivity.findViewById(R.id.declineButton);
 		
 		otherEventsButton.setOnClickListener(new AnglesClickListener(currentActivity) {
 			public void onClick(View v) {
@@ -155,6 +157,26 @@ public class AnglesTouchManager {
 		viewGuestsButton.setOnClickListener(new AnglesEventClickListener(currentActivity, event) {
 			public void onClick(View v) {
 				anglesController.loadGuestListActivity(currentActivity, event);
+			}
+		});
+		
+		acceptButton.setOnClickListener(new AnglesEventClickListener(currentActivity, event) {
+			@Override
+			public void onClick(View view) {
+				event.acceptInvite(view.getContext());
+				view.setVisibility(View.INVISIBLE);
+				((Button)currentActivity.findViewById(R.id.declineButton))
+					.setVisibility(View.INVISIBLE);
+			}
+		});
+		
+		declineButton.setOnClickListener(new AnglesEventClickListener(currentActivity, event) {
+			@Override
+			public void onClick(View view) {
+				event.declineInvite(view.getContext());
+				view.setVisibility(View.INVISIBLE);
+				((Button)currentActivity.findViewById(R.id.acceptButton))
+					.setVisibility(View.INVISIBLE);
 			}
 		});
 	}

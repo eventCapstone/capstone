@@ -183,12 +183,37 @@ public class EventTable extends SQLiteOpenHelper {
 		db.close();
 	}
 	
+	
+	public void setGuests(String eventID, Map<User, Attending> guests) {
+		SQLiteDatabase db = this.getWritableDatabase();
+		db.rawQuery("delete from " + GUESTS_TABLE_NAME + " where " + EVENT_ID + "=\"" + eventID + "\"", new String[]{} );
+		
+		for (User user: guests.keySet()) {
+			String status;
+			Attending attending = guests.get(user);
+			if (attending==Attending.ATTENDING) {
+				status = "ATTENDING";
+			}
+			else if (attending==Attending.NOT_ATTENDING) {
+				status = "NOT_ATTENDING";
+			}
+			else {
+				status = "UNDECIDED";
+			}
+			ContentValues values = new ContentValues();
+			values.put(EVENT_ID, eventID);
+			values.put(GUEST_NAME, user.userName);
+			values.put(GUEST_STATUS, status);
+			db.insert(GUESTS_TABLE_NAME, null, values);
+		}
+	}
+	
 	public void updateGuestStatus(String guestName, String eventID, String status) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues values = new ContentValues();
 		values.put(GUEST_STATUS, status);
 
-		db.update(GUESTS_TABLE_NAME, values, GUEST_NAME + "=" + guestName + " and " + EVENT_ID + " = " + eventID, new String[0]);
+		db.update(GUESTS_TABLE_NAME, values, GUEST_NAME + "==\"" + guestName + "\" and " + EVENT_ID + "==\"" + eventID + "\"", new String[0]);
 		db.close();
 	}
 }
