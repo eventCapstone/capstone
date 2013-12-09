@@ -139,7 +139,7 @@ public class EventsListAdapter extends BaseAdapter {
 			
 			if (isOngoing(anglesEvent)){
 				
-				anglesController.loadOngoingEventActivity(anglesListActivity);
+				anglesController.loadOngoingEventActivity(anglesListActivity, anglesEvent);
 			}
 			else
 				anglesController.loadViewEventActivity(anglesListActivity, anglesEvent);

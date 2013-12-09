@@ -16,7 +16,7 @@ public class MainActivity extends Activity {
    	 	setContentView(R.layout.activity_main);
    	 	
 //   	 	EventTable te = new EventTable(this);
-//   	 	te.emptyTables();
+  // 	 	te.emptyTables();
 //   	 	
      	AnglesController.createInstance(this);
      	AnglesController.getInstance().init(this);

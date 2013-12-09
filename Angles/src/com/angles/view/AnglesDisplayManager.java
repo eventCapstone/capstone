@@ -131,9 +131,13 @@ public class AnglesDisplayManager {
 	 * ONGOING EVENT DISPLAY
 	 * @param currentActivity
 	 */
-	public void displayOngoingEventActivity(Activity currentActivity) {
+	public void displayOngoingEventActivity(Activity currentActivity, AnglesEvent event) {
 		
 		currentActivity.setContentView(R.layout.ongoing_event_activity_main);
+		
+		TextView eventName = (TextView) currentActivity.findViewById(R.id.eventName);
+		
+		eventName.setText(event.getEventTitle());
 	}
 	
 	

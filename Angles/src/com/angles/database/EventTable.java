@@ -126,7 +126,8 @@ public class EventTable extends SQLiteOpenHelper {
 		
 		String lastUser = getLastUser();
 		
-		if (!getLastUser().equals(userName)) {
+		if (getLastUser() != null &&
+				!getLastUser().equals(userName)) {
 			emptyTables();
 			db = this.getReadableDatabase();
 			setUser(userName);

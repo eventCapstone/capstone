@@ -2,12 +2,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg1"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".MainActivity"  
-    android:background="@drawable/bg1">
+    tools:context=".MainActivity" >
 
     <com.angles.view.AlpineButton
         android:id="@+id/btnEventList"
@@ -16,8 +16,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="Events"
-        android:background="@drawable/button_oval"/>
+        android:background="@drawable/button_oval"
+        android:text="Events" />
 
     <com.angles.view.AlpineButton
         android:id="@+id/btnCapturePhoto"
@@ -25,27 +25,40 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/btnEventList"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/button_oval"
         android:onClick="onClick"
-        android:text="Take a Photo!" 
-      	android:background="@drawable/button_oval"
-      	android:layout_centerHorizontal="true"/>
+        android:text="Take a Photo!" />
 
-	<LinearLayout
-	    android:layout_width="wrap_content"
-	    android:layout_height="match_parent"
-	    android:layout_above="@+id/btnCapturePhoto"
-	    android:orientation="vertical" >
+    <com.angles.view.AlpineTextView
+        android:id="@+id/eventName"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="Event Name"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    	<HorizontalScrollView
-       		android:layout_width="match_parent"
-        	android:layout_height="wrap_content" >
-        	<LinearLayout
-            	android:id="@+id/recentPhotoGallery"
-            	android:layout_width="wrap_content"
-            	android:layout_height="wrap_content"
-            	android:orientation="horizontal"
-            	/>
-    	</HorizontalScrollView>
-	</LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/eventName"
+        android:layout_above="@+id/btnCapturePhoto"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <LinearLayout
+                android:id="@+id/recentPhotoGallery"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" />
+        </HorizontalScrollView>
+    </LinearLayout>
 
 </RelativeLayout>

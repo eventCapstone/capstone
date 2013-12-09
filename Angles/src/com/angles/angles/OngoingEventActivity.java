@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.util.Calendar;
 
 import com.angles.model.Angle;
+import com.angles.model.AnglesEvent;
 import com.angles.model.User;
 import com.google.cloud.backend.android.CloudBackendAsync;
 import com.google.cloud.backend.android.CloudCallbackHandler;
@@ -59,30 +60,34 @@ public class OngoingEventActivity extends Activity {
 	private int sizeOfGallery = 0;
 		
 	private File tempFile;
-	
+		
 	private Display display;
 			
 	public void onCreate(Bundle savedInstanceState) {
 		
 		super.onCreate(savedInstanceState);
 		
-		AnglesController.getInstance().getDisplayManager().displayOngoingEventActivity(this);
+		Bundle bundle = getIntent().getExtras();
+		
+		AnglesEvent event = (AnglesEvent)bundle.getSerializable("event");
+
+		AnglesController.getInstance().getDisplayManager().displayOngoingEventActivity(this, event);
 
    	 	AnglesController.getInstance().getTouchManager().setOngoingEventListeners(this);
    	 	
    	 	display = getWindowManager().getDefaultDisplay();
    	    	 	
    	 	recentPhotoGallery = (LinearLayout)findViewById(R.id.recentPhotoGallery);
-   	 	
+   	 	   	 	
    	 	findViewById(R.id.btnCapturePhoto).setOnClickListener (new OnClickListener() {
    	 	   	 		
 			public void onClick(View v) {
 				
 				Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 												
-		        tempFile = new File(Environment.getExternalStorageDirectory(),  
+		        tempFile = new File(Environment.getExternalStorageDirectory() +
 		        		"angle" + String.valueOf(Calendar.getInstance().getTimeInMillis()) + ".jpg");
-		        
+		        		        
 		        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(tempFile));
 		        
 		        recentPhotoUri = Uri.fromFile(tempFile);
@@ -166,6 +171,8 @@ public class OngoingEventActivity extends Activity {
 			
 			Toast.makeText(this, "Photo not taken.", Toast.LENGTH_SHORT).show();
 		}
+		
+		tempFile.delete();
 		
 		super.onActivityResult(requestCode, resultCode, returnedIntent);
 	}

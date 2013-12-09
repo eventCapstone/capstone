@@ -292,8 +292,6 @@ public class AnglesController {
 		}
 	}
 	
-	
-	
 	/*****************************************************************************
 	 * CREATE EVENT Business Logic
 	 *****************************************************************************/
@@ -377,8 +375,9 @@ public class AnglesController {
 		currentActivity.startActivity(intent);
 	}
 
-	public void loadOngoingEventActivity(Activity currentActivity) {
+	public void loadOngoingEventActivity(Activity currentActivity, AnglesEvent event) {
 		Intent intent = new Intent(currentActivity, OngoingEventActivity.class);
+		intent.putExtra("event", event);
 		currentActivity.startActivity(intent);
 	}
 	
