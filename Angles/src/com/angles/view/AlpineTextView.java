@@ -5,6 +5,11 @@ import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
+/**
+ * A TextView class that uses the Alpine font
+ * @author Mike
+ *
+ */
 public class AlpineTextView  extends TextView {
     public AlpineTextView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);

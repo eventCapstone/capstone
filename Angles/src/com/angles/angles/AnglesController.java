@@ -25,14 +25,19 @@ import com.angles.model.EventsManager;
 import com.angles.model.User;
 import com.angles.view.AnglesDisplayManager;
 import com.angles.view.AnglesTouchManager;
-//import com.google.appengine.api.datastore.Hash;
+import com.google.appengine.api.datastore.Hash;
 import com.google.cloud.backend.android.CloudBackend;
 import com.google.cloud.backend.android.CloudEntity;
 import com.google.cloud.backend.android.CloudQuery;
 import com.google.cloud.backend.android.DBTableConstants;
 import com.google.cloud.backend.android.F;
 
-
+/**
+ * Controller class responsible for loading new activities and implementing login
+ * and create event business logic
+ * @author Mike
+ *
+ */
 public class AnglesController {
 	//Singleton instance of the controller
 	private static AnglesController controllerInstance;
@@ -136,7 +141,7 @@ public class AnglesController {
 				CloudBackend cloudBackend = new CloudBackend();
 				CloudQuery cloudQuery = new CloudQuery(DBTableConstants.DB_USERS_USERSTABLENAME);
 				
-				// Run query
+				//Load emails from device contacts
 			    Uri uri = ContactsContract.CommonDataKinds.Email.CONTENT_URI;
 			    String[] projection = new String[] {
 			            ContactsContract.Contacts._ID,
@@ -150,6 +155,7 @@ public class AnglesController {
 			    Cursor cursor = activity.getContentResolver().query(uri, projection, selection, selectionArgs, null);
 			    F filter = null;
 			    
+			    //spin off new threads to search for angles users
 			    int counter=1;
 			    while (!cursor.isAfterLast()) {
 			    	filter = null;
@@ -168,6 +174,7 @@ public class AnglesController {
 				    }
 				    cloudQuery.setFilter(filter);
 				    
+				    //Spin off a new thread querying the cloud for users for these 10 emails
 					Thread theThread = new ContactQueryThread(cloudBackend, cloudQuery, contactTable) {
 						@Override
 						public void run() {
@@ -211,8 +218,7 @@ public class AnglesController {
 		
 		   
 		String userName = ((EditText) currentActivity.findViewById(R.id.loginUserName)).getText().toString();
-//		String password = Hash.md5( ((EditText) currentActivity.findViewById(R.id.loginPassword)).getText().toString());
-		String password = null;
+		String password = Hash.md5( ((EditText) currentActivity.findViewById(R.id.loginPassword)).getText().toString());
 	
 		final CloudBackend cb = new CloudBackend();
 		final CloudQuery cq = new CloudQuery(DBTableConstants.DB_USERS_USERSTABLENAME);
@@ -400,6 +406,11 @@ public class AnglesController {
 		currentActivity.startActivity(intent);
 	}
 	
+	/**
+	 * Private runnable class containing a CloudBackend, CloudQuery, and ContactTable
+	 * @author Mike
+	 *
+	 */
 	private class ContactQueryThread extends Thread {
 		protected CloudBackend cb;
 		protected CloudQuery cq;
@@ -413,6 +424,11 @@ public class AnglesController {
 		}
 	}
 	
+	/**
+	 * Private runnable class containing the current activity
+	 * @author Mike
+	 *
+	 */
 	private class ActivityThread extends Thread {
 		protected Activity activity;
 		

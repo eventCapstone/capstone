@@ -23,6 +23,11 @@ import com.angles.model.Attending;
 import com.angles.model.EventsManager;
 import com.angles.model.User;
 
+/**
+ * The display manager is responsible for loading layouts for the different activities
+ * @author Mike
+ *
+ */
 public class AnglesDisplayManager {
 	public static final String KEY = "AnglesDisplayManager"; 
 	

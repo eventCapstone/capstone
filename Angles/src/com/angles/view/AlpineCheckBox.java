@@ -5,6 +5,11 @@ import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.widget.CheckBox;
 
+/**
+ * A CheckBox class that uses the Alpine font
+ * @author Mike
+ *
+ */
 public class AlpineCheckBox  extends CheckBox {
     public AlpineCheckBox(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);

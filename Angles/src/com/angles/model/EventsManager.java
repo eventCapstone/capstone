@@ -21,6 +21,13 @@ import com.google.cloud.backend.android.CloudQuery;
 import com.google.cloud.backend.android.DBTableConstants;
 import com.google.cloud.backend.android.F;
 
+/**
+ * The events managers contains the list of events for which the current user is either the host
+ * or a guest. It also handles all logic pertaining to loading events either from the local tables
+ * or from the remote datastore
+ * @author Mike
+ *
+ */
 public class EventsManager {
 	protected List<CloudEntity> results;
 	protected User anglesUser;
@@ -34,16 +41,23 @@ public class EventsManager {
 		Toast.makeText(currentActivity, "Loading events...", Toast.LENGTH_LONG).show();
 	}
 	
+	/**
+	 * Get the locally persisted events. If we have switched users, this will return an empty list
+	 * @param context
+	 */
 	public void loadEventsFromLocalDatabase(Context context) {
 		EventTable eventTable = new EventTable(context);
 		eventList = eventTable.getEvents(AnglesController.getInstance().getAnglesUser().getUserName());
-//		eventList.add(new AnglesEvent("John's Wedding", "They grow up so fast", 
-//						makeCalendar(2013, 10, 3, 18, 0), makeCalendar(2014, 10, 15, 21, 0), 
-//						anglesUser, UUID.randomUUID()));
 	}
 		
 	/**
-	 * Load events from remote database for this user
+	 * Load events from remote database for this user. This occurs in a few new threads.
+	 * 1. Get all events for which this user is the host
+	 * 2. Get event IDs for all events this user is invited to
+	 * 3. Get all events for which this user is a guest
+	 * 4. Get all guests of events for which this user is host or guest
+	 * 5. Update local tables
+	 * 6. Reload events from local tables
 	 */
 	public void loadEventsFromCloud(Context context)
 	{
@@ -260,13 +274,12 @@ public class EventsManager {
 		thread.start();
 	}
 	
+	/**
+	 * Returns the events list in memory
+	 * @return
+	 */
 	public List<AnglesEvent> getEventList(){
 	    return eventList;
-	}
-	
-	public void addEvent(AnglesEvent event)
-	{
-		eventList.add(event);
 	}
 	
 	/**
@@ -279,11 +292,21 @@ public class EventsManager {
 		return calendar;
 	}
 	
+	/**
+	 * Formats the Calendar object into a displayable string
+	 * @param calendar
+	 * @return
+	 */
 	public static String getDisplayDateTime(Calendar calendar)
 	{
 		return getDisplayDate(calendar) + " at " + getDisplayTime(calendar); 
 	}
 	
+	/**
+	 * Formats the Calendar object into a displayable date
+	 * @param calendar
+	 * @return
+	 */
 	public static String getDisplayDate(Calendar calendar)
 	{
 		return "" +
@@ -292,6 +315,11 @@ public class EventsManager {
 				calendar.get(Calendar.YEAR);
 	}
 	
+	/**
+	 * Formats the Calendar object into a displayable Time
+	 * @param calendar
+	 * @return
+	 */
 	public static String getDisplayTime(Calendar calendar)
 	{
 		int hour = calendar.get(Calendar.HOUR_OF_DAY) % 12;
@@ -303,6 +331,12 @@ public class EventsManager {
 			(calendar.get(Calendar.HOUR_OF_DAY) < 12 ? " AM" : " PM");
 	}
 
+	/**
+	 * Creates a Calendar object out of a display date and time
+	 * @param date
+	 * @param time
+	 * @return
+	 */
 	public static Calendar parseDateTime(String date, String time) {
 		Calendar dateCalendar = parseDate(date);
 		Calendar timeCalendar = parseTime(time);
@@ -312,6 +346,11 @@ public class EventsManager {
 		return dateCalendar;
 	}
 	
+	/**
+	 * Creates a Calendar object out of a display date
+	 * @param str
+	 * @return
+	 */
 	public static Calendar parseDate(String str) {
 		Calendar calendar = Calendar.getInstance();
 		String[] nums = str.split("/");
@@ -330,6 +369,11 @@ public class EventsManager {
 		return calendar;
 	}
 	
+	/**
+	 * Creates a Calendar object out of a display time
+	 * @param str
+	 * @return
+	 */
 	public static Calendar parseTime(String str) 
 	{
 		Calendar calendar = Calendar.getInstance();
@@ -363,6 +407,14 @@ public class EventsManager {
 		return calendar;
 	}
 	
+	/**
+	 * Verify user inputted data for a new event
+	 * @param eventName
+	 * @param eventDescription
+	 * @param startDate
+	 * @param endDate
+	 * @return
+	 */
 	public static String verifyNewEventData(String eventName, String eventDescription,
 			Calendar startDate, Calendar endDate) {
 		String result = "";
@@ -389,6 +441,11 @@ public class EventsManager {
 		return result;
 	}
 	
+	/**
+	 * Convert a String status to an Attending enum
+	 * @param status
+	 * @return
+	 */
 	public static Attending parseAttending(String status) {
 		if (status.equals("ATTENDING")) {
 			return Attending.ATTENDING;
@@ -404,6 +461,11 @@ public class EventsManager {
 		}
 	}
 	
+	/**
+	 * A private runnable class that contains an events list and the event table
+	 * @author Mike
+	 *
+	 */
 	private class EventListThread extends Thread {
 		protected List<AnglesEvent> events;
 		protected EventTable eventTable;
@@ -414,6 +476,11 @@ public class EventsManager {
 		}
 	}
 	
+	/**
+	 * A private runnable class that contains an android context
+	 * @author Mike
+	 *
+	 */
 	private class ContextThread extends Thread {
 		protected Context threadContext;
 		

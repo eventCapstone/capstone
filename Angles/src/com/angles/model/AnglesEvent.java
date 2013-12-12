@@ -22,6 +22,11 @@ import com.google.cloud.backend.android.CloudQuery;
 import com.google.cloud.backend.android.DBTableConstants;
 import com.google.cloud.backend.android.F;
 
+/**
+ * The AnglesEvent class. Contains the logic for handling invites.
+ * @author Mike
+ *
+ */
 public class AnglesEvent implements Serializable, Comparable {
 	private String eventTitle;
 	private String eventDescription;
@@ -80,8 +85,6 @@ public class AnglesEvent implements Serializable, Comparable {
 		}
 		return guests.get(user);
 	}
-	
-	
 	
 	public String getEventTitle() {
 		return eventTitle;

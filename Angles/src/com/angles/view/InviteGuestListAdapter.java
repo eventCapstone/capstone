@@ -31,6 +31,12 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.Toast;
 
+/**
+ * The invite guest list adapter inflates the views for the invite guest list items and
+ * defines their onClickListeners
+ * @author Mike
+ *
+ */
 public class InviteGuestListAdapter extends BaseAdapter {
 	private AnglesEvent event;
 	private AnglesController controller;

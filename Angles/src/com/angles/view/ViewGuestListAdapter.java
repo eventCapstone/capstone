@@ -10,6 +10,12 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+/**
+ * The guest list adapter inflates the views for the guest list and defines
+ * their onClickListeners
+ * @author Mike
+ *
+ */
 public class ViewGuestListAdapter extends BaseAdapter {
 	private Activity activity;
 	private List<String> guests;

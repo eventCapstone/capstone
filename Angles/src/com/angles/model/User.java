@@ -3,6 +3,11 @@ package com.angles.model;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * A serializable Angles user object
+ * @author Mike
+ *
+ */
 public class User implements Serializable {
 	private String userName;
 	private String email;

@@ -5,6 +5,11 @@ import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.widget.Button;
 
+/**
+ * A button class that uses the Alpine font
+ * @author Mike
+ *
+ */
 public class AlpineButton  extends Button {
     public AlpineButton(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);

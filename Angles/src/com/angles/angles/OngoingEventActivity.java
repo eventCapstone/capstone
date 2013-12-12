@@ -39,66 +39,54 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+/**
+ * The ongoing event activity. 
+ * @author Mike
+ *
+ */
 public class OngoingEventActivity extends Activity {
 	
 	private static final String DEBUG_TAG = "OngoingEventActivity";
-	
 	public static final int REQUEST_CODE = 011;
 	
 	public ImageView imageView;
-	
 	public Activity currentActivity;
-	
 	public User user;
-	
 	private Uri recentPhotoUri;
-	
 	private Bitmap recentPhoto;
-	
 	private LinearLayout recentPhotoGallery;
 	
 	private int sizeOfGallery = 0;
 		
 	private File tempFile;
-		
 	private Display display;
 			
 	public void onCreate(Bundle savedInstanceState) {
 		
 		super.onCreate(savedInstanceState);
-		
 		Bundle bundle = getIntent().getExtras();
-		
 		AnglesEvent event = (AnglesEvent)bundle.getSerializable("event");
-
 		AnglesController.getInstance().getDisplayManager().displayOngoingEventActivity(this, event);
-
    	 	AnglesController.getInstance().getTouchManager().setOngoingEventListeners(this);
    	 	
    	 	display = getWindowManager().getDefaultDisplay();
-   	    	 	
    	 	recentPhotoGallery = (LinearLayout)findViewById(R.id.recentPhotoGallery);
    	 	   	 	
    	 	findViewById(R.id.btnCapturePhoto).setOnClickListener (new OnClickListener() {
-   	 	   	 		
 			public void onClick(View v) {
-				
 				Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 												
 		        tempFile = new File(Environment.getExternalStorageDirectory() +
 		        		"angle" + String.valueOf(Calendar.getInstance().getTimeInMillis()) + ".jpg");
 		        		        
 		        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(tempFile));
-		        
 		        recentPhotoUri = Uri.fromFile(tempFile);
-		        
 				startActivityForResult(cameraIntent, REQUEST_CODE);
 			}
 		});
    	}
 	
 	protected void onActivityResult(int requestCode, int resultCode, Intent returnedIntent) {
-		 
 		Log.d(DEBUG_TAG, "Request code: " + requestCode);
 		
 		if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
@@ -107,31 +95,22 @@ public class OngoingEventActivity extends Activity {
 			 */
 			
             getContentResolver().notifyChange(recentPhotoUri, null);
-
             ContentResolver cr = getContentResolver();
             
             try {
-
                 recentPhoto = MediaStore.Images.Media.getBitmap(cr, recentPhotoUri);
-
             } catch (Exception e) {
-
                  Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
                         																											
 			/* Display the recently taken picture in the gallery.
 			 * The gallery size is kept to no more than 4 pictures. */
             if (sizeOfGallery > 3) {
-            	
             	recentPhotoGallery.removeViewAt(3);
-            	
             	recentPhotoGallery.addView(insertPhoto(tempFile.getAbsolutePath()), 0);
-
             }
             else {
-            	
             	recentPhotoGallery.addView(insertPhoto(tempFile.getAbsolutePath()), 0);
-            	
             	sizeOfGallery++;
             }
             
@@ -152,13 +131,11 @@ public class OngoingEventActivity extends Activity {
 				
 				@Override
 				public void onComplete(final CloudEntity result) {
-					
 					Toast.makeText(getApplicationContext(),"Angle Sent!", Toast.LENGTH_LONG).show();
 			     }
 
 				@Override
 				public void onError(final IOException ioe) {
-	  
 					Log.e(DEBUG_TAG, ioe.toString());
 				}
 			};
@@ -168,31 +145,22 @@ public class OngoingEventActivity extends Activity {
 			backend.insert(entity, handler);
 		}
 		else {
-			
 			Toast.makeText(this, "Photo not taken.", Toast.LENGTH_SHORT).show();
 		}
 		
 		tempFile.delete();
-		
 		super.onActivityResult(requestCode, resultCode, returnedIntent);
 	}
 	
 	private byte[] convertImageToByteArray(Uri uri) {
-		
 		byte[] data = null;
 		
 		try {
-			
 			ContentResolver cr = getBaseContext().getContentResolver();
-			
             InputStream inputStream = cr.openInputStream(uri);
-            
             Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-            
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-            
             data = baos.toByteArray();
 			
 		} catch (FileNotFoundException fne) {
@@ -212,7 +180,6 @@ public class OngoingEventActivity extends Activity {
     	 * width no more than half the screen width.
     	 */
 		int targetWidth = 0;
-		
 		int targetHeight = 0;
 		
 		/*	The previous means for calculating screen height and width
@@ -277,21 +244,15 @@ public class OngoingEventActivity extends Activity {
     }
     
     public int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
-    	
     	final int height = options.outHeight;
-    	
     	final int width = options.outWidth;
-    	
     	int inSampleSize = 1;
     	        
     	if (height > reqHeight || width > reqWidth) {
-    		
     		if (width > height) {
-    			
     			inSampleSize = Math.round((float)height / (float)reqHeight);
     		}
     		else {
-    			
     			inSampleSize = Math.round((float)width / (float)reqWidth);
     		}
     	}

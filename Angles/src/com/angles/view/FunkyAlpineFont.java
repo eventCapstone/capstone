@@ -5,6 +5,11 @@ import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
+/**
+ * A TextView class for an exaggerated Alpine font
+ * @author Mike
+ *
+ */
 public class FunkyAlpineFont  extends TextView {
     public FunkyAlpineFont(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);

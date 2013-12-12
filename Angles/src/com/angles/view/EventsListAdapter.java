@@ -21,6 +21,11 @@ import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+/**
+ * The events list adapter inflates the views for list items and sets their click listeners
+ * @author Mike
+ *
+ */
 public class EventsListAdapter extends BaseAdapter {
 	private List<AnglesEvent> eventsList;
 	private AnglesController anglesController;

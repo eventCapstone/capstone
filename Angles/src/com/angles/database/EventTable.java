@@ -20,6 +20,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+/**
+ * A SQLite database schema for handling events, guests, and the last user
+ * @author Mike
+ *
+ */
 public class EventTable extends SQLiteOpenHelper {
 	private static final String DEBUG_TAG = "EventTable";
 	/* Events Table Name */
@@ -90,6 +95,9 @@ public class EventTable extends SQLiteOpenHelper {
 		onCreate(db);
 	}
 	
+	/**
+	 * Empty all tables
+	 */
 	public void emptyTables() {
 		SQLiteDatabase db = this.getReadableDatabase();
 		db.execSQL("DROP TABLE IF EXISTS " + EVENTS_TABLE_NAME);
@@ -100,6 +108,11 @@ public class EventTable extends SQLiteOpenHelper {
 		db.close();
 	}
 	
+	/**
+	 * Set the current user. When we switch users we need to wipe the database tables
+	 * clean, so we need to persist that last logged in user.
+	 * @param userName
+	 */
 	public void setUser(String userName) {
 		SQLiteDatabase db = this.getReadableDatabase();
 		db.rawQuery("delete from " + USER_TABLE_NAME, new String[]{});
@@ -109,6 +122,10 @@ public class EventTable extends SQLiteOpenHelper {
 		db.insert(USER_TABLE_NAME, null, values);
 	}
 	
+	/**
+	 * Get the last user to log in on this device
+	 * @return
+	 */
 	public String getLastUser() {
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery("select * from " + USER_TABLE_NAME,  new String[]{});
@@ -121,6 +138,12 @@ public class EventTable extends SQLiteOpenHelper {
 		return cursor.getString(index);
 	}
 	
+	/**
+	 * Get the events stored locally. If we have logged in with a new user, instead delete the
+	 * database tables and return an empty list
+	 * @param userName
+	 * @return
+	 */
 	public List<AnglesEvent> getEvents(String userName) {
 		SQLiteDatabase db;
 		
@@ -203,6 +226,11 @@ public class EventTable extends SQLiteOpenHelper {
 		long result = db.insert(EVENTS_TABLE_NAME, null, values);
 	}
 	
+	/**
+	 * Queries the local events table to see if it contains the specified event
+	 * @param eventID
+	 * @return
+	 */
 	public boolean containsEvent(String eventID) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		Cursor cursor = db.rawQuery("select * from " + EVENTS_TABLE_NAME + " where " + EVENT_ID + "=\"" + eventID + "\"", new String[]{} );
@@ -214,6 +242,11 @@ public class EventTable extends SQLiteOpenHelper {
 		}
 	}
 	
+	/**
+	 * Add a guest to the local tables
+	 * @param eventID
+	 * @param guestName
+	 */
 	public void addGuest(String eventID, String guestName) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues values = new ContentValues();
@@ -225,6 +258,11 @@ public class EventTable extends SQLiteOpenHelper {
 		db.insert(GUESTS_TABLE_NAME, null, values);
 	}
 	
+	/**
+	 * Add a set of guests to the local tables
+	 * @param eventID
+	 * @param guests
+	 */
 	public void addGuests(String eventID, Map<User, Attending> guests) {
 		SQLiteDatabase db = this.getWritableDatabase();
 
@@ -238,7 +276,11 @@ public class EventTable extends SQLiteOpenHelper {
 		db.close();
 	}
 	
-	
+	/**
+	 * Remove the old guests for a given event and set the new guest list
+	 * @param eventID
+	 * @param guests
+	 */
 	public void setGuests(String eventID, Map<User, Attending> guests) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		db.rawQuery("delete from " + GUESTS_TABLE_NAME + " where " + EVENT_ID + "=\"" + eventID + "\"", new String[]{} );
@@ -263,6 +305,12 @@ public class EventTable extends SQLiteOpenHelper {
 		}
 	}
 	
+	/**
+	 * Change the attending status of a guest in the guest table
+	 * @param guestName
+	 * @param eventID
+	 * @param status
+	 */
 	public void updateGuestStatus(String guestName, String eventID, String status) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues values = new ContentValues();

@@ -5,6 +5,11 @@ import java.util.Calendar;
 
 import com.google.appengine.api.datastore.Blob;
 
+/**
+ * The Angle class, represents a photo taken in the app
+ * @author Mike
+ *
+ */
 public class Angle implements Serializable {
 	private Blob image;
 	private User createdBy;

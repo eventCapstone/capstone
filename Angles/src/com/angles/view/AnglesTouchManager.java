@@ -25,6 +25,11 @@ import com.angles.angles.R;
 import com.angles.model.AnglesEvent;
 import com.angles.model.EventsManager;
 
+/**
+ * The touch manager is responsible for loading the click listeners for the different activities
+ * @author Mike
+ *
+ */
 public class AnglesTouchManager {
 	public static final String KEY = "AnglesTouchManager"; 
 	

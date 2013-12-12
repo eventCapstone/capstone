@@ -12,6 +12,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+/**
+ * A SQLite database schema for handling contacts
+ * @author Mike
+ *
+ */
 public class ContactTable extends SQLiteOpenHelper {
 	 
 	/* Name of this Activity for debugging in Logcat */
@@ -67,6 +72,10 @@ public class ContactTable extends SQLiteOpenHelper {
 		onCreate(db);
 	}
 	
+	/**
+	 * Add this user as an Angles contact
+	 * @param user
+	 */
 	public void addContact(User user) {
 		SQLiteDatabase db = this.getWritableDatabase();
 		ContentValues values = new ContentValues();
@@ -78,6 +87,10 @@ public class ContactTable extends SQLiteOpenHelper {
 		long result = db.insert(TABLE_CONTACTS, null, values);
 	}
 	
+	/**
+	 * Get a set of all contacts for this device
+	 * @return
+	 */
 	public Set<User> getContacts() {
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cursor = db.rawQuery("select * from " + TABLE_CONTACTS, new String[]{});
