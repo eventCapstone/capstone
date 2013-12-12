@@ -1,16 +1,22 @@
 package com.angles.angles;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.Semaphore;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
+import android.provider.ContactsContract;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.angles.database.ContactTable;
 import com.angles.database.EventTable;
@@ -19,27 +25,13 @@ import com.angles.model.EventsManager;
 import com.angles.model.User;
 import com.angles.view.AnglesDisplayManager;
 import com.angles.view.AnglesTouchManager;
+//import com.google.appengine.api.datastore.Hash;
 import com.google.cloud.backend.android.CloudBackend;
 import com.google.cloud.backend.android.CloudEntity;
 import com.google.cloud.backend.android.CloudQuery;
 import com.google.cloud.backend.android.DBTableConstants;
 import com.google.cloud.backend.android.F;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.provider.ContactsContract.Contacts;
-import android.provider.ContactsContract.RawContacts;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
 public class AnglesController {
 	//Singleton instance of the controller
@@ -120,7 +112,7 @@ public class AnglesController {
 	/**
 	 * From the main activity screen, just load the contacts
 	 * @param activity
-	 */
+ 	 */
 	public void init(Activity activity) {
 		loadContacts(activity);
 	}
@@ -144,7 +136,7 @@ public class AnglesController {
 				CloudBackend cloudBackend = new CloudBackend();
 				CloudQuery cloudQuery = new CloudQuery(DBTableConstants.DB_USERS_USERSTABLENAME);
 				
-				// Get email addresses from device
+				// Run query
 			    Uri uri = ContactsContract.CommonDataKinds.Email.CONTENT_URI;
 			    String[] projection = new String[] {
 			            ContactsContract.Contacts._ID,
@@ -158,7 +150,6 @@ public class AnglesController {
 			    Cursor cursor = activity.getContentResolver().query(uri, projection, selection, selectionArgs, null);
 			    F filter = null;
 			    
-			    //Spin off new threads to query the cload for the emails on this device
 			    int counter=1;
 			    while (!cursor.isAfterLast()) {
 			    	filter = null;
@@ -182,7 +173,6 @@ public class AnglesController {
 						public void run() {
 							try {
 								result = cb.list(cq);
-								//Add contacts if we found any
 								if (result != null && !result.isEmpty()) {
 									for (int i=0; i < result.size(); i++) {
 										String userName = (String)result.get(i).get(DBTableConstants.DB_USERS_USERNAME);
@@ -216,15 +206,13 @@ public class AnglesController {
 	/*****************************************************************************
 	 * LOGIN Business Logic
 	 *****************************************************************************/
-	/**
-	 * Check user name and password against values retrieved from the cloud
-	 * @param currentActivity
-	 */
 	public void loginUser(Activity currentActivity)
 	{
-		String userName = ((EditText) currentActivity.findViewById(R.id.loginUserName)).getText().toString();
-		String password = ((EditText) currentActivity.findViewById(R.id.loginPassword)).getText().toString();
 		
+		   
+		String userName = ((EditText) currentActivity.findViewById(R.id.loginUserName)).getText().toString();
+//		String password = Hash.md5( ((EditText) currentActivity.findViewById(R.id.loginPassword)).getText().toString());
+		String password = null;
 	
 		final CloudBackend cb = new CloudBackend();
 		final CloudQuery cq = new CloudQuery(DBTableConstants.DB_USERS_USERSTABLENAME);
@@ -254,6 +242,11 @@ public class AnglesController {
 		if ((result == null) || result.isEmpty()) {
 			Toast.makeText(currentActivity,"Wrong UserName Or Password", Toast.LENGTH_LONG).show();
 		} else {
+			
+			
+			
+			
+			
 			String phoneNumber = (String)result.get(0).get(DBTableConstants.DB_USERS_PHONENUMBER);
 			if (phoneNumber == null) {
 				phoneNumber = "";
@@ -273,9 +266,10 @@ public class AnglesController {
 		loadEventListActivity(currentActivity);
 	}
 	
-	/*****************************************************************************
-	 * REGISTER USER Business logic
-	 *****************************************************************************/
+	
+	/**
+	 * TODO: Implement register new user
+	 */
 	public void registerUser(Activity currentActivity)
 	{
 		EditText UserName = (EditText) currentActivity.findViewById(R.id.signupUserName);
@@ -306,6 +300,8 @@ public class AnglesController {
 		}
 		if(result.isEmpty()){
 			Button createNewUser = (Button) currentActivity.findViewById(R.id.signup_button);
+			anglesUser = new User(UserName.getText().toString(),Email.getText().toString() ,"");
+			eventsManager = new EventsManager(anglesUser, currentActivity);
 			((LoginActivity) currentActivity).createNewUser(createNewUser);
 			Toast.makeText(currentActivity,"Account created,Welcome to Angles!", Toast.LENGTH_LONG).show();
 			loadEventListActivity(currentActivity);	
@@ -404,11 +400,6 @@ public class AnglesController {
 		currentActivity.startActivity(intent);
 	}
 	
-	/**
-	 * A runnable class that contains references to a CloudBackend, CloudQuery, and ContactTable
-	 * @author Mike
-	 *
-	 */
 	private class ContactQueryThread extends Thread {
 		protected CloudBackend cb;
 		protected CloudQuery cq;
@@ -422,11 +413,6 @@ public class AnglesController {
 		}
 	}
 	
-	/**
-	 * A runnable class that contains a reference to the current activity
-	 * @author Mike
-	 *
-	 */
 	private class ActivityThread extends Thread {
 		protected Activity activity;
 		
