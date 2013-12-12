@@ -19,6 +19,12 @@ import com.google.cloud.backend.android.CloudCallbackHandler;
 import com.google.cloud.backend.android.CloudEntity;
 import com.google.cloud.backend.android.DBTableConstants;
 
+/**
+ * Activity that loads the login screen. Also contains the business logic for creating
+ * new users
+ * @author Mike
+ *
+ */
 public class LoginActivity extends CloudBackendActivity {
 	private final int REQ_SIGNUP = 1;
 	private final String DEBUG_TAG = "LoginActivity";

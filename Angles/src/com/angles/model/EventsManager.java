@@ -283,6 +283,15 @@ public class EventsManager {
 	}
 	
 	/**
+	 * Add an event to the event list in memory
+	 * @param event
+	 */
+    public void addEvent(AnglesEvent event)
+    {
+            eventList.add(event);
+    }
+	
+	/**
 	 * NOTE: Months are indexed from 0 
 	 */
 	public static Calendar makeCalendar(int year, int month, int day, int hour, int minute)
