@@ -85,7 +85,7 @@ public class OngoingEventActivity extends Activity {
 				
 				Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
 												
-		        tempFile = new File(Environment.getExternalStorageDirectory() +
+		        tempFile = new File(Environment.getExternalStorageDirectory(),
 		        		"angle" + String.valueOf(Calendar.getInstance().getTimeInMillis()) + ".jpg");
 		        		        
 		        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(tempFile));
