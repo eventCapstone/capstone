@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.appengine.api.datastore.Hash;
 import com.google.cloud.backend.android.CloudBackendActivity;
 import com.google.cloud.backend.android.CloudCallbackHandler;
 import com.google.cloud.backend.android.CloudEntity;
@@ -42,14 +43,14 @@ public class LoginActivity extends CloudBackendActivity {
     }
 	
 	public void createNewUser(View view){
-		EditText UserName = (EditText) findViewById(R.id.signupPassword);
+		EditText UserName = (EditText) findViewById(R.id.signupUserName);
 		EditText Email = (EditText) findViewById(R.id.signupEmail);
-		EditText PW = (EditText) findViewById(R.id.signupUserName);
+		EditText PW = (EditText) findViewById(R.id.signupPassword);
 		
 		CloudEntity createNewUser = new CloudEntity(DBTableConstants.DB_USERS_USERSTABLENAME);
-		createNewUser.put(DBTableConstants.DB_USERS_PASSWORD, UserName.getText().toString());
+		createNewUser.put(DBTableConstants.DB_USERS_PASSWORD,Hash.md5( PW.getText().toString()));
 		createNewUser.put(DBTableConstants.DB_USERS_EMAIL, Email.getText().toString().toLowerCase());
-		createNewUser.put(DBTableConstants.DB_USERS_USERNAME,PW.getText().toString() );
+		createNewUser.put(DBTableConstants.DB_USERS_USERNAME,UserName.getText().toString());
 		
 		 CloudCallbackHandler<CloudEntity> handler = new CloudCallbackHandler<CloudEntity>() {
 		      @Override

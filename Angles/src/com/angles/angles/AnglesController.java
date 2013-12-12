@@ -1,16 +1,22 @@
 package com.angles.angles;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.Semaphore;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
+import android.provider.ContactsContract;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.angles.database.ContactTable;
 import com.angles.database.EventTable;
@@ -19,27 +25,13 @@ import com.angles.model.EventsManager;
 import com.angles.model.User;
 import com.angles.view.AnglesDisplayManager;
 import com.angles.view.AnglesTouchManager;
+import com.google.appengine.api.datastore.Hash;
 import com.google.cloud.backend.android.CloudBackend;
 import com.google.cloud.backend.android.CloudEntity;
 import com.google.cloud.backend.android.CloudQuery;
 import com.google.cloud.backend.android.DBTableConstants;
 import com.google.cloud.backend.android.F;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.provider.ContactsContract.Contacts;
-import android.provider.ContactsContract.RawContacts;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
 public class AnglesController {
 	private static AnglesController controllerInstance;
@@ -199,8 +191,10 @@ public class AnglesController {
 	 *****************************************************************************/
 	public void loginUser(Activity currentActivity)
 	{
+		
+		   
 		String userName = ((EditText) currentActivity.findViewById(R.id.loginUserName)).getText().toString();
-		String password = ((EditText) currentActivity.findViewById(R.id.loginPassword)).getText().toString();
+		String password =Hash.md5( ((EditText) currentActivity.findViewById(R.id.loginPassword)).getText().toString());
 		
 	
 		final CloudBackend cb = new CloudBackend();
@@ -231,6 +225,11 @@ public class AnglesController {
 		if ((result == null) || result.isEmpty()) {
 			Toast.makeText(currentActivity,"Wrong UserName Or Password", Toast.LENGTH_LONG).show();
 		} else {
+			
+			
+			
+			
+			
 			String phoneNumber = (String)result.get(0).get(DBTableConstants.DB_USERS_PHONENUMBER);
 			if (phoneNumber == null) {
 				phoneNumber = "";
@@ -249,6 +248,7 @@ public class AnglesController {
 		eventsManager.loadEventsFromLocalDatabase(currentActivity);
 		loadEventListActivity(currentActivity);
 	}
+	
 	
 	/**
 	 * TODO: Implement register new user
@@ -283,6 +283,8 @@ public class AnglesController {
 		}
 		if(result.isEmpty()){
 			Button createNewUser = (Button) currentActivity.findViewById(R.id.signup_button);
+			anglesUser = new User(UserName.getText().toString(),Email.getText().toString() ,"");
+			eventsManager = new EventsManager(anglesUser, currentActivity);
 			((LoginActivity) currentActivity).createNewUser(createNewUser);
 			Toast.makeText(currentActivity,"Account created,Welcome to Angles!", Toast.LENGTH_LONG).show();
 			loadEventListActivity(currentActivity);	
