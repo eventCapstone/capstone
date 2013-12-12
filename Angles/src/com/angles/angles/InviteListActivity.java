@@ -5,6 +5,12 @@ import com.angles.model.AnglesEvent;
 import android.app.Activity;
 import android.os.Bundle;
 
+/**
+ * Activity that loads an interactive list that allows the host to invite guests to
+ * their event
+ * @author Mike
+ *
+ */
 public class InviteListActivity extends Activity {
 	
 	@Override

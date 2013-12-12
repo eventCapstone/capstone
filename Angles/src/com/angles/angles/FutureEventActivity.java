@@ -5,6 +5,12 @@ import com.angles.model.AnglesEvent;
 import android.app.Activity;
 import android.os.Bundle;
 
+/**
+ * Activity that loads the future event view which displays event description, host, and
+ * allows the user to view the guest list
+ * @author Mike
+ *
+ */
 public class FutureEventActivity extends Activity {
 	@Override
     protected void onCreate(Bundle savedInstanceState) {

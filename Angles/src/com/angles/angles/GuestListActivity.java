@@ -5,8 +5,12 @@ import android.os.Bundle;
 
 import com.angles.model.AnglesEvent;
 
+/**
+ * Activity that loads the guest list
+ * @author Mike
+ *
+ */
 public class GuestListActivity  extends Activity {
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

@@ -42,16 +42,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class AnglesController {
+	//Singleton instance of the controller
 	private static AnglesController controllerInstance;
-	public static final String TAG = "AnglesController";
-	
+	//Display manager for loading layouts
 	private AnglesDisplayManager itsDisplayManager;
+	//Touch manager for loading onClickListeners
 	private AnglesTouchManager  itsTouchManager;
+	//Events manager for loading and managing events
 	private EventsManager eventsManager;
 	
+	//User object representing the logged in user
 	private User anglesUser;
+	//Angles contacts loaded from this device
 	private Set<User> contacts;
 	
+	//Cloud Entity result object used throughout the class
 	private List<CloudEntity> result;
 	
 	/**
@@ -112,10 +117,22 @@ public class AnglesController {
 	/*****************************************************************************
 	 * INITIALIZATION Business Logic
 	 *****************************************************************************/
+	/**
+	 * From the main activity screen, just load the contacts
+	 * @param activity
+	 */
 	public void init(Activity activity) {
 		loadContacts(activity);
 	}
 	
+	/**
+	 * Spins off new threads to load contacts for this device. This method obtains a list of all
+	 * email addresses registered to contacts on this device, then queries the cloud to find users
+	 * registered with those email addresses.
+	 * 
+	 * Because there is a limit on cloud query size, we query for 10 email addresses at a time
+	 * @param activity
+	 */
 	public void loadContacts(Activity activity) {
 		ContactTable contactTable = new ContactTable(activity);
 		contacts = contactTable.getContacts();
@@ -127,7 +144,7 @@ public class AnglesController {
 				CloudBackend cloudBackend = new CloudBackend();
 				CloudQuery cloudQuery = new CloudQuery(DBTableConstants.DB_USERS_USERSTABLENAME);
 				
-				// Run query
+				// Get email addresses from device
 			    Uri uri = ContactsContract.CommonDataKinds.Email.CONTENT_URI;
 			    String[] projection = new String[] {
 			            ContactsContract.Contacts._ID,
@@ -141,6 +158,7 @@ public class AnglesController {
 			    Cursor cursor = activity.getContentResolver().query(uri, projection, selection, selectionArgs, null);
 			    F filter = null;
 			    
+			    //Spin off new threads to query the cload for the emails on this device
 			    int counter=1;
 			    while (!cursor.isAfterLast()) {
 			    	filter = null;
@@ -164,6 +182,7 @@ public class AnglesController {
 						public void run() {
 							try {
 								result = cb.list(cq);
+								//Add contacts if we found any
 								if (result != null && !result.isEmpty()) {
 									for (int i=0; i < result.size(); i++) {
 										String userName = (String)result.get(i).get(DBTableConstants.DB_USERS_USERNAME);
@@ -197,6 +216,10 @@ public class AnglesController {
 	/*****************************************************************************
 	 * LOGIN Business Logic
 	 *****************************************************************************/
+	/**
+	 * Check user name and password against values retrieved from the cloud
+	 * @param currentActivity
+	 */
 	public void loginUser(Activity currentActivity)
 	{
 		String userName = ((EditText) currentActivity.findViewById(R.id.loginUserName)).getText().toString();
@@ -250,9 +273,9 @@ public class AnglesController {
 		loadEventListActivity(currentActivity);
 	}
 	
-	/**
-	 * TODO: Implement register new user
-	 */
+	/*****************************************************************************
+	 * REGISTER USER Business logic
+	 *****************************************************************************/
 	public void registerUser(Activity currentActivity)
 	{
 		EditText UserName = (EditText) currentActivity.findViewById(R.id.signupUserName);
@@ -381,6 +404,11 @@ public class AnglesController {
 		currentActivity.startActivity(intent);
 	}
 	
+	/**
+	 * A runnable class that contains references to a CloudBackend, CloudQuery, and ContactTable
+	 * @author Mike
+	 *
+	 */
 	private class ContactQueryThread extends Thread {
 		protected CloudBackend cb;
 		protected CloudQuery cq;
@@ -394,6 +422,11 @@ public class AnglesController {
 		}
 	}
 	
+	/**
+	 * A runnable class that contains a reference to the current activity
+	 * @author Mike
+	 *
+	 */
 	private class ActivityThread extends Thread {
 		protected Activity activity;
 		

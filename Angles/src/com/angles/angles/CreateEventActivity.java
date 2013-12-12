@@ -17,8 +17,14 @@ import com.google.cloud.backend.android.CloudBackendActivity;
 import com.google.cloud.backend.android.CloudCallbackHandler;
 import com.google.cloud.backend.android.CloudEntity;
 import com.google.cloud.backend.android.DBTableConstants;
+
+/**
+ * Activity that loads the form for creating a new event. Also handles the business
+ * logic of sending a new event to the cloud
+ * @author Mike
+ *
+ */
 public class CreateEventActivity extends CloudBackendActivity {
-	
 	EditText eventTitle;
 	EditText eventDescription;
 	Button startDateButton;

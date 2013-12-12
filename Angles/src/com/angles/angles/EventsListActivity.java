@@ -4,6 +4,11 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.Toast;
 
+/**
+ * Activity that loads the events list
+ * @author Mike
+ *
+ */
 public class EventsListActivity extends Activity {
 		
 	@Override
